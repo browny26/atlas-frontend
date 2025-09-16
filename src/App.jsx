@@ -49,7 +49,7 @@ const App = () => {
 
         <div className="flex-grow flex items-center justify-center">
           <div className="text-center text-black px-4 max-w-3xl flex flex-col items-center gap-16">
-            <h1 className="font-nata text-4xl md:text-9xl font-bold mb-4 text-white">
+            <h1 className="font-nata text-6xl sm:text-7xl md:text-9xl font-bold mb-4 text-white">
               <span className="font-italiana text-black">Mysteries of</span>
               <br />
               The World
@@ -71,7 +71,7 @@ const App = () => {
             beautiful
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Destination 1 */}
             <Card
               rating={4.5}
@@ -144,7 +144,7 @@ const App = () => {
           <span className="text-xs uppercase tracking-widest font-medium items-center gap-2 opacity-90 py-3 px-6 bg-gray-200 border border-gray-300 inline-block mb-6 rounded-full">
             travel layout pack
           </span>
-          <h2 className="font-nata text-3xl md:text-8xl text-center font-bold">
+          <h2 className="font-nata text-3xl sm:text-6xl md:text-8xl text-center font-bold">
             <span className="font-italiana font-black md:text-7xl">
               Your adventure
             </span>
@@ -177,9 +177,9 @@ const App = () => {
                 "url('https://images.unsplash.com/photo-1678211370298-0daeced0e569?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')", // Replace with your image
             }}
           >
-            <div className="md:flex">
-              <div className="md:w-1/2 p-8 md:p-12 flex flex-col">
-                <h2 className="font-nata text-3xl md:text-6xl font-bold">
+            <div className="lg:flex">
+              <div className="md:w-1/2 p-12 flex flex-col">
+                <h2 className="font-nata text-6xl font-bold">
                   <span className="font-italiana font-black md:text-5xl">
                     Seek The
                   </span>
@@ -187,11 +187,11 @@ const App = () => {
                   Paradise
                 </h2>
               </div>
-              <div className="md:w-1/2 h-80 md:h-auto flex flex-col justify-center px-14 py-8 md:py-14 text-black">
-                <h3 className="font-italiana text-2xl md:text-3xl mb-8">
+              <div className="lg:w-1/2 h-auto flex flex-col justify-center px-14 py-8 md:py-14 text-black">
+                <h3 className="font-marcellus text-2xl md:text-3xl mb-8 text-white lg:text-black">
                   Conquer the Frozen Trails
                 </h3>
-                <p className="font-extralight mb-8">
+                <p className="text-white lg:text-black lg:font-extralight mb-8">
                   Our expert guides will lead you through the most breathtaking
                   frozen landscapes on Earth. All equipment and training
                   provided.

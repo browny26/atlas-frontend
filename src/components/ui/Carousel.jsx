@@ -99,12 +99,12 @@ const Carousel = ({
 
       {/* Slide indicators */}
       {showIndicators && (
-        <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse bg-neutral-400/40 opacity-95 py-5 px-20 border border-neutral-50 rounded-full">
+        <div className="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse bg-neutral-400/40 opacity-95 py-2 px-5 md:py-5 md:px-20 border border-neutral-50 rounded-full">
           {images.map((_, index) => (
             <button
               key={index}
               type="button"
-              className={`w-2 h-2 rounded-full ${
+              className={`w-1 h-1 md:w-2 md:h-2 rounded-full ${
                 index === currentSlide
                   ? "bg-white"
                   : "bg-white/50 hover:bg-white/80"

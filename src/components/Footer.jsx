@@ -6,12 +6,12 @@ const Footer = () => {
       <div className="container mx-auto max-w-6xl">
         <div className="flex flex-col justify-between items-center w-full gap-10">
           <div className="mb-6 md:mb-0 w-full">
-            <h3 className="text-3xl font-bold font-italiana">ATLAS</h3>
+            <h3 className="text-3xl font-bold font-nata">ATLAS</h3>
             <p className="text-gray-500 mt-2 font-extralight">
               Discover the world's mysteries with us
             </p>
           </div>
-          <div className="grid grid-cols-4 gap-8 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
             <div>
               <h3 className="font-semibold mb-4 font-italiana text-3xl">
                 Important Page

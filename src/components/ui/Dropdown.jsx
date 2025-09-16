@@ -44,16 +44,18 @@ const Dropdown = ({
   };
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative w-full" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className={`text-black bg-gray-50 hover:bg-gray-100 font-medium text-sm px-5 py-2.5 text-center inline-flex items-center ${buttonClassName}`}
+        className={`text-black bg-gray-50 w-full hover:bg-gray-100 font-medium text-sm px-5 py-3.5 text-center flex justify-between items-center ${buttonClassName}`}
         type="button"
       >
-        {decorativeIcon && (
-          <span className="mr-2 flex items-center">{decorativeIcon}</span>
-        )}
-        {text}
+        <span className="flex items-center">
+          {decorativeIcon && (
+            <span className="mr-2 flex items-center">{decorativeIcon}</span>
+          )}
+          {text}
+        </span>
         {icon && <ChevronDownIcon class="ms-2 h-4 w-4 text-black" />}
       </button>
 
@@ -62,7 +64,7 @@ const Dropdown = ({
           isOpen ? "block" : "hidden"
         } "bg-white divide-y divide-gray-100 shadow-sm w-44 ${dropdownClassName}"`}
       >
-        <ul className="py-2 text-sm text-gray-700">
+        <ul className="py-2 text-sm text-gray-700 bg-white">
           {options.map((option, index) => (
             <li key={index}>
               <button
