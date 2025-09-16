@@ -50,11 +50,9 @@ const App = () => {
         <div className="flex-grow flex items-center justify-center">
           <div className="text-center text-black px-4 max-w-3xl flex flex-col items-center gap-16">
             <h1 className="font-nata text-4xl md:text-9xl font-bold mb-4 text-white">
-              <span className="font-italiana font-black text-black">
-                Mysteries of
-              </span>
+              <span className="font-italiana text-black">Mysteries of</span>
               <br />
-              The Desert
+              The World
             </h1>
 
             <BookingForm />

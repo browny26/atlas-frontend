@@ -55,9 +55,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>
-            © 2023 Travel Agency. All rights reserved. | Designed by DIVI PIXEL
-          </p>
+          <p>© 2023 Atlas. All rights reserved. | Designed by DIVI PIXEL</p>
         </div>
       </div>
     </footer>
