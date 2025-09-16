@@ -9,13 +9,10 @@ const Navbar = () => {
       <MagnifyingGlassIcon className="h-6 w-6 text-black cursor-pointer hidden" />
       <ul className="md:flex gap-6 text-black font-marcellus items-center font-medium hidden">
         <li>
-          <a href="#">Homepage</a>
+          <a href="/">Homepage</a>
         </li>
         <li>
-          <a href="#">About</a>
-        </li>
-        <li>
-          <a href="#">Services</a>
+          <a href="/about">About</a>
         </li>
         <li>
           <a href="#" className="font-nata font-bold text-xl">
@@ -23,13 +20,10 @@ const Navbar = () => {
           </a>
         </li>
         <li>
-          <a href="#">Blog</a>
+          <a href="#">Services</a>
         </li>
         <li>
-          <a href="#">Pages</a>
-        </li>
-        <li>
-          <a href="#">Destinations</a>
+          <a href="/destinations">Destinations</a>
         </li>
       </ul>
       <button
@@ -60,10 +54,10 @@ const Navbar = () => {
         {/* Contenuto drawer */}
         <ul className="flex flex-col gap-12 h-full text-black font-marcellus text-4xl items-center justify-center font-medium">
           <li className="hover:text-gray-400 transition-all">
-            <a href="#">Homepage</a>
+            <a href="/">Homepage</a>
           </li>
           <li className="hover:text-gray-400 transition-all">
-            <a href="#">About</a>
+            <a href="/about">About</a>
           </li>
           <li className="hover:text-gray-400 transition-all">
             <a href="#">Services</a>
@@ -75,7 +69,7 @@ const Navbar = () => {
             <a href="#">Pages</a>
           </li>
           <li className="hover:text-gray-400 transition-all">
-            <a href="#">Destinations</a>
+            <a href="/destinations">Destinations</a>
           </li>
         </ul>
       </div>

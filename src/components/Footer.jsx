@@ -13,7 +13,7 @@ const Footer = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
             <div>
-              <h3 className="font-semibold mb-4 font-italiana text-3xl">
+              <h3 className="font-semibold mb-4 font-marcellus text-3xl">
                 Important Page
               </h3>
               <ul className="space-y-2 text-gray-500 font-extralight">
@@ -23,7 +23,7 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 font-italiana text-3xl">
+              <h3 className="font-semibold mb-4 font-marcellus text-3xl">
                 Other Page
               </h3>
               <ul className="space-y-2 text-gray-500 font-extralight">
@@ -32,7 +32,7 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 font-italiana text-3xl">
+              <h3 className="font-semibold mb-4 font-marcellus text-3xl">
                 Social
               </h3>
               <ul className="space-y-2 text-gray-500 font-extralight">
@@ -43,7 +43,7 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4 font-italiana text-3xl">
+              <h3 className="font-semibold mb-4 font-marcellus text-3xl">
                 Resources
               </h3>
               <ul className="space-y-2 text-gray-500 font-extralight">

@@ -9,7 +9,7 @@ const Card = ({
   img = null,
 }) => {
   return (
-    <div className="relative w-[90dvw] h-96 lg:w-80 shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+    <div className="relative w-[90dvw] h-[500px] lg:w-96 shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
       {/* Background Image */}
       <div className="absolute inset-0">
         {img ? (
