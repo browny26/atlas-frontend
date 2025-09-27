@@ -20,7 +20,7 @@ const Navbar = () => {
           </a>
         </li>
         <li>
-          <a href="#">Services</a>
+          <a href="/services">Services</a>
         </li>
         <li>
           <a href="/destinations">Destinations</a>
@@ -60,13 +60,10 @@ const Navbar = () => {
             <a href="/about">About</a>
           </li>
           <li className="hover:text-gray-400 transition-all">
-            <a href="#">Services</a>
+            <a href="/services">Services</a>
           </li>
           <li className="hover:text-gray-400 transition-all">
             <a href="#">Blog</a>
-          </li>
-          <li className="hover:text-gray-400 transition-all">
-            <a href="#">Pages</a>
           </li>
           <li className="hover:text-gray-400 transition-all">
             <a href="/destinations">Destinations</a>

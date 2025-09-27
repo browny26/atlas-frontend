@@ -25,7 +25,7 @@ const index = () => {
         <div className="flex-grow flex items-center justify-center">
           <div className="text-center text-white px-4 max-w-3xl flex flex-col items-center gap-16">
             <span className="text-xs uppercase tracking-widest font-medium items-center gap-2 opacity-90 py-3 px-6 bg-gray-700/40 border border-gray-500 inline-block mb-6 rounded-full">
-              travel layout pack
+              about us
             </span>
 
             <h1 className="font-nata text-6xl sm:text-7xl md:text-9xl font-bold mb-4 text-nowrap">
