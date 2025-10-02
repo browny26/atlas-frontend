@@ -12,7 +12,7 @@ const Tab = ({ tabs, defaultActive = 0, onTabChange, className = "" }) => {
 
   return (
     <ul
-      className={`flex flex-wrap text-sm font-marcellus font-medium text-center text-black border-b border-gray-200 ${className}`}
+      className={`flex flex-wrap text-sm text-center text-black border-b border-gray-200 ${className}`}
     >
       {tabs.map((tab, index) => (
         <li key={index} className="me-2">
