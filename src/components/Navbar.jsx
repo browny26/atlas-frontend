@@ -1,34 +1,39 @@
 import React, { useState } from "react";
-import { MagnifyingGlassIcon, Bars3Icon } from "@heroicons/react/24/outline";
+import { Bars3Icon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   return (
-    <nav className="w-full flex items-center justify-end md:justify-center mx-auto my-10 px-6 max-w-7xl">
-      <MagnifyingGlassIcon className="h-6 w-6 text-black cursor-pointer hidden" />
-      <ul className="md:flex gap-6 text-black font-marcellus items-center font-medium hidden">
+    <nav className="w-full flex items-center justify-end md:justify-between mx-auto my-10 px-6 max-w-7xl">
+      <span className="h-6 w-6 text-black cursor-pointer opacity-0"></span>
+      <ul className="md:flex gap-6 text-black font-nata items-center font-light hidden">
         <li>
-          <a href="/">Homepage</a>
+          <Link to="/">Homepage</Link>
         </li>
         <li>
-          <a href="/about">About</a>
+          <Link to="/about">About</Link>
         </li>
         <li>
-          <a href="#" className="font-nata font-bold text-xl">
+          <Link to="/" className="font-nata font-bold text-xl">
             ATLAS
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/services">Services</a>
+          <Link to="/services">Services</Link>
         </li>
         <li>
-          <a href="/destinations">Destinations</a>
+          <Link to="/destinations">Destinations</Link>
         </li>
       </ul>
+      <Link to="/signin">
+        <UserCircleIcon className="h-6 w-6 text-black cursor-pointer" />
+      </Link>
+
       <button
         type="button"
-        className="cursor-pointer md:hidden"
+        className="cursor-pointer md:hidden ms-5"
         onClick={() => setDrawerOpen(true)}
       >
         <Bars3Icon className="h-6 w-6 text-black" />
@@ -54,19 +59,19 @@ const Navbar = () => {
         {/* Contenuto drawer */}
         <ul className="flex flex-col gap-12 h-full text-black font-marcellus text-4xl items-center justify-center font-medium">
           <li className="hover:text-gray-400 transition-all">
-            <a href="/">Homepage</a>
+            <Link to="/">Homepage</Link>
           </li>
           <li className="hover:text-gray-400 transition-all">
-            <a href="/about">About</a>
+            <Link to="/about">About</Link>
           </li>
           <li className="hover:text-gray-400 transition-all">
-            <a href="/services">Services</a>
+            <Link to="/services">Services</Link>
           </li>
           <li className="hover:text-gray-400 transition-all">
-            <a href="#">Blog</a>
+            <Link to="#">Blog</Link>
           </li>
           <li className="hover:text-gray-400 transition-all">
-            <a href="/destinations">Destinations</a>
+            <Link to="/destinations">Destinations</Link>
           </li>
         </ul>
       </div>
