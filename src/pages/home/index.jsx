@@ -15,7 +15,7 @@ const Home = () => {
         className="relative h-screen flex flex-col items-center w-full bg-cover bg-center bg-no-repeat overflow-hidden"
         style={{
           backgroundImage:
-            "url('https://images.unsplash.com/photo-1617374128851-c84e37dc9f37?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')", // Replace with your image
+            "url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=2676&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')", // Replace with your image
         }}
       >
         <Navbar />

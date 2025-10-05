@@ -2,9 +2,11 @@ import { useState } from "react";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { Link } from "react-router";
+import { useUser } from "../../context/UserContext";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useUser();
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -26,7 +28,9 @@ export default function UserDropdown() {
           />
         </span>
 
-        <span className="block mr-1 font-medium text-theme-sm">Musharof</span>
+        <span className="block mr-1 font-medium text-theme-sm">
+          {user && user.firstName}
+        </span>
         <svg
           className={`stroke-gray-500 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
@@ -54,10 +58,10 @@ export default function UserDropdown() {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm">
-            Musharof Chowdhury
+            {user && user.firstName + " " + user.lastName}
           </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500">
-            randomuser@pimjo.com
+            {user && user.email}
           </span>
         </div>
 
@@ -140,6 +144,7 @@ export default function UserDropdown() {
         </ul>
         <Link
           to="/signin"
+          onClick={logout}
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700"
         >
           <svg

@@ -7,9 +7,14 @@ const Card = ({
   title = { first: "Royal Palace", second: "of Madrid" },
   location = "SPAIN, EUROPE",
   img = null,
+  size = "",
 }) => {
   return (
-    <div className="relative w-[90dvw] h-[500px] lg:w-96 shadow-md overflow-hidden transition-transform duration-300 hover:scale-105">
+    <div
+      className={`relative ${
+        size ? size : "lg:w-96 w-[90dvw] h-[500px]"
+      }  shadow-md overflow-hidden transition-transform duration-300 hover:scale-105`}
+    >
       {/* Background Image */}
       <div className="absolute inset-0">
         {img ? (

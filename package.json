@@ -12,8 +12,10 @@
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
+    "@react-google-maps/api": "^2.20.7",
     "@tailwindcss/vite": "^4.1.13",
     "clsx": "^2.1.1",
+    "ldrs": "^1.1.7",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",

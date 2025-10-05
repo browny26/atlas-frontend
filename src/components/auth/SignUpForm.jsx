@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
 import Input from "../ui/InputField";
 import Checkbox from "../ui/Checkbox";
@@ -8,6 +8,40 @@ import Button from "../ui/Button";
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const firstName = formData.get("fname");
+    const lastName = formData.get("lname");
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/v1/api/auth/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password, firstName, lastName }),
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Errore Register");
+        return;
+      }
+
+      navigate("/signin");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2 no-scrollbar">
       <div className="w-full max-w-md mx-auto mb-5 sm:pt-10">
@@ -95,7 +129,7 @@ export default function SignUpForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleRegister}>
               <div className="space-y-5">
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {/* <!-- First Name --> */}
@@ -143,6 +177,8 @@ export default function SignUpForm() {
                   <div className="relative">
                     <Input
                       placeholder="Enter your password"
+                      id="password"
+                      name="password"
                       type={showPassword ? "text" : "password"}
                     />
                     <span
@@ -202,9 +238,10 @@ export default function SignUpForm() {
                     <span className="text-gray-800">Privacy Policy</span>
                   </p>
                 </div>
-                {/* <!-- Button --> */}
                 <div>
-                  <Button className="w-full">Sign Up</Button>
+                  <Button className="w-full" type="submit">
+                    Sign Up
+                  </Button>
                 </div>
               </div>
             </form>

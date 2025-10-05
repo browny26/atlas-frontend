@@ -1,18 +1,29 @@
 import UserMetaCard from "../../components/UserMetaCard";
 import UserInfoCard from "../../components/UserInfoCard";
 import UserAddressCard from "../../components/UserAddressCard";
+import { useUser } from "../../context/UserContext";
+import { dotPulse } from "ldrs";
+dotPulse.register();
 
 export default function UserProfiles() {
+  const { user, loading } = useUser();
+  if (loading)
+    return (
+      <div className="h-[80vh] w-full flex items-center justify-center">
+        <l-dot-pulse size="43" speed="1.3" color="black"></l-dot-pulse>
+      </div>
+    );
+  if (!user) return <p>Utente non trovato o non loggato.</p>;
   return (
     <>
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
-        <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
+      <div className=" bg-white p-5 lg:p-6">
+        <h3 className="mb-5 text-3xl font-marcellus font-semibold text-gray-800 lg:mb-7">
           Profile
         </h3>
         <div className="space-y-6">
           <UserMetaCard />
           <UserInfoCard />
-          <UserAddressCard />
+          {/* <UserAddressCard /> */}
         </div>
       </div>
     </>

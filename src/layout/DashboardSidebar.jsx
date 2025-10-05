@@ -8,9 +8,13 @@ import {
   UserCircleIcon,
   ChevronDownIcon,
   EllipsisHorizontalIcon,
+  PaperAirplaneIcon,
+  MapIcon,
+  ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 
 import { useSidebar } from "../context/SidebarContext";
+import { useUser } from "../context/UserContext";
 
 const navItems = [
   {
@@ -20,19 +24,33 @@ const navItems = [
   },
   {
     icon: <CalendarIcon className="h-6 w-6 " />,
-    name: "Calendar",
-    path: "/calendar",
+    name: "Itineraries",
+    path: "/dashboard/itineraries",
   },
   {
     icon: <UserCircleIcon className="h-6 w-6 " />,
     name: "User Profile",
-    path: "/profile",
+    path: "/dashboard/profile",
+  },
+];
+
+const othersItems = [
+  {
+    icon: <PaperAirplaneIcon className="h-6 w-6 " />,
+    name: "Flights",
+    path: "/dashboard/flights",
+  },
+  {
+    icon: <MapIcon className="h-6 w-6 " />,
+    name: "Activities",
+    path: "/dashboard/activities",
   },
 ];
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+  const { logout } = useUser();
 
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [subMenuHeight, setSubMenuHeight] = useState({});
@@ -47,7 +65,7 @@ const AppSidebar = () => {
   useEffect(() => {
     let submenuMatched = false;
     ["main", "others"].forEach((menuType) => {
-      const items = menuType === "main" ? navItems : [];
+      const items = menuType === "main" ? navItems : othersItems;
       items.forEach((nav, index) => {
         if (nav.subItems) {
           nav.subItems.forEach((subItem) => {
@@ -137,8 +155,10 @@ const AppSidebar = () => {
             nav.path && (
               <Link
                 to={nav.path}
-                className={`menu-item flex gap-2 group ${
-                  isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
+                className={`menu-item flex gap-2 group p-2 transition-colors ${
+                  isActive(nav.path)
+                    ? "menu-item-active bg-green-700/30 rounded text-green-700"
+                    : "menu-item-inactive"
                 }`}
               >
                 <span
@@ -218,7 +238,7 @@ const AppSidebar = () => {
 
   return (
     <aside
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
+      className={`fixed mt-16 flex flex-col justify-between lg:mt-0 top-0 px-5 left-0 bg-black text-white h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200 
         ${
           isExpanded || isMobileOpen
             ? "w-[290px]"
@@ -231,55 +251,71 @@ const AppSidebar = () => {
       onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
-        className={`py-8 flex ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-        }`}
-      >
-        <Link to="/">
-          {isExpanded || isHovered || isMobileOpen ? (
-            <span className="font-bold">ATLAS</span>
-          ) : (
-            <span className="font-bold">ATLAS</span>
-          )}
-        </Link>
+      <div>
+        <div
+          className={`py-8 flex ${
+            !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+          }`}
+        >
+          <Link to="/">
+            {isExpanded || isHovered || isMobileOpen ? (
+              <span className="font-bold">ATLAS</span>
+            ) : (
+              <span className="font-bold">ATLAS</span>
+            )}
+          </Link>
+        </div>
+        <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+          <nav className="mb-6">
+            <div className="flex flex-col gap-4">
+              <div>
+                <h2
+                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                    !isExpanded && !isHovered
+                      ? "lg:justify-center"
+                      : "justify-start"
+                  }`}
+                >
+                  {isExpanded || isHovered || isMobileOpen ? (
+                    "Menu"
+                  ) : (
+                    <EllipsisHorizontalIcon className="size-6" />
+                  )}
+                </h2>
+                {renderMenuItems(navItems, "main")}
+              </div>
+              <div className="">
+                <h2
+                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                    !isExpanded && !isHovered
+                      ? "lg:justify-center"
+                      : "justify-start"
+                  }`}
+                >
+                  {isExpanded || isHovered || isMobileOpen ? (
+                    "Others"
+                  ) : (
+                    <EllipsisHorizontalIcon />
+                  )}
+                </h2>
+                {renderMenuItems(othersItems, "others")}
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
-        <nav className="mb-6">
-          <div className="flex flex-col gap-4">
-            <div>
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Menu"
-                ) : (
-                  <EllipsisHorizontalIcon className="size-6" />
-                )}
-              </h2>
-              {renderMenuItems(navItems, "main")}
-            </div>
-            <div className="">
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
-                ) : (
-                  <EllipsisHorizontalIcon />
-                )}
-              </h2>
-            </div>
-          </div>
-        </nav>
+      <div className="flex items-center gap-2 py-8">
+        <div
+          className={`menu-item flex gap-2 group p-2 cursor-pointer`}
+          onClick={logout}
+        >
+          <span className={`menu-item-icon-size `}>
+            <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />
+          </span>
+          {(isExpanded || isHovered || isMobileOpen) && (
+            <span className="menu-item-text">Logout</span>
+          )}
+        </div>
       </div>
     </aside>
   );

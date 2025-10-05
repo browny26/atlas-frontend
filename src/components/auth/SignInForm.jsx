@@ -1,13 +1,47 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
 import Input from "../ui/InputField";
 import Checkbox from "../ui/Checkbox";
 import Button from "../ui/Button";
-
+import { useUser } from "../../context/UserContext";
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const navigate = useNavigate();
+  const { login } = useUser();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const email = formData.get("email");
+    const password = formData.get("password");
+
+    try {
+      const response = await fetch("http://localhost:8080/v1/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        console.error("Errore login");
+        return;
+      }
+
+      const data = await response.json();
+      const token = data.token;
+
+      await login(token);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto ">
@@ -21,7 +55,7 @@ export default function SignInForm() {
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="size-4"
+            className="size-4"
           >
             <path
               stroke-linecap="round"
@@ -95,13 +129,17 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={(e) => handleLogin(e)}>
               <div className="space-y-6">
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>{" "}
                   </Label>
-                  <Input placeholder="info@gmail.com" />
+                  <Input
+                    id={"email"}
+                    name={"email"}
+                    placeholder="info@gmail.com"
+                  />
                 </div>
                 <div>
                   <Label>
@@ -110,6 +148,8 @@ export default function SignInForm() {
                   <div className="relative">
                     <Input
                       type={showPassword ? "text" : "password"}
+                      id={"password"}
+                      name={"password"}
                       placeholder="Enter your password"
                     />
                     <span
@@ -170,7 +210,7 @@ export default function SignInForm() {
                   </Link>
                 </div>
                 <div>
-                  <Button className="w-full" size="sm">
+                  <Button type="submit" className="w-full">
                     Sign in
                   </Button>
                 </div>

@@ -7,8 +7,15 @@ import UserProfiles from "./pages/profile";
 import SignIn from "./pages/login";
 import SignUp from "./pages/signup";
 import AppLayout from "./layout/DashboardLayout";
+import Dashboard from "./pages/dashboard";
+import Itineraries from "./pages/itineraries";
+import Flights from "./pages/flights";
+import Activities from "./pages/activities";
+import { useUser } from "./context/UserContext";
+import { ProtectedRoute } from "./layout/ProtectedRoute";
 
 export default function App() {
+  const { user } = useUser();
   return (
     <Router>
       <Routes>
@@ -20,11 +27,23 @@ export default function App() {
         <Route path="/signup" element={<SignUp />} />
 
         {/* Dashboard layout con pagine interne */}
-        <Route path="/dashboard" element={<AppLayout />}>
+
+        <Route
+          path="/dashboard/*"
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
+          {/* <Route path="/dashboard" element={<AppLayout />}> */}
           {/* Qui dentro usiamo Route relative */}
-          <Route index element={<Home />} /> {/* /dashboard */}
+          <Route index element={<Dashboard />} /> {/* /dashboard */}
           <Route path="profile" element={<UserProfiles />} />{" "}
           {/* /dashboard/profile */}
+          <Route path="itineraries" element={<Itineraries />} />{" "}
+          <Route path="flights" element={<Flights />} />{" "}
+          <Route path="activities" element={<Activities />} />{" "}
         </Route>
       </Routes>
     </Router>
