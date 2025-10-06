@@ -23,7 +23,7 @@ const Input = ({
   } else if (success) {
     inputClasses += `  border-success-500 focus:border-success-300 focus:ring-success-500/20 `;
   } else {
-    inputClasses += ` bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20`;
+    inputClasses += ` bg-transparent text-gray-800 border-gray-300`;
   }
 
   return (

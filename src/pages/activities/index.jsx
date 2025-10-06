@@ -22,7 +22,7 @@ const Activities = () => {
         `http://localhost:8080/amadeus/tours-and-activities?latitude=${41.397158}&longitude=${2.160873}&radius=${1}&page=${page}&size=${itemsPerPage}`,
         {
           headers: {
-            Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWQiOjEsImZpc3ROYW1lIjoiTWFyaW8iLCJsYXN0TmFtZSI6IlJvc3NpIiwiaWF0IjoxNzU5NjEzNzE2LCJleHAiOjE3NTk3MDAxMTZ9.rEUYpzzJe3EtelkxaXSGZrPdWLNV3ETCP9i2gtUq7HA"}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
