@@ -129,11 +129,6 @@ const Flights = () => {
                   placeholder="Select departure date"
                   minDate={new Date()}
                 />
-                {flightData.departDate && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    Selected: {flightData.departDate}
-                  </p>
-                )}
               </div>
 
               <div>
@@ -150,11 +145,6 @@ const Flights = () => {
                       : new Date()
                   }
                 />
-                {flightData.returnDate && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    Selected: {flightData.returnDate}
-                  </p>
-                )}
               </div>
               <div>
                 <Label>Number of Adults</Label>
@@ -170,7 +160,14 @@ const Flights = () => {
               </div>
             </div>
             <Button type="submit" disabled={loading}>
-              {loading ? "Searching..." : "Search"}
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Searching...
+                </div>
+              ) : (
+                "Search"
+              )}
             </Button>
           </form>
 
