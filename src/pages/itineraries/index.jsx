@@ -49,6 +49,12 @@ const index = () => {
     setLoading(true);
     setError("");
 
+    if (!formData.destination || !formData.days || !formData.budget) {
+      setError("Please fill in destination, days and budget");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(
         "http://localhost:8080/v1/api/itinerary/generate",
@@ -171,10 +177,10 @@ const index = () => {
   return (
     <>
       <div className=" bg-white p-5 lg:p-6">
-        <h1 className="text-3xl font-marcellus font-semibold text-gray-800 lg:mb-7">
+        <h1 className="text-3xl font-marcellus font-semibold text-gray-800">
           Travel Itinerary Generator
         </h1>
-        <p className="text-gray-600 mb-5">
+        <p className="text-gray-600 mb-10">
           Plan your perfect trip with AI-powered itinerary suggestions tailored
           to your interests and budget.
         </p>
@@ -183,7 +189,7 @@ const index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Form Section */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-8">
+              <div className="bg-white shadow-lg p-6 sticky top-8">
                 <form onSubmit={generateItinerary} className="space-y-6">
                   {/* Destination */}
                   <div>
@@ -313,7 +319,7 @@ const index = () => {
                   )}
 
                   {/* Header Card */}
-                  <div className="bg-white rounded-2xl shadow-lg p-6">
+                  <div className="bg-white shadow-lg p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <h2 className="text-3xl font-bold text-gray-800 capitalize">
@@ -321,8 +327,7 @@ const index = () => {
                         </h2>
                         <p className="text-gray-600 mt-2">
                           {getTotalDays(itinerary)} day
-                          {getTotalDays(itinerary) > 1 ? "s" : ""} •{" "}
-                          {getTotalBudget(itinerary)}
+                          {getTotalDays(itinerary) > 1 ? "s" : ""}
                         </p>
                       </div>
                       <div className="text-right">
@@ -365,7 +370,7 @@ const index = () => {
                     {getItineraryDays(itinerary).map((day) => (
                       <div
                         key={day.day}
-                        className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                        className="bg-white shadow-lg overflow-hidden"
                       >
                         <div className="bg-black p-4">
                           <h3 className="text-xl font-bold text-white">
@@ -443,8 +448,8 @@ const index = () => {
                     <Button
                       onClick={() => setItinerary(null)}
                       textColor="black"
-                      bgColor="neutral-300"
-                      hoverBgColor="neutral-400"
+                      bgColor="gray-200"
+                      hoverBgColor="gray-300"
                       className="flex-1 py-3"
                     >
                       🔄 Generate New

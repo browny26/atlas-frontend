@@ -157,7 +157,7 @@ const AppSidebar = () => {
                 to={nav.path}
                 className={`menu-item flex gap-2 group p-2 transition-colors ${
                   isActive(nav.path)
-                    ? "menu-item-active bg-green-700/30 rounded text-green-700"
+                    ? "menu-item-active bg-blue-300/30 text-blue-400 border-b border-blue-400"
                     : "menu-item-inactive"
                 }`}
               >

@@ -90,15 +90,16 @@ const Flights = () => {
   return (
     <>
       <div className=" bg-white p-5 lg:p-6">
-        <h3 className="mb-5 text-3xl font-marcellus font-semibold text-gray-800 lg:mb-7">
+        <h3 className="text-3xl font-marcellus font-semibold text-gray-800">
           Flights
         </h3>
+        <p className="mb-10">Search the flight for your new adventure</p>
         <div className="space-y-6">
           <form
             className="border border-gray-100 flex flex-col gap-10 justify-between p-10"
             onSubmit={(e) => fetchFlights(e)}
           >
-            <div className="flex gap-10 justify-between">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10 justify-between">
               <div>
                 <Label>From</Label>
                 <AirportAutocomplete

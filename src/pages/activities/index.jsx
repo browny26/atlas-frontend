@@ -54,11 +54,11 @@ const Activities = () => {
   return (
     <>
       <div className=" bg-white p-5 lg:p-6">
-        <h3 className="mb-5 text-3xl font-marcellus font-semibold text-gray-800 lg:mb-7">
+        <h3 className=" text-3xl font-marcellus font-semibold text-gray-800">
           Activities
         </h3>
-        <p>Find the best activities in your location.</p>
-        <div className="space-y-6 flex flex-col items-center mt-20">
+        <p className="mb-10">Find the best activities in your location.</p>
+        <div className="space-y-6 flex flex-col items-center">
           <GoogleMapComponent onLocationSelect={handleLocationSelect} />
 
           {loading && (
@@ -68,11 +68,9 @@ const Activities = () => {
           )}
           {error && <p className="text-red-500">{error}</p>}
 
-          <ul className="flex flex-wrap justify-between gap-4 my-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 justify-between w-full gap-10 my-10">
             {activities.map((a) => (
-              <li key={a.id} className="">
-                {/* <h3 className="font-bold">{a.name}</h3>
-                <p>{a.shortDescription}</p> */}
+              <div key={a.id} className="">
                 <ActivitiesCard
                   title={a.name}
                   price={
@@ -82,10 +80,11 @@ const Activities = () => {
                   }
                   location={a.tourismType || "General"}
                   img={a.pictures[0]}
+                  size="w-72 h-96"
                 />
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
 
           {totalPages > 1 && (
             <Pagination

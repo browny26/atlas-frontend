@@ -1,6 +1,8 @@
 import React from "react";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 
+import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
+
 const ActivitiesCard = ({
   price = null,
   title = "",
@@ -14,6 +16,8 @@ const ActivitiesCard = ({
         size ? size : "lg:w-96 w-[90dvw] h-[500px]"
       }  shadow-md overflow-hidden`}
     >
+      <ExclamationCircleIcon className="absolute top-5 right-5 h-6 w-6 text-white z-20" />
+
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black to-transparent z-10"></div>
       {/* Background Image */}
       <div className="absolute inset-0">

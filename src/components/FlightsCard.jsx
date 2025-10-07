@@ -28,33 +28,37 @@ const FlightsCard = ({ flight, onClick }) => {
         <h4 className="font-semibold text-lg mb-2">
           Flight: {flight.validatingAirlineCodes[0]}
         </h4>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <p className="flex flex-col">
+            <strong>From:</strong> {firstSegment.departure.iataCode}{" "}
+          </p>
 
-        <p>
-          <strong>From:</strong> {firstSegment.departure.iataCode}{" "}
-          <strong>To:</strong> {lastSegment.arrival.iataCode}
-        </p>
+          <p className="flex flex-col">
+            <strong>To:</strong> {lastSegment.arrival.iataCode}
+          </p>
 
-        <p>
-          <strong>Departure:</strong>{" "}
-          {new Date(firstSegment.departure.at).toLocaleString()}
-        </p>
+          <p className="flex flex-col">
+            <strong>Departure:</strong>{" "}
+            {new Date(firstSegment.departure.at).toLocaleString()}
+          </p>
 
-        <p>
-          <strong>Arrival:</strong>{" "}
-          {new Date(lastSegment.arrival.at).toLocaleString()}
-        </p>
+          <p className="flex flex-col">
+            <strong>Arrival:</strong>{" "}
+            {new Date(lastSegment.arrival.at).toLocaleString()}
+          </p>
 
-        <p>
-          <strong>Duration:</strong> {hours}h {minutes}m
-        </p>
+          <p className="flex flex-col">
+            <strong>Duration:</strong> {hours}h {minutes}m
+          </p>
 
-        <p>
-          <strong>Seats available:</strong> {flight.numberOfBookableSeats}
-        </p>
+          <p className="flex flex-col">
+            <strong>Seats available:</strong> {flight.numberOfBookableSeats}
+          </p>
 
-        <p>
-          <strong>Price:</strong> {flight.price.total} {flight.price.currency}
-        </p>
+          <p className="flex flex-col">
+            <strong>Price:</strong> {flight.price.total} {flight.price.currency}
+          </p>
+        </div>
       </div>
       <Button type="button" onClick={onClick}>
         More Info
