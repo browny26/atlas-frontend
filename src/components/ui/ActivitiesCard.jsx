@@ -9,14 +9,16 @@ const ActivitiesCard = ({
   location = "SPAIN, EUROPE",
   img = null,
   size = "",
+  onClick,
 }) => {
   return (
     <div
-      className={`relative ${
+      className={`relative cursor-pointer ${
         size ? size : "lg:w-96 w-[90dvw] h-[500px]"
       }  shadow-md overflow-hidden`}
+      onClick={onClick}
     >
-      <ExclamationCircleIcon className="absolute top-5 right-5 h-6 w-6 text-white z-20" />
+      <ExclamationCircleIcon className="absolute top-5 right-5 h-6 w-6 text-white z-20 cursor-pointer" />
 
       <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black to-transparent z-10"></div>
       {/* Background Image */}

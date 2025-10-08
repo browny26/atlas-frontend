@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import GoogleMapComponent from "../../components/GoogleMapComponent";
 import ActivitiesCard from "../../components/ui/ActivitiesCard";
 import Pagination from "../../components/Pagination";
+import { Modal } from "../../components/ui/Modal";
+import Button from "../../components/ui/Button";
 import { dotPulse } from "ldrs";
+import { useModal } from "../../hooks/useModal";
+import ActivityDescription from "../../components/ui/ActivityDescription";
+import { Link } from "react-router-dom";
 dotPulse.register();
 
 const Activities = () => {
+  const { isOpen, openModal, closeModal } = useModal();
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [location, setLocation] = useState(null);
+  const [selectedActivity, setSelectedActivity] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const itemsPerPage = 10;
@@ -43,6 +50,11 @@ const Activities = () => {
     setLocation({ lat, lng });
     setPage(1);
     fetchActivities(lat, lng, 1, 1);
+  };
+
+  const handleSelectCard = (activity) => {
+    openModal();
+    setSelectedActivity(activity);
   };
 
   useEffect(() => {
@@ -81,6 +93,7 @@ const Activities = () => {
                   location={a.tourismType || "General"}
                   img={a.pictures[0]}
                   size="w-72 h-96"
+                  onClick={() => handleSelectCard(a)}
                 />
               </div>
             ))}
@@ -94,6 +107,51 @@ const Activities = () => {
               size="sm" // o "lg"
             />
           )}
+
+          <Modal
+            isOpen={isOpen}
+            onClose={closeModal}
+            className="max-w-[700px] m-4"
+          >
+            <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 lg:p-11">
+              <div className="px-2 pr-14">
+                <h4 className="mb-4 text-2xl font-semibold text-gray-800">
+                  Activity Information
+                </h4>
+
+                {selectedActivity ? (
+                  <>
+                    {selectedActivity.minimumDuration && (
+                      <p className="text-sm my-4">
+                        Minimum Duration: {selectedActivity.minimumDuration}
+                      </p>
+                    )}
+                    <p className="mb-2">
+                      <ActivityDescription
+                        description={selectedActivity.description}
+                      />
+                    </p>
+
+                    {selectedActivity.bookingLink && (
+                      <p className="text-sm my-4">
+                        Want to book?{" "}
+                        <Link
+                          to={selectedActivity.bookingLink}
+                          className="cursor-pointer text-blue-600"
+                        >
+                          Click here
+                        </Link>
+                      </p>
+                    )}
+
+                    <Button onClick={closeModal}>Close</Button>
+                  </>
+                ) : (
+                  <p>No flight data available</p>
+                )}
+              </div>
+            </div>
+          </Modal>
         </div>
       </div>
     </>
