@@ -5,18 +5,28 @@ import Input from "../ui/InputField";
 import Checkbox from "../ui/Checkbox";
 import Button from "../ui/Button";
 import { useUser } from "../../context/UserContext";
+import { set } from "date-fns";
 export default function SignInForm() {
+  const [message, setMessage] = useState({ type: "", text: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
   const { login } = useUser();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
+
+    if (!email || !password) {
+      setMessage({ type: "error", text: "Email and password are required" });
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:8080/v1/api/auth/login", {
@@ -28,7 +38,8 @@ export default function SignInForm() {
       });
 
       if (!response.ok) {
-        console.error("Errore login");
+        setMessage({ type: "error", text: "Invalid email or password" });
+        setLoading(false);
         return;
       }
 
@@ -39,6 +50,9 @@ export default function SignInForm() {
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
+      setMessage({ type: "error", text: "Login failed. Please try again." });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,7 +83,7 @@ export default function SignInForm() {
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
           <div className="mb-5 sm:mb-8">
-            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm sm:text-title-md">
+            <h1 className="mb-2 font-semibold text-gray-800 text-lg sm:text-xl">
               Sign In
             </h1>
             <p className="text-sm text-gray-500 ">
@@ -151,6 +165,7 @@ export default function SignInForm() {
                       id={"password"}
                       name={"password"}
                       placeholder="Enter your password"
+                      required
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -203,7 +218,7 @@ export default function SignInForm() {
                     </span>
                   </div>
                   <Link
-                    to="/reset-password"
+                    to="/forgot-password"
                     className="text-sm text-brand-500 hover:text-brand-600 "
                   >
                     Forgot password?
@@ -211,8 +226,25 @@ export default function SignInForm() {
                 </div>
                 <div>
                   <Button type="submit" className="w-full">
-                    Sign in
+                    {loading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Signin In...
+                      </div>
+                    ) : (
+                      "Sign In"
+                    )}
                   </Button>
+                  {message.text && message.type === "success" && (
+                    <p className="text-green-600 text-center text-sm mt-2">
+                      {message.text}
+                    </p>
+                  )}
+                  {message.text && message.type === "error" && (
+                    <p className="text-red-600 text-center text-sm mt-2">
+                      {message.text}
+                    </p>
+                  )}
                 </div>
               </div>
             </form>
@@ -222,7 +254,7 @@ export default function SignInForm() {
                 Don&apos;t have an account? {""}
                 <Link
                   to="/signup"
-                  className="text-brand-500 hover:text-brand-600 "
+                  className="text-blue-500 hover:text-blue-600 "
                 >
                   Sign Up
                 </Link>

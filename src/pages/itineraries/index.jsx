@@ -417,7 +417,7 @@ const index = () => {
 
                   {/* Travel Tips */}
                   {getTips(itinerary).length > 0 && (
-                    <div className="bg-white rounded-2xl shadow-lg p-6">
+                    <div className="bg-white shadow-lg p-6">
                       <h3 className="text-2xl font-bold text-gray-800 mb-4">
                         Travel Tips
                       </h3>

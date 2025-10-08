@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const token = localStorage.getItem("token");
   return (
     <nav className="w-full flex items-center justify-end md:justify-between mx-auto my-10 px-6 max-w-7xl">
       <span className="h-6 w-6 text-black cursor-pointer opacity-0"></span>
@@ -27,7 +28,7 @@ const Navbar = () => {
           <Link to="/destinations">Destinations</Link>
         </li>
       </ul>
-      <Link to="/signin">
+      <Link to={token ? "/dashboard" : "/signin"}>
         <UserCircleIcon className="h-6 w-6 text-black cursor-pointer" />
       </Link>
 

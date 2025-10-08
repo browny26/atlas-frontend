@@ -4,20 +4,39 @@ import Label from "../ui/Label";
 import Input from "../ui/InputField";
 import Checkbox from "../ui/Checkbox";
 import Button from "../ui/Button";
+import { set } from "date-fns";
 
 export default function SignUpForm() {
+  const [message, setMessage] = useState({ type: "", text: "" });
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(e.target);
     const firstName = formData.get("fname");
     const lastName = formData.get("lname");
     const email = formData.get("email");
     const password = formData.get("password");
+
+    if (!firstName || !lastName || !email || !password) {
+      setMessage({ type: "error", text: "All fields are required" });
+      setLoading(false);
+      return;
+    }
+
+    if (!isChecked) {
+      setMessage({
+        type: "error",
+        text: "You must agree to the Terms and Conditions and Privacy Policy",
+      });
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -32,13 +51,21 @@ export default function SignUpForm() {
       );
 
       if (!response.ok) {
-        console.error("Errore Register");
+        setMessage({ type: "error", text: "Registration failed" });
+        setLoading(false);
         return;
       }
 
+      setMessage({ type: "success", text: "Registration successful!" });
       navigate("/signin");
     } catch (error) {
       console.error("Login failed:", error);
+      setMessage({
+        type: "error",
+        text: "Registration failed. Please try again.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -69,7 +96,7 @@ export default function SignUpForm() {
       <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
         <div>
           <div className="mb-5 sm:mb-8">
-            <h1 className="mb-2 font-semibold text-gray-800 text-title-sm sm:text-title-md">
+            <h1 className="mb-2 font-semibold text-gray-800 text-lg sm:text-xl">
               Sign Up
             </h1>
             <p className="text-sm text-gray-500">
@@ -239,9 +266,26 @@ export default function SignUpForm() {
                   </p>
                 </div>
                 <div>
-                  <Button className="w-full" type="submit">
-                    Sign Up
+                  <Button type="submit" className="w-full">
+                    {loading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Signin Up...
+                      </div>
+                    ) : (
+                      "Sign Up"
+                    )}
                   </Button>
+                  {message.text && message.type === "success" && (
+                    <p className="text-green-600 text-center text-sm mt-2">
+                      {message.text}
+                    </p>
+                  )}
+                  {message.text && message.type === "error" && (
+                    <p className="text-red-600 text-center text-sm mt-2">
+                      {message.text}
+                    </p>
+                  )}
                 </div>
               </div>
             </form>
@@ -251,7 +295,7 @@ export default function SignUpForm() {
                 Already have an account? {""}
                 <Link
                   to="/signin"
-                  className="text-brand-500 hover:text-brand-600"
+                  className="text-blue-500 hover:text-blue-600"
                 >
                   Sign In
                 </Link>

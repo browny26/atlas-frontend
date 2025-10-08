@@ -13,6 +13,8 @@ import Flights from "./pages/flights";
 import Activities from "./pages/activities";
 import { useUser } from "./context/UserContext";
 import { ProtectedRoute } from "./layout/ProtectedRoute";
+import ResetPassword from "./pages/reset-password";
+import ForgotPassword from "./pages/forgot-password";
 
 export default function App() {
   const { user } = useUser();
@@ -25,6 +27,8 @@ export default function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Dashboard layout con pagine interne */}
 
