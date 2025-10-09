@@ -11,16 +11,21 @@ import {
   CloudIcon,
 } from "@heroicons/react/24/solid";
 import { bouncy } from "ldrs";
+import { useUser } from "../../context/UserContext";
+import { set } from "date-fns";
 bouncy.register();
 
 const index = () => {
+  const { user } = useUser();
   const [formData, setFormData] = useState({
     destination: "",
     days: 1,
     budget: "",
     interests: [],
   });
+  const [message, setMessage] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [itinerary, setItinerary] = useState(null);
   const [error, setError] = useState("");
 
@@ -82,6 +87,38 @@ const index = () => {
     }
   };
 
+  const handleSaveItinerary = async () => {
+    setSubmitted(false);
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/v1/api/itinerary/save/${user.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(itinerary),
+        }
+      );
+
+      if (!res.ok)
+        setMessage({ type: "error", text: "Failed to save itinerary" });
+
+      const data = await res.json();
+      if (data.success) {
+        setMessage({ type: "success", text: "Itinerary saved successfully" });
+      } else {
+        setMessage({ type: "error", text: "Failed to save itinerary" });
+      }
+    } catch (error) {
+      console.error("Error saving itinerary:", error);
+      setMessage({ type: "error", text: "Failed to save itinerary" });
+    } finally {
+      setSubmitted(true);
+    }
+  };
+
   const getAccommodation = (itinerary) => {
     return itinerary.accommodation || null;
   };
@@ -90,7 +127,6 @@ const index = () => {
     if (!itinerary.itinerary) return [];
 
     return itinerary.itinerary.map((day) => {
-      // Se ha la struttura classica (morning, afternoon, evening)
       if (day.morning || day.afternoon || day.evening) {
         return {
           day: day.day,
@@ -98,10 +134,8 @@ const index = () => {
           afternoon: day.afternoon,
           evening: day.evening,
         };
-      }
-      // Se ha la struttura activities array
-      else if (day.activities && Array.isArray(day.activities)) {
-        const activities = day.activities.slice(0, 3); // Prendi max 3 attività
+      } else if (day.activities && Array.isArray(day.activities)) {
+        const activities = day.activities.slice(0, 3);
         return {
           day: day.day,
           morning: activities[0] || null,
@@ -109,7 +143,7 @@ const index = () => {
           evening: activities[2] || null,
         };
       }
-      // Formato sconosciuto
+
       return {
         day: day.day,
         morning: null,
@@ -186,10 +220,10 @@ const index = () => {
         </p>
         <div className="space-y-6">
           {/* <Table /> */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
             {/* Form Section */}
             <div className="lg:col-span-1">
-              <div className="bg-white shadow-lg p-6 sticky top-8">
+              <div className="bg-white shadow p-6 sticky top-8">
                 <form onSubmit={generateItinerary} className="space-y-6">
                   {/* Destination */}
                   <div>
@@ -319,7 +353,7 @@ const index = () => {
                   )}
 
                   {/* Header Card */}
-                  <div className="bg-white shadow-lg p-6">
+                  <div className="bg-white shadow p-6">
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <h2 className="text-3xl font-bold text-gray-800 capitalize">
@@ -370,7 +404,7 @@ const index = () => {
                     {getItineraryDays(itinerary).map((day) => (
                       <div
                         key={day.day}
-                        className="bg-white shadow-lg overflow-hidden"
+                        className="bg-white shadow overflow-hidden"
                       >
                         <div className="bg-black p-4">
                           <h3 className="text-xl font-bold text-white">
@@ -417,7 +451,7 @@ const index = () => {
 
                   {/* Travel Tips */}
                   {getTips(itinerary).length > 0 && (
-                    <div className="bg-white shadow-lg p-6">
+                    <div className="bg-white shadow p-6">
                       <h3 className="text-2xl font-bold text-gray-800 mb-4">
                         Travel Tips
                       </h3>
@@ -440,20 +474,20 @@ const index = () => {
                   {/* Action Buttons */}
                   <div className="flex space-x-4">
                     <Button
-                      onClick={() => window.print()}
+                      onClick={() => handleSaveItinerary()}
                       className="flex-1 py-3"
                     >
                       📝 Save Itinerary
                     </Button>
-                    <Button
-                      onClick={() => setItinerary(null)}
+                    {/* <Button
+                      onClick={() => generateItinerary()}
                       textColor="black"
                       bgColor="gray-200"
                       hoverBgColor="gray-300"
                       className="flex-1 py-3"
                     >
                       🔄 Generate New
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
               ) : loading ? (

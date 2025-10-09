@@ -7,10 +7,10 @@ import { dotPulse } from "ldrs";
 import Button from "../../components/ui/Button";
 import FlightsCard from "../../components/FlightsCard";
 import { useModal } from "../../hooks/useModal";
-import { Modal } from "../../components/ui/modal";
 import { format } from "date-fns";
 import DatePicker from "../../components/ui/DatePicker";
 import AirportAutocomplete from "../../components/ui/AirportAutocomplete";
+import { Modal } from "../../components/ui/Modal";
 dotPulse.register();
 
 const Flights = () => {
@@ -96,7 +96,7 @@ const Flights = () => {
         <p className="mb-10">Search the flight for your new adventure</p>
         <div className="space-y-6">
           <form
-            className="border border-gray-100 flex flex-col gap-10 justify-between p-10"
+            className="border border-gray-100 shadow flex flex-col gap-10 justify-between p-10"
             onSubmit={(e) => fetchFlights(e)}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10 justify-between">

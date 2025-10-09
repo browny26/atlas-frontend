@@ -8,14 +8,16 @@ import { dotPulse } from "ldrs";
 import { useModal } from "../../hooks/useModal";
 import ActivityDescription from "../../components/ui/ActivityDescription";
 import { Link } from "react-router-dom";
+import { useActivity } from "../../context/ActivityContext";
 dotPulse.register();
 
 const Activities = () => {
+  const { pointer } = useActivity();
   const { isOpen, openModal, closeModal } = useModal();
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState(pointer || null);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
@@ -71,7 +73,10 @@ const Activities = () => {
         </h3>
         <p className="mb-10">Find the best activities in your location.</p>
         <div className="space-y-6 flex flex-col items-center">
-          <GoogleMapComponent onLocationSelect={handleLocationSelect} />
+          <GoogleMapComponent
+            onLocationSelect={handleLocationSelect}
+            initialMarker={pointer || null}
+          />
 
           {loading && (
             <div className="h-[30vh] w-full flex items-center justify-center">
@@ -126,11 +131,11 @@ const Activities = () => {
                         Minimum Duration: {selectedActivity.minimumDuration}
                       </p>
                     )}
-                    <p className="mb-2">
+                    <div className="mb-2">
                       <ActivityDescription
                         description={selectedActivity.description}
                       />
-                    </p>
+                    </div>
 
                     {selectedActivity.bookingLink && (
                       <p className="text-sm my-4">

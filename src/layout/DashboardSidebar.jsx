@@ -24,7 +24,7 @@ const navItems = [
   },
   {
     icon: <CalendarIcon className="h-6 w-6 " />,
-    name: "Itineraries",
+    name: "Itinerary Generator",
     path: "/dashboard/itineraries",
   },
   {
