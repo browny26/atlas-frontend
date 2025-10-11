@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router";
 
-// Assume these icons are imported from an icon library
 import {
   CalendarIcon,
   RectangleGroupIcon,
@@ -48,7 +47,13 @@ const othersItems = [
 ];
 
 const AppSidebar = () => {
-  const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const {
+    isExpanded,
+    isMobileOpen,
+    isHovered,
+    setIsHovered,
+    toggleMobileSidebar,
+  } = useSidebar();
   const location = useLocation();
   const { logout } = useUser();
 
@@ -56,11 +61,23 @@ const AppSidebar = () => {
   const [subMenuHeight, setSubMenuHeight] = useState({});
   const subMenuRefs = useRef({});
 
-  // const isActive = (path: string) => location.pathname === path;
   const isActive = useCallback(
     (path) => location.pathname === path,
     [location.pathname]
   );
+
+  const handleLinkClick = () => {
+    if (isMobileOpen) {
+      toggleMobileSidebar();
+    }
+  };
+
+  const handleLogout = () => {
+    if (isMobileOpen) {
+      toggleMobileSidebar();
+    }
+    logout();
+  };
 
   useEffect(() => {
     let submenuMatched = false;
@@ -155,6 +172,7 @@ const AppSidebar = () => {
             nav.path && (
               <Link
                 to={nav.path}
+                onClick={handleLinkClick}
                 className={`menu-item flex gap-2 group p-2 transition-colors ${
                   isActive(nav.path)
                     ? "menu-item-active bg-blue-300/30 text-blue-400 border-b border-blue-400"
@@ -194,6 +212,7 @@ const AppSidebar = () => {
                   <li key={subItem.name}>
                     <Link
                       to={subItem.path}
+                      onClick={handleLinkClick}
                       className={`menu-dropdown-item ${
                         isActive(subItem.path)
                           ? "menu-dropdown-item-active"
@@ -257,7 +276,7 @@ const AppSidebar = () => {
             !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
           }`}
         >
-          <Link to="/">
+          <Link to="/" onClick={handleLinkClick}>
             {isExpanded || isHovered || isMobileOpen ? (
               <span className="font-bold">ATLAS</span>
             ) : (
@@ -307,7 +326,7 @@ const AppSidebar = () => {
       <div className="flex items-center gap-2 py-8">
         <div
           className={`menu-item flex gap-2 group p-2 cursor-pointer`}
-          onClick={logout}
+          onClick={handleLogout}
         >
           <span className={`menu-item-icon-size `}>
             <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />
