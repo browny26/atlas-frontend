@@ -14,6 +14,7 @@ import { bouncy } from "ldrs";
 import { useUser } from "../../context/UserContext";
 import { set } from "date-fns";
 import ActivityCard from "../../components/ActivityCard";
+import { itineraryAPI } from "../../services/api";
 bouncy.register();
 
 const index = () => {
@@ -62,20 +63,22 @@ const index = () => {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/v1/api/itinerary/generate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      // const response = await fetch(
+      //   "http://localhost:8080/v1/api/itinerary/generate",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(formData),
+      //   }
+      // );
 
-      if (!response.ok) throw new Error("Failed to generate itinerary");
+      const res = await itineraryAPI.generateItinerary(formData);
 
-      const data = await response.json();
+      if (res.status !== 200) throw new Error("Failed to generate itinerary");
+
+      const data = res.data;
       if (data.success) {
         setItinerary(data.itinerary);
       } else {

@@ -14,6 +14,7 @@ import {
   CloudIcon,
 } from "@heroicons/react/24/solid";
 import ActivityCard from "../../components/ActivityCard";
+import { itineraryAPI } from "../../services/api";
 
 const Dashboard = () => {
   const { isOpen, openModal, closeModal } = useModal();
@@ -29,14 +30,20 @@ const Dashboard = () => {
 
   const getUserItineraries = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8080/v1/api/itinerary", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!response.ok) throw new Error("Failed to fetch itineraries");
-      const data = await response.json();
-      console.log("User Itineraries:", data);
+      const res = await itineraryAPI.getUserItineraries();
 
+      if (res.status !== 200) throw new Error("Failed to generate itinerary");
+
+      const data = res.data;
+
+      if (data.length === 0) {
+        return;
+      }
+      if (data.success) {
+        setItinerary(data.itinerary);
+      } else {
+        throw new Error("Failed to generate itinerary");
+      }
       setItineraries(data);
     } catch (error) {
       console.error("Error fetching itineraries:", error);
@@ -54,8 +61,8 @@ const Dashboard = () => {
           Dashboard
         </h3>
         <section className="space-y-6">
-          <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+          <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <div className="xl:col-span-2">
               <p className="mb-2 text-gray-600">
                 Click on the map to find the best activity near you!
               </p>
@@ -70,8 +77,8 @@ const Dashboard = () => {
                   <div>
                     {itineraries.length === 0 ? (
                       <p className="text-gray-500">
-                        You have no itineraries. Create one by selecting a
-                        location on the map.
+                        You have no itineraries. Create one by clicking the
+                        button down below.
                       </p>
                     ) : (
                       <div className="max-h-[400px] overflow-y-auto">

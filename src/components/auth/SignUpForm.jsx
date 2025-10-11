@@ -5,6 +5,7 @@ import Input from "../ui/InputField";
 import Checkbox from "../ui/Checkbox";
 import Button from "../ui/Button";
 import { set } from "date-fns";
+import { authAPI } from "../../services/api";
 
 export default function SignUpForm() {
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -39,18 +40,14 @@ export default function SignUpForm() {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/v1/api/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password, firstName, lastName }),
-        }
-      );
+      const response = await authAPI.register({
+        email,
+        password,
+        firstName,
+        lastName,
+      });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         setMessage({ type: "error", text: "Registration failed" });
         setLoading(false);
         return;

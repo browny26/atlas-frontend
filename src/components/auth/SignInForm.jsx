@@ -5,7 +5,8 @@ import Input from "../ui/InputField";
 import Checkbox from "../ui/Checkbox";
 import Button from "../ui/Button";
 import { useUser } from "../../context/UserContext";
-import { set } from "date-fns";
+import { authAPI } from "../../services/api";
+
 export default function SignInForm() {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -29,21 +30,14 @@ export default function SignInForm() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/v1/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await authAPI.login({ email, password });
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         setMessage({ type: "error", text: "Invalid email or password" });
         setLoading(false);
         return;
       }
-
-      const data = await response.json();
+      const data = response.data;
       const token = data.token;
 
       await login(token);

@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import DatePicker from "../../components/ui/DatePicker";
 import AirportAutocomplete from "../../components/ui/AirportAutocomplete";
 import { Modal } from "../../components/ui/Modal";
+import { flightsAPI } from "../../services/api";
 dotPulse.register();
 
 const Flights = () => {
@@ -47,19 +48,17 @@ const Flights = () => {
     }
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/amadeus/flights?origin=${flightData.origin}&destination=${flightData.destination}&departDate=${flightData.departDate}&returnDate=${flightData.returnDate}&adults=${flightData.adults}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (!res.ok) throw new Error("Errore durante la richiesta");
-      const data = await res.json();
+      const res = await flightsAPI.searchFlights({
+        origin: flightData.origin,
+        destination: flightData.destination,
+        departDate: flightData.departDate,
+        returnDate: flightData.returnDate,
+        adults: flightData.adults,
+      });
+
+      if (res.status !== 200) throw new Error("Errore durante la richiesta");
+      const data = res.data;
       setFlights(data || []);
-      //setTotalPages(data.totalPages);
-      //setPage(data.page);
       setError("");
     } catch (err) {
       setError(err.message);
@@ -67,16 +66,6 @@ const Flights = () => {
       setLoading(false);
     }
   }
-
-  const handleDepartDateChange = (date) => {
-    const formattedDate = format(date, "yyyy-MM-dd");
-    setFlightData({ ...flightData, departDate: formattedDate });
-  };
-
-  const handleReturnDateChange = (date) => {
-    const formattedDate = format(date, "yyyy-MM-dd");
-    setFlightData({ ...flightData, returnDate: formattedDate });
-  };
 
   const handleOpenModal = (flight) => {
     setSelectedFlight(flight);

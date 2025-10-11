@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Label from "../ui/Label";
 import Input from "../ui/InputField";
 import Button from "../ui/Button";
+import { authAPI } from "../../services/api";
 
 const ResetRequestForm = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -14,19 +15,10 @@ const ResetRequestForm = () => {
     const email = e.target.email.value;
 
     try {
-      const result = await fetch(
-        "http://localhost:8080/v1/api/auth/request-reset-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        }
-      );
+      const res = await authAPI.requestReset({ email });
 
-      if (!result.ok) {
-        const data = await result.json();
+      if (res.status !== 200) {
+        const data = res.data;
         setMessage({
           type: "error",
           text: data.message || "Failed to send reset link",

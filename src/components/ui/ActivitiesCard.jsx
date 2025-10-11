@@ -13,9 +13,9 @@ const ActivitiesCard = ({
 }) => {
   return (
     <div
-      className={`relative cursor-pointer ${
-        size ? size : "lg:w-96 w-[90dvw] h-[500px]"
-      }  shadow-md overflow-hidden`}
+      className={`relative cursor-pointer group ${
+        size ? size : "w-full h-full min-h-[400px] lg:min-h-[500px]"
+      } overflow-hidden`}
       onClick={onClick}
     >
       <ExclamationCircleIcon className="absolute top-5 right-5 h-6 w-6 text-white z-20 cursor-pointer" />

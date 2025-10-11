@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Label from "../ui/Label";
 import Input from "../ui/InputField";
 import Button from "../ui/Button";
+import { authAPI } from "../../services/api";
 
 const ResetPasswordForm = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -28,19 +29,21 @@ const ResetPasswordForm = () => {
     }
 
     try {
-      const result = await fetch(
-        "http://localhost:8080/v1/api/auth/reset-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token, newPassword: password }),
-        }
-      );
+      // const result = await fetch(
+      //   "http://localhost:8080/v1/api/auth/reset-password",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify({ token, newPassword: password }),
+      //   }
+      // );
 
-      if (!result.ok) {
-        const data = await result.json();
+      const res = await authAPI.resetPassword({ token, newPassword: password });
+
+      if (res.status !== 200) {
+        const data = res.data;
         setMessage({
           type: "error",
           text: data.message || "Failed to reset password",

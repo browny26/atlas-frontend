@@ -1,20 +1,17 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { authAPI, userAPI } from "../services/api";
 
-// Creo il context
 const UserContext = createContext();
 
-// Hook personalizzato per usarlo facilmente
 export const useUser = () => useContext(UserContext);
 
-// Provider che avvolge l'app e mantiene lo stato dell'utente
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // user = { id, email, firstName, lastName }
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Funzione per fare il login e salvare il token
   const login = async (token) => {
     localStorage.setItem("token", token);
-    await fetchUser(); // recupera info utente dal backend
+    await fetchUser();
   };
 
   // Funzione per logout
@@ -23,7 +20,6 @@ export const UserProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Funzione per recuperare l'utente dal backend
   const fetchUser = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -33,29 +29,19 @@ export const UserProvider = ({ children }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:8080/v1/api/auth/status", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await authAPI.status();
 
-      if (!res.ok) throw new Error("Non autorizzato");
+      if (res.status !== 200) throw new Error("Non autorizzato");
 
-      const data = await res.json();
+      const data = res.data;
 
-      const userData = await fetch(
-        `http://localhost:8080/v1/api/user/${data.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const userData = await userAPI.getUser(data.id);
 
-      if (!userData.ok) throw new Error("Errore nel recupero dei dati utente");
+      if (userData.status !== 200)
+        throw new Error("Errore nel recupero dei dati utente");
 
-      const dataUser = await userData.json();
-      setUser(dataUser); // salva i dati dell'utente
+      const dataUser = userData.data;
+      setUser(dataUser);
     } catch (err) {
       console.error(err);
       setUser(null);
@@ -64,7 +50,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // Recupero l'utente al mount del provider
   useEffect(() => {
     fetchUser();
   }, []);

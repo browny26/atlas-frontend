@@ -9,6 +9,7 @@ import { useModal } from "../../hooks/useModal";
 import ActivityDescription from "../../components/ui/ActivityDescription";
 import { Link } from "react-router-dom";
 import { useActivity } from "../../context/ActivityContext";
+import { activityAPI } from "../../services/api";
 dotPulse.register();
 
 const Activities = () => {
@@ -27,16 +28,20 @@ const Activities = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(
-        `http://localhost:8080/amadeus/tours-and-activities?latitude=${41.397158}&longitude=${2.160873}&radius=${1}&page=${page}&size=${itemsPerPage}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (!res.ok) throw new Error("Errore durante la richiesta");
-      const data = await res.json();
+      const request = {
+        latitude: 41.397158,
+        longitude: 2.160873,
+        radius: 1,
+        page: page,
+        size: itemsPerPage,
+      };
+
+      console.log(request);
+
+      const res = await activityAPI.searchActivity(request);
+
+      if (res.status !== 200) throw new Error("Errore durante la richiesta");
+      const data = res.data;
       setActivities(data.data || []);
       setTotalPages(data.totalPages);
       setPage(data.page);
@@ -85,22 +90,19 @@ const Activities = () => {
           )}
           {error && <p className="text-red-500">{error}</p>}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 justify-between w-full gap-10 my-10">
+          <div className="flex flex-wrap justify-between w-full gap-10 my-10">
             {activities.map((a) => (
-              <div key={a.id} className="">
-                <ActivitiesCard
-                  title={a.name}
-                  price={
-                    a.price
-                      ? `${a.price.amount}0 ${a.price.currencyCode}`
-                      : "N/A"
-                  }
-                  location={a.tourismType || "General"}
-                  img={a.pictures[0]}
-                  size="w-72 h-96"
-                  onClick={() => handleSelectCard(a)}
-                />
-              </div>
+              <ActivitiesCard
+                key={a.id}
+                title={a.name}
+                price={
+                  a.price ? `${a.price.amount}0 ${a.price.currencyCode}` : "N/A"
+                }
+                location={a.tourismType || "General"}
+                img={a.pictures[0]}
+                size="w-72 h-96"
+                onClick={() => handleSelectCard(a)}
+              />
             ))}
           </div>
 

@@ -1,14 +1,16 @@
 import { useModal } from "../hooks/useModal";
-import { Modal } from "./ui/modal";
-import Button from "./ui//Button";
+import { Modal } from "./ui/Modal";
+import Button from "./ui/Button";
 import Input from "./ui/InputField";
 import Label from "./ui/Label";
 import { useUser } from "../context/UserContext";
 import { useState } from "react";
+import { userAPI } from "../services/api";
 
 export default function UserInfoCard() {
   const { isOpen, openModal, closeModal } = useModal();
   const { user, fetchUser } = useUser();
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
     firstName: user ? user.firstName : "",
     lastName: user ? user.lastName : "",
@@ -21,31 +23,25 @@ export default function UserInfoCard() {
     instagramLink: user ? user.instagramLink : "",
   });
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
-
-    console.log("User Data to be saved:", userData);
+    setLoading(true);
 
     try {
-      const response = fetch(`http://localhost:8080/v1/api/user/${user.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(userData),
-      });
+      await userAPI.updateProfile(user.id, userData);
+
       setTimeout(() => {
         fetchUser();
       }, 1000);
     } catch (error) {
       console.error("Error updating user data:", error);
     } finally {
+      setLoading(false);
       closeModal();
     }
-    console.log("Saving changes...");
     closeModal();
   };
+
   return (
     <div className="p-5 border border-gray-100 lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -230,7 +226,7 @@ export default function UserInfoCard() {
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Email Address</Label>
                     <Input
-                      type="text"
+                      type="email"
                       value={userData.email}
                       onChange={(e) =>
                         setUserData({
@@ -244,7 +240,7 @@ export default function UserInfoCard() {
                   <div className="col-span-2 lg:col-span-1">
                     <Label>Phone</Label>
                     <Input
-                      type="text"
+                      type="phone"
                       value={userData.phoneNumber}
                       onChange={(e) =>
                         setUserData({
@@ -273,7 +269,16 @@ export default function UserInfoCard() {
             </div>
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
               <Button text="Close" onClick={closeModal} />
-              <Button text="Save Changes" type="submit" />
+              <Button type="submit">
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Saving Changes...
+                  </div>
+                ) : (
+                  "Save Changes"
+                )}
+              </Button>
             </div>
           </form>
         </div>
