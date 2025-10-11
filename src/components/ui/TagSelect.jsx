@@ -11,7 +11,6 @@ const TagSelect = ({
 
   const handleChange = (newValue) => {
     setValue(newValue);
-    // Restituisce solo i valori (["food", "culture"]) invece di oggetti
     onChange?.(newValue.map((opt) => opt.value));
   };
 
@@ -26,12 +25,12 @@ const TagSelect = ({
       styles={{
         control: (base, state) => ({
           ...base,
-          backgroundColor: "#f9fafb", // bg-gray-50
           border: "none",
-          borderBottom: `1px solid ${state.isFocused ? "black" : "#f9fafb"}`,
+          borderBottom: `1px solid ${state.isFocused ? "black" : "#d1d5db"}`,
+          backgroundColor: "transparent",
           borderRadius: 0,
           boxShadow: "none",
-          padding: "6px 10px", // p-2.5
+          padding: "5px 10px", // p-2.5
           minHeight: "unset",
           fontSize: "0.875rem", // text-sm
         }),
@@ -54,7 +53,7 @@ const TagSelect = ({
         }),
         placeholder: (base) => ({
           ...base,
-          color: "#6b7280", // gray-500
+          color: "#99a1af", // gray-500
         }),
       }}
       classNamePrefix="select"

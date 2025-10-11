@@ -29,7 +29,7 @@ const index = () => {
               services
             </span>
 
-            <h1 className="font-nata text-6xl sm:text-7xl md:text-9xl font-bold mb-4 text-nowrap">
+            <h1 className="font-nata text-6xl sm:text-7xl 2xl:text-8xl 3xl:text-9xl font-bold mb-4 text-nowrap">
               <span className="font-italiana">Your Gateway to</span>
               <br />
               Travel Adventures
@@ -44,7 +44,7 @@ const index = () => {
       </header>
 
       <section className="py-20">
-        <div className="grid grid-cols-3 gap-5 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 p-5 max-w-7xl mx-auto">
           <div className="flex flex-col gap-5 p-10 bg-gray-100">
             <MapIcon className="h-15 w-15" />
             <div className="flex flex-col gap-2">
@@ -110,7 +110,7 @@ const index = () => {
       </section>
 
       <section className="pb-16">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto p-5">
           <h2 className="text-[200px] font-marcellus">Adventure</h2>
           <div className="flex flex-col lg:flex-row gap-10 mt-5">
             <div className="flex flex-col">
@@ -145,7 +145,7 @@ const index = () => {
               </span>
               <div className="flex flex-col gap-6 h-full">
                 <div
-                  className="relative flex-2 bg-cover bg-center bg-no-repeat overflow-hidden h-96"
+                  className="relative lg:flex-2 bg-cover bg-center bg-no-repeat overflow-hidden h-96"
                   style={{
                     backgroundImage:
                       "url('https://images.unsplash.com/photo-1506260408121-e353d10b87c7?q=80&w=2728&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
@@ -157,7 +157,7 @@ const index = () => {
               </div>
               <div className="flex flex-col gap-6 h-full">
                 <div
-                  className="relative flex-2 bg-cover bg-center bg-no-repeat overflow-hidden h-96"
+                  className="relative lg:flex-2 bg-cover bg-center bg-no-repeat overflow-hidden h-96"
                   style={{
                     backgroundImage:
                       "url('https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?q=80&w=2371&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
@@ -182,7 +182,9 @@ const index = () => {
           <span className="uppercase tracking-widest font-medium items-center gap-2">
             Experience the beauty with sunshine.
           </span>
-          <h2 className="text-[200px] font-marcellus">Ready?</h2>
+          <h2 className="text-[100px] md:text-[150px] lg:text-[200px] font-marcellus">
+            Ready?
+          </h2>
         </div>
       </section>
 
@@ -196,7 +198,7 @@ const index = () => {
             }}
           >
             <div className="lg:flex p-10">
-              <div className="md:w-1/2 flex flex-col">
+              <div className="md:w-1/2 flex flex-col mb-20">
                 <h2 className="font-nata text-6xl font-bold">
                   <span className="font-italiana font-black md:text-5xl">
                     Explore the

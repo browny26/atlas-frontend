@@ -79,12 +79,8 @@ const Flights = () => {
   };
 
   const handleOpenModal = (flight) => {
-    console.log("1. Flight card clicked");
-    console.log("2. Flight data:", flight);
     setSelectedFlight(flight);
-    console.log("3. Selected flight set");
     openModal();
-    console.log("4. Modal opened, isOpen should be true");
   };
 
   return (

@@ -28,7 +28,7 @@ const index = () => {
               about us
             </span>
 
-            <h1 className="font-nata text-6xl sm:text-7xl md:text-9xl font-bold mb-4 text-nowrap">
+            <h1 className="font-nata text-6xl sm:text-7xl md:text-8xl 3xl:text-9xl font-bold mb-4 text-nowrap">
               <span className="font-italiana">We choose</span>
               <br />
               Prime locations
@@ -306,7 +306,7 @@ const index = () => {
       <section className="py-16 w-full">
         <div className="max-w-7xl flex flex-col items-center justify-center mx-auto">
           <div className="w-full">
-            <h2 className="font-nata text-3xl md:text-6xl font-bold mb-12">
+            <h2 className="font-nata text-3xl md:text-6xl font-bold mb-12 text-center lg:text-start">
               <span className="font-italiana font-black md:text-5xl">
                 Tourists
               </span>
@@ -314,8 +314,8 @@ const index = () => {
               Experience
             </h2>
           </div>
-          <div class="mx-auto w-full grid grid-cols-1 gap-x-8 gap-y-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            <article class="flex max-w-xl flex-col items-start justify-between bg-gray-100 p-8">
+          <div class="mx-auto w-full grid grid-cols-1 gap-x-8 gap-y-16 sm:pt-16 px-5 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+            <article class="flex w-full lg:max-w-xl flex-col items-start justify-between bg-gray-100 p-8">
               <div class="flex items-center gap-2 text-xs">
                 <StarIcon className="h-3 w-3 text-amber-500" />
                 <StarIcon className="h-3 w-3 text-amber-500" />
@@ -351,7 +351,7 @@ const index = () => {
                 </div>
               </div>
             </article>
-            <article class="flex max-w-xl flex-col items-start justify-between bg-gray-100 p-8">
+            <article class="flex w-full lg:max-w-xl flex-col items-start justify-between bg-gray-100 p-8">
               <div class="flex items-center gap-2 text-xs">
                 <StarIcon className="h-3 w-3 text-amber-500" />
                 <StarIcon className="h-3 w-3 text-amber-500" />
@@ -389,7 +389,7 @@ const index = () => {
                 </div>
               </div>
             </article>
-            <article class="flex max-w-xl flex-col items-start justify-between bg-gray-100 p-8">
+            <article class="flex w-full lg:max-w-xl flex-col items-start justify-between bg-gray-100 p-8">
               <div class="flex items-center gap-2 text-xs">
                 <StarIcon className="h-3 w-3 text-amber-500" />
                 <StarIcon className="h-3 w-3 text-amber-500" />

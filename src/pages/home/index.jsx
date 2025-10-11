@@ -6,13 +6,29 @@ import Accordion from "../../components/ui/Accordion";
 import Carousel from "../../components/ui/Carousel";
 import Footer from "../../components/Footer";
 import { ArrowDownIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const [loading, setLoading] = useState();
+  const [error, setError] = useState();
+  const navigate = useNavigate();
+
+  const handleSubmitSuccess = (results, tabType) => {
+    navigate("/adventure", {
+      state: {
+        results,
+        tabType,
+        timestamp: new Date().getTime(),
+      },
+    });
+  };
+
   return (
     <div className="bg-gray-50">
       {/* Header Section */}
       <header
-        className="relative h-screen flex flex-col items-center w-full bg-cover bg-center bg-no-repeat overflow-hidden"
+        className="relative h-screen flex flex-col items-center w-full bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=2676&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')", // Replace with your image
@@ -22,13 +38,17 @@ const Home = () => {
 
         <div className="flex-grow flex items-center justify-center lg:mt-30">
           <div className="text-center text-black px-4 max-w-3xl flex flex-col items-center gap-16">
-            <h1 className="font-nata text-6xl sm:text-7xl md:text-9xl font-bold mb-4 text-white">
+            <h1 className="font-nata text-6xl sm:text-7xl md:text-8xl 2xl:text-9xl font-bold mb-4 text-white select-none">
               <span className="font-italiana text-black">Mysteries of</span>
               <br />
               The World
             </h1>
 
-            <BookingForm />
+            <BookingForm
+              onSuccess={handleSubmitSuccess}
+              setError={setError}
+              setLoading={setLoading}
+            />
 
             <span className="flex flex-col gap-2 items-center text-white/50 font-nata md:text-xl font-extralight">
               Scrool Down
@@ -39,7 +59,7 @@ const Home = () => {
       </header>
 
       {/* Explore Section */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4 z-0">
         <div className="container flex flex-col items-center mx-auto max-w-6xl">
           <h2 className="font-nata text-3xl md:text-6xl text-center font-bold mb-12">
             <span className="font-italiana font-black md:text-5xl">
@@ -49,7 +69,7 @@ const Home = () => {
             beautiful
           </h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 justify-center">
             {/* Destination 1 */}
             <Card
               rating={4.5}

@@ -7,73 +7,279 @@ import Button from "./ui/Button";
 import TextInput from "./ui/TextInput";
 import Select from "./ui/Select";
 import TagSelect from "./ui/TagSelect";
+import AirportAutocomplete from "./ui/AirportAutocomplete";
+import Label from "./ui/Label";
+import DatePicker from "./ui/DatePicker";
+import Input from "./ui/InputField";
+import { validators } from "tailwind-merge";
+import { useNavigate } from "react-router-dom";
 
-const BookingForm = () => {
+const BookingForm = ({
+  setPage,
+  setError,
+  setLoading,
+  loading,
+  setFlights,
+  setItinerary,
+  onSuccess,
+}) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
+  const [flightData, setFlightData] = useState({
+    origin: "",
+    destination: "",
+    departDate: "",
+    returnDate: "",
+    adults: 1,
+  });
+  const [formData, setFormData] = useState({
+    destination: "",
+    days: 1,
+    budget: "",
+    interests: [],
+  });
   const tabs = [
     { label: "Itinerary", href: "#itinerary" },
-    { label: "Hotels", href: "#hotels" },
     { label: "Flights", href: "#flights" },
+  ];
+  const interestOptions = [
+    { value: "food", label: "Food" },
+    { value: "culture", label: "Culture" },
+    { value: "adventure", label: "Adventure" },
+    { value: "nature", label: "Nature" },
+    { value: "shopping", label: "Shopping" },
+    { value: "history", label: "History" },
+    { value: "relaxation", label: "Relaxation" },
+    { value: "nightlife", label: "Nightlife" },
   ];
 
   const handleTabChange = (index) => {
-    console.log("Tab changed to:", tabs[index].label);
     setActiveTab(index);
+    if (setPage) setPage(index);
+  };
+
+  async function fetchFlights(e) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    if (
+      !flightData.origin ||
+      !flightData.destination ||
+      !flightData.departDate
+    ) {
+      setError("Please fill in origin, destination and departure date");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(
+        `http://localhost:8080/amadeus/flights?origin=${flightData.origin}&destination=${flightData.destination}&departDate=${flightData.departDate}&returnDate=${flightData.returnDate}&adults=${flightData.adults}`
+      );
+      if (!res.ok) throw new Error("Errore durante la richiesta");
+      const data = await res.json();
+
+      if (onSuccess) {
+        onSuccess(data, "flights");
+      } else {
+        setFlights(data || []);
+      }
+      setError("");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const generateItinerary = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    if (!formData.destination || !formData.days || !formData.budget) {
+      setError("Please fill in destination, days and budget");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/v1/api/itinerary/generate",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to generate itinerary");
+
+      const data = await response.json();
+      if (onSuccess) {
+        onSuccess(data.itinerary, "itinerary");
+      } else {
+        if (data.success) {
+          setItinerary(data.itinerary);
+        } else {
+          throw new Error("Failed to generate itinerary");
+        }
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDepartDateChange = (date) => {
+    const formattedDate = format(date, "yyyy-MM-dd");
+    setFlightData({ ...flightData, departDate: formattedDate });
+  };
+
+  const handleReturnDateChange = (date) => {
+    const formattedDate = format(date, "yyyy-MM-dd");
+    setFlightData({ ...flightData, returnDate: formattedDate });
+  };
+
+  const handleSubmit = (e) => {
+    navigate("/adventure");
+    generateItinerary(e);
   };
 
   return (
-    <div className="bg-white py-4 px-6 flex flex-col flex-wrap gap-6 max-w-6xl lg:min-w-5xl min-w-full">
+    <div className="bg-white py-4 px-6 flex flex-col flex-wrap gap-6 max-w-6xl lg:min-w-5xl 2xl:min-w-7xl min-w-full z-10">
       <Tab tabs={tabs} onTabChange={handleTabChange} />
       {activeTab === 0 && (
-        <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-6 items-center gap-2">
-            <TextInput placeholder="Destination" />
-            <TextInput placeholder="Days" />
-            <TextInput placeholder="Budget (€)" />
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={(e) => generateItinerary(e)}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-center gap-x-2 gap-y-5">
+            <Input
+              name="destination"
+              id="destination"
+              type="text"
+              placeholder="Destination"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  destination: e.target.value,
+                })
+              }
+              containerClass="col-span-1 sm:col-span-2 lg:col-span-1"
+            />
+            <Input
+              type="number"
+              min={1}
+              placeholder="Days"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  days: e.target.value,
+                })
+              }
+            />
+            <Input
+              type="number"
+              min={1}
+              placeholder="Budget (€)"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  budget: e.target.value,
+                })
+              }
+            />
             <TagSelect
-              className="col-span-2"
+              className="col-span-1 sm:col-span-2 lg:col-span-1"
               placeholder="Interests"
-              options={[
-                { value: "food", label: "Food" },
-                { value: "culture", label: "Culture" },
-                { value: "adventure", label: "Adventure" },
-              ]}
-              onChange={(value) => console.log("Scelta singola:", value)}
+              options={interestOptions}
             />
 
-            <Button text="Explore All" />
+            <Button
+              type="submit"
+              text="Generate Itinerary"
+              className="col-span-1 sm:col-span-2 lg:col-span-1"
+            />
           </div>
-        </div>
+        </form>
       )}
       {activeTab === 1 && (
-        <div className="grid grid-cols-4 items-center gap-2">
-          <TextInput placeholder="Destination" />
-          <TextInput placeholder="Days" />
-          <TextInput placeholder="Budget (€)" />
-          <Button text="Explore All" />
-        </div>
-      )}
-      {activeTab === 2 && (
-        <div className="grid grid-cols-4 items-center gap-2">
-          <TextInput placeholder="Destination" />
-          <TextInput placeholder="Days" />
-          <Dropdown
-            text="Budget"
-            decorativeIcon={<TicketIcon className="h-3 w-3 text-black" />}
-            options={[
-              { label: "Economy Class", value: "profile" },
-              {
-                label: "Business Class",
-                value: "settings",
-              },
-              {
-                label: "First Class",
-                value: "signout",
-              },
-            ]}
-          />
-          <Button text="Explore All" />
-        </div>
+        <form
+          className="flex flex-col gap-10 justify-between"
+          onSubmit={(e) => fetchFlights(e)}
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-5 justify-between">
+            <div className="flex flex-col">
+              <AirportAutocomplete
+                value={flightData.origin}
+                onChange={(iataCode) =>
+                  setFlightData({ ...flightData, origin: iataCode })
+                }
+                placeholder="From"
+              />
+            </div>
+            <div>
+              <AirportAutocomplete
+                value={flightData.destination}
+                onChange={(iataCode) =>
+                  setFlightData({ ...flightData, destination: iataCode })
+                }
+                placeholder="To"
+              />
+            </div>
+            <div>
+              <DatePicker
+                value={flightData.departDate}
+                onChange={(date) =>
+                  setFlightData({ ...flightData, departDate: date })
+                }
+                placeholder="Select departure date"
+                minDate={new Date()}
+              />
+            </div>
+
+            <div>
+              <DatePicker
+                value={flightData.returnDate}
+                onChange={(date) =>
+                  setFlightData({ ...flightData, returnDate: date })
+                }
+                placeholder="Select return date"
+                minDate={
+                  flightData.departDate
+                    ? new Date(flightData.departDate)
+                    : new Date()
+                }
+              />
+            </div>
+            <div>
+              <Input
+                type="number"
+                min="1"
+                max="9"
+                placeholder="N. Adults"
+                onChange={(e) =>
+                  setFlightData({ ...flightData, adults: e.target.value })
+                }
+              />
+            </div>
+            <Button type="submit" disabled={loading}>
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Searching...
+                </div>
+              ) : (
+                "Search"
+              )}
+            </Button>
+          </div>
+        </form>
       )}
     </div>
   );

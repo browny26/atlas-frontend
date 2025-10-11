@@ -15,6 +15,7 @@ import { useUser } from "./context/UserContext";
 import { ProtectedRoute } from "./layout/ProtectedRoute";
 import ResetPassword from "./pages/reset-password";
 import ForgotPassword from "./pages/forgot-password";
+import Adventure from "./pages/adventure";
 
 export default function App() {
   const { user } = useUser();
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/adventure" element={<Adventure />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/reset-password" element={<ResetPassword />} />

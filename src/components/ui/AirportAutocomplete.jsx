@@ -10,11 +10,14 @@ const AirportAutocomplete = ({
   const [suggestions, setSuggestions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAirport, setSelectedAirport] = useState(null);
+  const [isSelecting, setIsSelecting] = useState(false);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
 
   // Debounce per evitare troppe chiamate API
   useEffect(() => {
+    if (isSelecting) return;
+
     if (inputValue.length > 2) {
       const timeoutId = setTimeout(() => {
         searchAirports(inputValue);
@@ -25,23 +28,18 @@ const AirportAutocomplete = ({
       setSuggestions([]);
       setIsOpen(false);
     }
-  }, [inputValue]);
+  }, [inputValue, isSelecting]);
 
   const searchAirports = async (query) => {
-    if (!query || query.length < 2) return;
+    if (!query || query.length < 2 || isSelecting) return;
 
     setLoading(true);
+
     try {
-      const token = localStorage.getItem("token");
       const response = await fetch(
         `http://localhost:8080/amadeus/airport-and-city-search?subType=AIRPORT&keyword=${encodeURIComponent(
           query
-        )}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        )}`
       );
 
       if (!response.ok) throw new Error("Failed to fetch airports");
@@ -61,6 +59,7 @@ const AirportAutocomplete = ({
     const value = e.target.value;
     setInputValue(value);
     setSelectedAirport(null);
+    setIsSelecting(false);
 
     // Se l'utente cancella, resetta il valore
     if (value === "") {
@@ -69,11 +68,14 @@ const AirportAutocomplete = ({
   };
 
   const handleSelect = (airport) => {
+    setIsSelecting(true);
     setSelectedAirport(airport);
     setInputValue(formatAirportDisplay(airport));
     setSuggestions([]);
     setIsOpen(false);
     onChange(airport.iataCode); // Restituisce solo il codice IATA (es: "MXP")
+
+    setTimeout(() => setIsSelecting(false), 100);
   };
 
   const handleFocus = () => {
