@@ -85,7 +85,7 @@ export default function UserMetaCard() {
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
             <img
               src={userData.avatar}
-              alt="Profile preview"
+              alt="Avatar"
               className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
             />
             <div className="order-3 xl:order-2">

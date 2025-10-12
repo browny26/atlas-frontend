@@ -21,9 +21,11 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dropdown-toggle"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <img src={user.avatar || "/profile-placeholder.png"} alt="avatar" />
-        </span>
+        <img
+          src={user.avatar || "/profile-placeholder.png"}
+          alt="Avatar"
+          className="w-11 h-11 mr-3 rounded-full object-cover border-2 border-gray-200"
+        />
 
         <span className="block mr-1 font-medium text-theme-sm">
           {user && user.firstName}
