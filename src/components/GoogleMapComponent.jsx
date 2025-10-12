@@ -1,5 +1,5 @@
 import { APIProvider, Map, AdvancedMarker } from "@vis.gl/react-google-maps";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 const containerStyle = {
   width: "100%",
   height: "500px",

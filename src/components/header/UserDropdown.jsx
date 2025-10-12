@@ -22,10 +22,7 @@ export default function UserDropdown() {
         className="flex items-center text-gray-700 dropdown-toggle"
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <img
-            src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png"
-            alt="avatar"
-          />
+          <img src={user.avatar || "/profile-placeholder.png"} alt="avatar" />
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">

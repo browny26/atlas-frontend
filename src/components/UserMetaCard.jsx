@@ -6,6 +6,7 @@ import { useUser } from "../context/UserContext";
 import { useState } from "react";
 import { Modal } from "./ui/Modal";
 import { userAPI } from "../services/api";
+import InputUpload from "./ui/InputUpload";
 
 export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
@@ -21,7 +22,25 @@ export default function UserMetaCard() {
     facebookLink: user ? user.facebookLink : "",
     linkedinLink: user ? user.linkedinLink : "",
     instagramLink: user ? user.instagramLink : "",
+    avatar: user ? user.avatar : "",
   });
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (error) {
+      return "Invalid date";
+    }
+  };
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -42,25 +61,41 @@ export default function UserMetaCard() {
     closeModal();
   };
 
+  const handleClose = () => {
+    setUserData({
+      firstName: user ? user.firstName : "",
+      lastName: user ? user.lastName : "",
+      email: user ? user.email : "",
+      phoneNumber: user ? user.phoneNumber : "",
+      bio: user ? user.bio : "",
+      xLink: user ? user.xLink : "",
+      facebookLink: user ? user.facebookLink : "",
+      linkedinLink: user ? user.linkedinLink : "",
+      instagramLink: user ? user.instagramLink : "",
+      avatar: user ? user.avatar : "",
+    });
+
+    closeModal();
+  };
+
   return (
     <>
       <div className="p-5 border border-gray-100 shadow lg:p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
-            <div className="w-20 h-20 overflow-hidden border border-gray-200 rounded-full">
-              <img
-                src="https://cdn.flyonui.com/fy-assets/avatar/avatar-1.png"
-                alt="avatar"
-              />
-            </div>
+            <img
+              src={userData.avatar}
+              alt="Profile preview"
+              className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+            />
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 xl:text-left">
                 {user ? `${user.firstName} ${user.lastName}` : "Guest User"}
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                <p className="text-sm text-gray-500">Team Manager</p>
-                <div className="hidden h-3.5 w-px bg-gray-300 xl:block"></div>
-                <p className="text-sm text-gray-500">Arizona, United States</p>
+                <p className="text-sm text-gray-500">
+                  Account created: {user ? formatDate(user.createdAt) : "N/A"}
+                </p>
               </div>
             </div>
             <div className="flex items-center order-2 gap-2 grow xl:order-3 xl:justify-end">
@@ -292,6 +327,7 @@ export default function UserMetaCard() {
                     <Label>Email Address</Label>
                     <Input
                       type="email"
+                      disabled={user.provider === "GOOGLE"}
                       value={userData.email}
                       onChange={(e) =>
                         setUserData({
@@ -329,11 +365,41 @@ export default function UserMetaCard() {
                       }
                     />
                   </div>
+
+                  <div className="col-span-2">
+                    <Label>Profile Picture</Label>
+                    <InputUpload
+                      id="avatar-upload"
+                      name="avatar"
+                      placeholder="Upload profile picture"
+                      onUploadComplete={(avatar) =>
+                        setUserData({
+                          ...userData,
+                          avatar: avatar,
+                        })
+                      }
+                      bucketName="avatars"
+                      folderPath="profiles"
+                      acceptedTypes="image/jpeg,image/png,image/webp"
+                      hint="Supported formats: JPG, PNG, WebP. Max size: 5MB"
+                    />
+
+                    {userData.avatar && (
+                      <div className="mt-4">
+                        <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                        <img
+                          src={userData.avatar}
+                          alt="Profile preview"
+                          className="w-32 h-32 rounded-full object-cover border-2 border-gray-200"
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-3 px-2 mt-6 lg:justify-end">
-              <Button text="Close" onClick={closeModal} />
+              <Button text="Close" onClick={handleClose} />
               <Button type="submit">
                 {loading ? (
                   <div className="flex items-center justify-center">

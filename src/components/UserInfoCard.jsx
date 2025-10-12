@@ -94,7 +94,7 @@ export default function UserInfoCard() {
           </div>
         </div>
 
-        <button
+        {/* <button
           onClick={openModal}
           className="flex w-full items-center justify-center gap-2 border border-gray-300 bg-black px-4 py-3 text-sm font-medium text-white shadow-theme-xs hover:bg-gray-700 hover:text-gray-50 lg:inline-flex lg:w-auto"
         >
@@ -114,10 +114,10 @@ export default function UserInfoCard() {
             />
           </svg>
           Edit
-        </button>
+        </button> */}
       </div>
 
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
+      {/* <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
         <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 lg:p-11">
           <div className="px-2 pr-14">
             <h4 className="mb-2 text-2xl font-semibold text-gray-800">
@@ -282,7 +282,7 @@ export default function UserInfoCard() {
             </div>
           </form>
         </div>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

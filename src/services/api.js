@@ -75,6 +75,40 @@ export const itineraryAPI = {
   deleteItinerary: (id) => api.delete(`/v1/api/itinerary/${id}`),
 };
 
+export const storageAPI = {
+  upload: (formData, onProgress) =>
+    api.post("/v1/api/storage/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: onProgress,
+    }),
+
+  uploadWithProgress: (file, folder = "profiles", onProgress) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", folder);
+
+    return api.post("/v1/api/storage/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: onProgress,
+    });
+  },
+
+  generateUploadUrl: (fileName, contentType) =>
+    api.post("/v1/api/storage/generate-upload-url", {
+      fileName,
+      contentType,
+    }),
+
+  deleteFile: (fileUrl) =>
+    api.delete("/v1/api/storage/delete", {
+      data: { fileUrl },
+    }),
+};
+
 export const authAPI = {
   login: (credentials) => publicApi.post("/v1/api/auth/login", credentials),
 
@@ -87,6 +121,9 @@ export const authAPI = {
 
   resetPassword: (password) =>
     publicApi.post("/v1/api/auth/reset-password", password),
+
+  googleLogin: (googleData) =>
+    publicApi.post("/v1/api/auth/google", googleData),
 };
 
 export const userAPI = {
