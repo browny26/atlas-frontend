@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "../../components/ui/InputField";
 import Label from "../../components/ui/Label";
 import { useState } from "react";
@@ -7,11 +7,11 @@ import { dotPulse } from "ldrs";
 import Button from "../../components/ui/Button";
 import FlightsCard from "../../components/FlightsCard";
 import { useModal } from "../../hooks/useModal";
-import { format } from "date-fns";
 import DatePicker from "../../components/ui/DatePicker";
 import AirportAutocomplete from "../../components/ui/AirportAutocomplete";
 import { Modal } from "../../components/ui/Modal";
 import { flightsAPI } from "../../services/api";
+import Alert from "../../components/ui/Alert";
 dotPulse.register();
 
 const Flights = () => {
@@ -28,21 +28,37 @@ const Flights = () => {
     returnDate: "",
     adults: 1,
   });
+  const [message, setMessage] = useState({ type: "", text: "" });
+  const [hasSearched, setHasSearched] = useState(false);
   const [selectedFlight, setSelectedFlight] = useState(null);
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ type: "", text: "" });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message.text]);
 
   async function fetchFlights(e, page = 1) {
     e.preventDefault();
     setLoading(true);
     setError("");
     setSelectedFlight(null);
+    setHasSearched(true);
 
     if (
       !flightData.origin ||
       !flightData.destination ||
       !flightData.departDate
     ) {
-      setError("Please fill in origin, destination and departure date");
+      setMessage({
+        type: "error",
+        text: "Please fill in origin, destination and departure date",
+      });
       setLoading(false);
       return;
     }
@@ -56,7 +72,12 @@ const Flights = () => {
         adults: flightData.adults,
       });
 
-      if (res.status !== 200) throw new Error("Errore durante la richiesta");
+      if (res.status !== 200) {
+        setMessage({
+          type: "error",
+          text: "Errore durante la ricerca di voli",
+        });
+      }
       const data = res.data;
       setFlights(data || []);
       setError("");
@@ -91,12 +112,15 @@ const Flights = () => {
   };
 
   return (
-    <>
+    <div className="relative">
+      {message.text && <Alert type={message.type} message={message.text} />}
       <div className=" bg-white p-5 lg:p-6">
         <h3 className="text-3xl font-marcellus font-semibold text-gray-800">
           Flights
         </h3>
-        <p className="mb-10">Search the flight for your new adventure</p>
+        <p className="text-gray-600 mb-10">
+          Search the flight for your new adventure
+        </p>
         <div className="space-y-6">
           <form
             className="border border-gray-100 shadow flex flex-col gap-10 justify-between p-10"
@@ -182,7 +206,7 @@ const Flights = () => {
               </div>
             )}
             {error && <p className="text-red-500">{error}</p>}
-            {!loading && !error && flights.length === 0 && (
+            {!loading && !error && hasSearched && flights.length === 0 && (
               <p className="text-gray-500">No flights found.</p>
             )}
             <div className="flex flex-col w-full gap-6">
@@ -278,7 +302,7 @@ const Flights = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

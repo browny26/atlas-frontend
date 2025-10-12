@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/InputField";
 import Label from "../../components/ui/Label";
-import Table from "../../components/Table";
 import {
   SunIcon,
   MoonIcon,
@@ -12,7 +11,6 @@ import {
 } from "@heroicons/react/24/solid";
 import { bouncy } from "ldrs";
 import { useUser } from "../../context/UserContext";
-import { set } from "date-fns";
 import ActivityCard from "../../components/ActivityCard";
 import { itineraryAPI } from "../../services/api";
 import Alert from "../../components/ui/Alert";
@@ -74,17 +72,6 @@ const index = () => {
     }
 
     try {
-      // const response = await fetch(
-      //   "http://localhost:8080/v1/api/itinerary/generate",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(formData),
-      //   }
-      // );
-
       const res = await itineraryAPI.generateItinerary(formData);
 
       if (res.status !== 200) throw new Error("Failed to generate itinerary");
@@ -104,19 +91,9 @@ const index = () => {
 
   const handleSaveItinerary = async () => {
     setSubmitted(false);
+    setLoading(true);
 
     try {
-      // const res = await fetch(
-      //   `http://localhost:8080/v1/api/itinerary/save/${user.id}`,
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify(itinerary),
-      //   }
-      // );
-
       const res = await itineraryAPI.saveItinerary(user.id, itinerary);
 
       if (res.status === 200) {
@@ -129,6 +106,7 @@ const index = () => {
       setMessage({ type: "error", text: "Failed to save itinerary" });
     } finally {
       setSubmitted(true);
+      setLoading(false);
     }
   };
 
@@ -456,7 +434,14 @@ const index = () => {
                       onClick={() => handleSaveItinerary()}
                       className="flex-1 py-3"
                     >
-                      📝 Save Itinerary
+                      {loading ? (
+                        <div className="flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                          Saving Itinerary...
+                        </div>
+                      ) : (
+                        "Save Itinerary"
+                      )}
                     </Button>
                   </div>
                 </div>

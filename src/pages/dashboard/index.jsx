@@ -15,6 +15,9 @@ import {
 } from "@heroicons/react/24/solid";
 import ActivityCard from "../../components/ActivityCard";
 import { itineraryAPI } from "../../services/api";
+import { bouncy } from "ldrs";
+
+bouncy.register();
 
 const Dashboard = () => {
   const { isOpen, openModal, closeModal } = useModal();
@@ -118,8 +121,12 @@ const Dashboard = () => {
                   </h4>
                   <div>
                     {loading ? (
-                      <div className="h-full w-full flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
+                      <div className="h-[30vh] w-full flex items-center justify-center">
+                        <l-dot-pulse
+                          size="43"
+                          speed="1.3"
+                          color="black"
+                        ></l-dot-pulse>
                       </div>
                     ) : itineraries.length === 0 ? (
                       <>

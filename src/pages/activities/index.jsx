@@ -76,7 +76,9 @@ const Activities = () => {
         <h3 className=" text-3xl font-marcellus font-semibold text-gray-800">
           Activities
         </h3>
-        <p className="mb-10">Find the best activities in your location.</p>
+        <p className="text-gray-600 mb-10">
+          Click on the map to find the best activities in your location.
+        </p>
         <div className="space-y-6 flex flex-col items-center">
           <GoogleMapComponent
             onLocationSelect={handleLocationSelect}
