@@ -14,7 +14,6 @@ const AirportAutocomplete = ({
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
 
-  // Debounce per evitare troppe chiamate API
   useEffect(() => {
     if (isSelecting) return;
 
@@ -61,7 +60,6 @@ const AirportAutocomplete = ({
     setSelectedAirport(null);
     setIsSelecting(false);
 
-    // Se l'utente cancella, resetta il valore
     if (value === "") {
       onChange("");
     }
@@ -73,7 +71,7 @@ const AirportAutocomplete = ({
     setInputValue(formatAirportDisplay(airport));
     setSuggestions([]);
     setIsOpen(false);
-    onChange(airport.iataCode); // Restituisce solo il codice IATA (es: "MXP")
+    onChange(airport.iataCode);
 
     setTimeout(() => setIsSelecting(false), 100);
   };
@@ -96,13 +94,11 @@ const AirportAutocomplete = ({
     inputRef.current?.focus();
   };
 
-  // Formatta la visualizzazione dell'aeroporto
   const formatAirportDisplay = (airport) => {
     if (!airport) return "";
     return `${airport.address.cityName} (${airport.iataCode}) - ${airport.name}`;
   };
 
-  // Formatta il nome dettagliato
   const formatDetailedName = (detailedName) => {
     return detailedName.replace(/.*?:/, "").trim();
   };
@@ -136,7 +132,6 @@ const AirportAutocomplete = ({
         )}
       </div>
 
-      {/* Dropdown delle suggestions */}
       {isOpen && (suggestions.length > 0 || loading) && (
         <div className="absolute top-full left-0 right-0 z-50 bg-white border border-gray-300 shadow-lg mt-1 max-h-60 overflow-y-auto">
           {loading ? (
@@ -179,7 +174,6 @@ const AirportAutocomplete = ({
         </div>
       )}
 
-      {/* Messaggio se non ci sono risultati */}
       {isOpen &&
         !loading &&
         inputValue.length > 2 &&

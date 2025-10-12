@@ -67,6 +67,24 @@ const Flights = () => {
     }
   }
 
+  const formatDuration = (duration) => {
+    if (!duration) return "N/A";
+
+    const hoursMatch = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+    const hours = hoursMatch[1] ? parseInt(hoursMatch[1]) : 0;
+    const minutes = hoursMatch[2] ? parseInt(hoursMatch[2]) : 0;
+
+    if (hours > 0 && minutes > 0) {
+      return `${hours}h ${minutes}m`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else if (minutes > 0) {
+      return `${minutes}m`;
+    } else {
+      return "0m";
+    }
+  };
+
   const handleOpenModal = (flight) => {
     setSelectedFlight(flight);
     openModal();
@@ -233,10 +251,7 @@ const Flights = () => {
                         >
                           <p>
                             <strong>Duration:</strong>{" "}
-                            {itinerary.duration.match(/PT(\d+)H(\d+)M/)[1] +
-                              "h" +
-                              itinerary.duration.match(/PT(\d+)H(\d+)M/)[2] +
-                              "m"}
+                            {formatDuration(itinerary.duration)}
                           </p>
                           <p>
                             <strong>Segments:</strong>
