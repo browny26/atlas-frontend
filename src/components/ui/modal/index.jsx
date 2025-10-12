@@ -49,7 +49,7 @@ export const Modal = ({
       {/* Sfondo semitrasparente (solo se non fullscreen) */}
       {!isFullscreen && (
         <div
-          className="fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
+          className="fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[5px]"
           onClick={onClose}
         ></div>
       )}

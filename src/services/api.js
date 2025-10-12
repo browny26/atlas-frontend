@@ -66,9 +66,9 @@ export const itineraryAPI = {
   generateItinerary: (data) =>
     publicApi.post("/v1/api/itinerary/generate", data),
 
-  saveItinerary: (data) => api.post("/v1/api/itinerary/save", data),
+  saveItinerary: (id, data) => api.post(`/v1/api/itinerary/save/${id}`, data),
 
-  getUserItineraries: () => api.get("/v1/api/itinerary"),
+  getUserItineraries: () => api.get("/v1/api/itinerary/user"),
 
   getItinerary: (id) => api.get(`/v1/api/itinerary/${id}`),
 
@@ -130,6 +130,8 @@ export const userAPI = {
   getUser: (id) => api.get(`/v1/api/user/${id}`),
 
   updateProfile: (id, data) => api.put(`/v1/api/user/${id}`, data),
+
+  deleteUser: (id) => api.delete(`/v1/api/user/${id}`),
 };
 
 export const get = (url, config = {}) => api.get(url, config);

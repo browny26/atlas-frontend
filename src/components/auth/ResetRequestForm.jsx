@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Label from "../ui/Label";
 import Input from "../ui/InputField";
 import Button from "../ui/Button";
 import { authAPI } from "../../services/api";
+import Alert from "../ui/Alert";
 
 const ResetRequestForm = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ type: "", text: "" });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message.text]);
+
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,6 +51,7 @@ const ResetRequestForm = () => {
   };
   return (
     <div className="flex flex-col flex-1">
+      {message.text && <Alert type={message.type} message={message.text} />}
       <div className="w-full max-w-md pt-10 mx-auto ">
         <Link
           to="/"
@@ -96,16 +109,6 @@ const ResetRequestForm = () => {
                       "Send Reset Link"
                     )}
                   </Button>
-                  {message.text && message.type === "success" && (
-                    <p className="text-green-600 text-center text-sm mt-2">
-                      {message.text}
-                    </p>
-                  )}
-                  {message.text && message.type === "error" && (
-                    <p className="text-red-600 text-center text-sm mt-2">
-                      {message.text}
-                    </p>
-                  )}
                 </div>
               </div>
             </form>

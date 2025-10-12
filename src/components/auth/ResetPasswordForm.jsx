@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Label from "../ui/Label";
 import Input from "../ui/InputField";
 import Button from "../ui/Button";
 import { authAPI } from "../../services/api";
+import Alert from "../ui/Alert";
 
 const ResetPasswordForm = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -13,6 +14,17 @@ const ResetPasswordForm = () => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const token = params.get("token");
+
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ type: "", text: "" });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message.text]);
+
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -25,21 +37,11 @@ const ResetPasswordForm = () => {
         type: "error",
         text: "Passwords do not match",
       });
+      setLoading(false);
       return;
     }
 
     try {
-      // const result = await fetch(
-      //   "http://localhost:8080/v1/api/auth/reset-password",
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({ token, newPassword: password }),
-      //   }
-      // );
-
       const res = await authAPI.resetPassword({ token, newPassword: password });
 
       if (res.status !== 200) {
@@ -67,6 +69,7 @@ const ResetPasswordForm = () => {
   };
   return (
     <div className="flex flex-col flex-1">
+      {message.text && <Alert type={message.type} message={message.text} />}
       <div className="w-full max-w-md pt-10 mx-auto ">
         <Link
           to="/"
@@ -221,16 +224,6 @@ const ResetPasswordForm = () => {
                       "Reset Password"
                     )}
                   </Button>
-                  {message.text && message.type === "success" && (
-                    <p className="text-green-600 text-center text-sm mt-2">
-                      {message.text}
-                    </p>
-                  )}
-                  {message.text && message.type === "error" && (
-                    <p className="text-red-600 text-center text-sm mt-2">
-                      {message.text}
-                    </p>
-                  )}
                 </div>
               </div>
             </form>

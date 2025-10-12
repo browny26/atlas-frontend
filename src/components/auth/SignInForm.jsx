@@ -1,20 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
 import Input from "../ui/InputField";
-import Checkbox from "../ui/Checkbox";
 import Button from "../ui/Button";
 import { useUser } from "../../context/UserContext";
 import { authAPI } from "../../services/api";
 import GoogleLoginButton from "../GoogleLoginButton";
+import Alert from "../ui/Alert";
 
 export default function SignInForm() {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
   const { login } = useUser();
+
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ type: "", text: "" });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message.text]);
 
   const handleGoogleSuccess = async (data) => {
     try {
@@ -79,6 +88,7 @@ export default function SignInForm() {
 
   return (
     <div className="flex flex-col flex-1">
+      {message.text && <Alert type={message.type} message={message.text} />}
       <div className="w-full max-w-md pt-10 mx-auto ">
         <Link
           to="/"
@@ -118,19 +128,6 @@ export default function SignInForm() {
                 onSuccess={handleGoogleSuccess}
                 onError={handleGoogleError}
               />
-              {/* <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 ">
-                <svg
-                  width="21"
-                  className="fill-current"
-                  height="20"
-                  viewBox="0 0 21 20"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z" />
-                </svg>
-                Sign in with X
-              </button> */}
             </div>
             <div className="relative py-3 sm:py-5">
               <div className="absolute inset-0 flex items-center">
@@ -228,16 +225,6 @@ export default function SignInForm() {
                       "Sign In"
                     )}
                   </Button>
-                  {message.text && message.type === "success" && (
-                    <p className="text-green-600 text-center text-sm mt-2">
-                      {message.text}
-                    </p>
-                  )}
-                  {message.text && message.type === "error" && (
-                    <p className="text-red-600 text-center text-sm mt-2">
-                      {message.text}
-                    </p>
-                  )}
                 </div>
               </div>
             </form>

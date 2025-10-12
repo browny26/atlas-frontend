@@ -3,6 +3,7 @@ import UserInfoCard from "../../components/UserInfoCard";
 import UserAddressCard from "../../components/UserAddressCard";
 import { useUser } from "../../context/UserContext";
 import { dotPulse } from "ldrs";
+import DeleteAccountButton from "../../components/DeleteAccountButton";
 dotPulse.register();
 
 export default function UserProfiles() {
@@ -15,7 +16,7 @@ export default function UserProfiles() {
     );
   if (!user) return <p>Utente non trovato o non loggato.</p>;
   return (
-    <>
+    <div className="relative">
       <div className=" bg-white p-5 lg:p-6">
         <h3 className="mb-5 text-3xl font-marcellus font-semibold text-gray-800 lg:mb-7">
           Profile
@@ -23,8 +24,11 @@ export default function UserProfiles() {
         <div className="space-y-6">
           <UserMetaCard />
           <UserInfoCard />
+          <div className="flex items-start">
+            <DeleteAccountButton userId={user.id} />
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

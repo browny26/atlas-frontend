@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router";
 import Label from "../ui/Label";
 import Input from "../ui/InputField";
 import Checkbox from "../ui/Checkbox";
 import Button from "../ui/Button";
-import { set } from "date-fns";
 import { authAPI } from "../../services/api";
 import GoogleLoginButton from "../GoogleLoginButton";
+import Alert from "../ui/Alert";
 
 export default function SignUpForm() {
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -14,6 +14,16 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ type: "", text: "" });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message.text]);
 
   const handleGoogleSuccess = async (data) => {
     try {
@@ -95,6 +105,7 @@ export default function SignUpForm() {
 
   return (
     <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2 no-scrollbar">
+      {message.text && <Alert type={message.type} message={message.text} />}
       <div className="w-full max-w-md mx-auto mb-5 sm:pt-10">
         <Link
           to="/"
@@ -269,16 +280,6 @@ export default function SignUpForm() {
                       "Sign Up"
                     )}
                   </Button>
-                  {message.text && message.type === "success" && (
-                    <p className="text-green-600 text-center text-sm mt-2">
-                      {message.text}
-                    </p>
-                  )}
-                  {message.text && message.type === "error" && (
-                    <p className="text-red-600 text-center text-sm mt-2">
-                      {message.text}
-                    </p>
-                  )}
                 </div>
               </div>
             </form>

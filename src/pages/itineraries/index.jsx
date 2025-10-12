@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/InputField";
 import Label from "../../components/ui/Label";
@@ -15,6 +15,7 @@ import { useUser } from "../../context/UserContext";
 import { set } from "date-fns";
 import ActivityCard from "../../components/ActivityCard";
 import { itineraryAPI } from "../../services/api";
+import Alert from "../../components/ui/Alert";
 bouncy.register();
 
 const index = () => {
@@ -41,6 +42,16 @@ const index = () => {
     "relaxation",
     "nightlife",
   ];
+
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ type: "", text: "" });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message.text]);
 
   const handleInterestToggle = (interest) => {
     setFormData((prev) => ({
@@ -95,22 +106,20 @@ const index = () => {
     setSubmitted(false);
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/v1/api/itinerary/save/${user.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(itinerary),
-        }
-      );
+      // const res = await fetch(
+      //   `http://localhost:8080/v1/api/itinerary/save/${user.id}`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     body: JSON.stringify(itinerary),
+      //   }
+      // );
 
-      if (!res.ok)
-        setMessage({ type: "error", text: "Failed to save itinerary" });
+      const res = await itineraryAPI.saveItinerary(user.id, itinerary);
 
-      const data = await res.json();
-      if (data.success) {
+      if (res.status === 200) {
         setMessage({ type: "success", text: "Itinerary saved successfully" });
       } else {
         setMessage({ type: "error", text: "Failed to save itinerary" });
@@ -178,7 +187,8 @@ const index = () => {
   };
 
   return (
-    <>
+    <div className="relative">
+      {message.text && <Alert type={message.type} message={message.text} />}
       <div className=" bg-white p-5 lg:p-6">
         <h1 className="text-3xl font-marcellus font-semibold text-gray-800">
           Travel Itinerary Generator
@@ -448,15 +458,6 @@ const index = () => {
                     >
                       📝 Save Itinerary
                     </Button>
-                    {/* <Button
-                      onClick={() => generateItinerary()}
-                      textColor="black"
-                      bgColor="gray-200"
-                      hoverBgColor="gray-300"
-                      className="flex-1 py-3"
-                    >
-                      🔄 Generate New
-                    </Button> */}
                   </div>
                 </div>
               ) : loading ? (
@@ -481,7 +482,7 @@ const index = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

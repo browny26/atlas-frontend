@@ -3,13 +3,15 @@ import Button from "./ui/Button";
 import Input from "./ui/InputField";
 import Label from "./ui/Label";
 import { useUser } from "../context/UserContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "./ui/Modal";
 import { userAPI } from "../services/api";
 import InputUpload from "./ui/InputUpload";
+import Alert from "./ui/Alert";
 
 export default function UserMetaCard() {
   const { isOpen, openModal, closeModal } = useModal();
+  const [message, setMessage] = useState({ type: "", text: "" });
   const { user, fetchUser } = useUser();
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
@@ -24,6 +26,16 @@ export default function UserMetaCard() {
     instagramLink: user ? user.instagramLink : "",
     avatar: user ? user.avatar : "",
   });
+
+  useEffect(() => {
+    if (message.text) {
+      const timer = setTimeout(() => {
+        setMessage({ type: "", text: "" });
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message.text]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -45,6 +57,7 @@ export default function UserMetaCard() {
   const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage({ type: "", text: "" });
 
     try {
       await userAPI.updateProfile(user.id, userData);
@@ -52,8 +65,14 @@ export default function UserMetaCard() {
       setTimeout(() => {
         fetchUser();
       }, 1000);
+
+      setMessage({ type: "success", text: "Profile update successfully!" });
     } catch (error) {
       console.error("Error updating user data:", error);
+      setMessage({
+        type: "error",
+        text: "Error updating profile.",
+      });
     } finally {
       setLoading(false);
       closeModal();
@@ -80,11 +99,13 @@ export default function UserMetaCard() {
 
   return (
     <>
+      {message.text && <Alert type={message.type} message={message.text} />}
+
       <div className="p-5 border border-gray-100 shadow lg:p-6">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
             <img
-              src={userData.avatar}
+              src={userData.avatar || "/profile-placeholder.png"}
               alt="Avatar"
               className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
             />
