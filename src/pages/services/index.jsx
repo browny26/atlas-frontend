@@ -30,9 +30,9 @@ const index = () => {
             </span>
 
             <h1 className="font-nata text-6xl sm:text-7xl 2xl:text-8xl 3xl:text-9xl font-bold mb-4 text-nowrap">
-              <span className="font-italiana">Your Gateway to</span>
+              <span className="font-italiana">Explore more.</span>
               <br />
-              Travel Adventures
+              We handle the rest.
             </h1>
 
             <span className="flex flex-col gap-2 items-center text-white/70 font-nata md:text-xl font-extralight">
@@ -50,10 +50,10 @@ const index = () => {
             <div className="flex flex-col gap-2">
               <h3 className="font-marcellus text-2xl ">Itinerary Creation</h3>
               <p className="text-gray-400">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-                vitae in dolorem optio? Error quaerat illo dolorum quos eligendi
-                corrupti dignissimos facere sint. Cupiditate eum quod ratione
-                ipsa sint facilis!
+                We craft personalized itineraries that make your trip seamless
+                and memorable. From must-see landmarks to hidden gems, every
+                detail is planned with care so you can focus on enjoying the
+                journey.
               </p>
             </div>
           </div>
@@ -62,22 +62,22 @@ const index = () => {
             <div className="flex flex-col gap-2">
               <h3 className="font-marcellus text-2xl ">Flight Search</h3>
               <p className="text-gray-400">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-                vitae in dolorem optio? Error quaerat illo dolorum quos eligendi
-                corrupti dignissimos facere sint. Cupiditate eum quod ratione
-                ipsa sint facilis!
+                Find the best flights at the most convenient times and prices.
+                Our platform provides real-time updates and options tailored to
+                your travel needs, making booking effortless and stress-free.
               </p>
             </div>
           </div>
           <div className="flex flex-col gap-5 p-10 bg-gray-100">
             <HomeModernIcon className="h-15 w-15" />
             <div className="flex flex-col gap-2">
-              <h3 className="font-marcellus text-2xl ">Hotel Raccomandation</h3>
+              <h3 className="font-marcellus text-2xl ">
+                Adventure Raccomandation
+              </h3>
               <p className="text-gray-400">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem
-                vitae in dolorem optio? Error quaerat illo dolorum quos eligendi
-                corrupti dignissimos facere sint. Cupiditate eum quod ratione
-                ipsa sint facilis!
+                Discover activities that match your style — from cultural tours
+                and local experiences to outdoor adventures. We help you turn
+                every stop into an unforgettable experience.
               </p>
             </div>
           </div>
@@ -99,8 +99,9 @@ const index = () => {
               Experience the safest travel packages
             </h2>
             <p className="text-gray-400">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit Aenean leo
-              sem ultrices ut tempor sit amet fringilla ut eros Sed gravida
+              Explore the world with confidence. Our curated travel packages
+              ensure comfort, security, and unforgettable experiences at every
+              step.
             </p>
             <a href="/about" className="underline">
               Learn more about us!
@@ -124,15 +125,13 @@ const index = () => {
               ></div>
               <div className="flex flex-col gap-6 my-10">
                 <h2 className="text-4xl font-semibold font-marcellus tracking-tight text-pretty text-gray-900 sm:text-5xl">
-                  Experience the safest travel packages and best view of the
-                  nature.
+                  Discover Breathtaking Destinations with Curated Travel
+                  Packages
                 </h2>
                 <p className="text-gray-400">
-                  Lorem ipsum dolor sit amet consectetur adipiscing elit Aenean
-                  leo sem ultrices ut tempor sit amet fringilla ut eros Sed
-                  gravida sapien leo et sodales ipsum ullamcorper sit amet
-                  Vestibulum elementum imperdiet lectus a molestie mi placerat
-                  sit amet
+                  Explore breathtaking destinations with peace of mind. Our
+                  travel packages combine comfort, safety, and unforgettable
+                  natural views for every kind of traveler.
                 </p>
               </div>
               <a href="/about" className="underline">
@@ -152,7 +151,7 @@ const index = () => {
                   }}
                 ></div>
                 <h2 className="text-4xl font-semibold font-marcellus tracking-tight text-pretty text-gray-900 sm:text-5xl">
-                  Discover Unforgettable Travel Experiences with Natural Views.
+                  Explore Beyond the Ordinary.
                 </h2>
               </div>
               <div className="flex flex-col gap-6 h-full">
@@ -164,7 +163,7 @@ const index = () => {
                   }}
                 ></div>
                 <h2 className="text-4xl font-semibold font-marcellus tracking-tight text-pretty text-gray-900 sm:text-5xl">
-                  Embark on Memorable Journeys with Unbeatable Travel Packages.
+                  Adventures That Last a Lifetime.
                 </h2>
               </div>
             </div>
@@ -180,7 +179,7 @@ const index = () => {
           }}
         >
           <span className="uppercase tracking-widest font-medium items-center gap-2">
-            Experience the beauty with sunshine.
+            Where Beauty Meets the Sun
           </span>
           <h2 className="text-[100px] md:text-[150px] lg:text-[200px] font-marcellus">
             Ready?
@@ -194,7 +193,7 @@ const index = () => {
             className="bg-cover bg-center bg-no-repeat overflow-hidden shadow-xl"
             style={{
               backgroundImage:
-                "url('https://images.unsplash.com/photo-1678211370298-0daeced0e569?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')", // Replace with your image
+                "url('https://images.unsplash.com/photo-1467377791767-c929b5dc9a23?q=80&w=3264&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
             }}
           >
             <div className="lg:flex p-10">
@@ -210,7 +209,7 @@ const index = () => {
               <div className="lg:w-1/2 flex flex-col gap-10 justify-center px-14 py-8 md:py-14 text-black bg-white">
                 <div>
                   <h3 className="uppercase tracking-widest font-medium items-center gap-2 mb-8 text-black/80">
-                    Upcoming Trek Events
+                    World’s Most Stunning Destinations
                   </h3>
 
                   <div className="flex flex-col gap-10">
@@ -219,10 +218,10 @@ const index = () => {
                         book now
                       </span>
                       <p className="uppercase tracking-widest font-medium items-center gap-2">
-                        Himalayan Range
+                        Maldives & South Pacific
                       </p>
                       <p className="font-marcellus text-2xl">
-                        Trekking to Mountain
+                        Island Adventures
                       </p>
                     </div>
                     <div className="relative border border-gray-200 rounded-lg flex flex-col gap-2 p-8">
@@ -230,10 +229,10 @@ const index = () => {
                         book now
                       </span>
                       <p className="uppercase tracking-widest font-medium items-center gap-2">
-                        Himalayan Range
+                        Maldives & South Pacific
                       </p>
                       <p className="font-marcellus text-2xl">
-                        Trekking to Mountain
+                        Cultural Journeys
                       </p>
                     </div>
                   </div>
@@ -249,10 +248,10 @@ const index = () => {
                         closed
                       </span>
                       <p className="uppercase tracking-widest font-medium items-center gap-2">
-                        Himalayan Range
+                        Italy & Mediterranean
                       </p>
                       <p className="font-marcellus text-2xl">
-                        Trekking to Mountain
+                        Culinary Experience
                       </p>
                     </div>
                   </div>

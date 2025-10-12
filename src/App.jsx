@@ -16,6 +16,8 @@ import { ProtectedRoute } from "./layout/ProtectedRoute";
 import ResetPassword from "./pages/reset-password";
 import ForgotPassword from "./pages/forgot-password";
 import Adventure from "./pages/adventure";
+import Terms from "./pages/terms";
+import Privacy from "./pages/privacy";
 
 export default function App() {
   const { user } = useUser();
@@ -29,6 +31,8 @@ export default function App() {
         <Route path="/adventure" element={<Adventure />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 

@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../../components/Navbar";
 import {
   ArrowDownIcon,
-  CreditCardIcon,
+  MapIcon,
   MapPinIcon,
   TicketIcon,
 } from "@heroicons/react/24/outline";
@@ -29,9 +29,9 @@ const index = () => {
             </span>
 
             <h1 className="font-nata text-6xl sm:text-7xl md:text-8xl 3xl:text-9xl font-bold mb-4 text-nowrap">
-              <span className="font-italiana">We choose</span>
+              <span className="font-italiana">Every trip</span>
               <br />
-              Prime locations
+              Tells a story
             </h1>
 
             <span className="flex flex-col gap-2 items-center text-white/70 font-nata md:text-xl font-extralight">
@@ -54,9 +54,9 @@ const index = () => {
                   Experience the safest travel packages
                 </p>
                 <p class="mt-6 text-lg/8 text-gray-700">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Maiores impedit perferendis suscipit eaque, iste dolor
-                  cupiditate blanditiis ratione.
+                  Explore the world with confidence through our curated travel
+                  packages — designed for comfort, safety, and flexibility
+                  wherever you go.
                 </p>
                 <dl class="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none">
                   <div class="relative pl-9">
@@ -65,29 +65,31 @@ const index = () => {
                       Itinerary.{" "}
                     </dt>
                     <dd class="inline">
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                      Maiores impedit perferendis suscipit eaque, iste dolor
-                      cupiditate blanditiis ratione.
+                      Plan your trip effortlessly with personalized itineraries
+                      that guide you through every destination — from must-see
+                      landmarks to hidden gems.
                     </dd>
                   </div>
                   <div class="relative pl-9">
                     <dt class="inline font-semibold text-gray-900">
-                      <CreditCardIcon className="absolute top-1 left-1 h-5 w-5" />
-                      Payments.{" "}
+                      <MapIcon className="absolute top-1 left-1 h-5 w-5" />
+                      Activities.{" "}
                     </dt>
                     <dd class="inline">
-                      Anim aute id magna aliqua ad ad non deserunt sunt. Qui
-                      irure qui lorem cupidatat commodo.
+                      Turn every stop into an experience. Choose from local
+                      tours, cultural adventures, and outdoor activities
+                      tailored to your travel style.
                     </dd>
                   </div>
                   <div class="relative pl-9">
                     <dt class="inline font-semibold text-gray-900">
                       <TicketIcon className="absolute top-1 left-1 h-5 w-5" />
-                      Flites.{" "}
+                      Flights.{" "}
                     </dt>
                     <dd class="inline">
-                      Ac tincidunt sapien vehicula erat auctor pellentesque
-                      rhoncus. Et magna sit morbi lobortis.
+                      Find and book the best flight options at competitive
+                      rates, with real-time updates and 24/7 support for
+                      complete peace of mind.
                     </dd>
                   </div>
                 </dl>
@@ -230,9 +232,9 @@ const index = () => {
           <figure class="mt-10">
             <blockquote class="text-center text-xl/8 font-marcellus font-semibold text-gray-900 sm:text-2xl/9">
               <p>
-                “Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo
-                expedita voluptas culpa sapiente alias molestiae. Numquam
-                corrupti in laborum sed rerum et corporis.”
+                “Atlas completely changed the way I travel. Their team made
+                everything effortless — from planning to booking — and I felt
+                supported every step of the way. Truly a next-level experience.”
               </p>
             </blockquote>
             <figcaption class="mt-10">
@@ -242,7 +244,7 @@ const index = () => {
                 class="mx-auto size-10 rounded-full"
               />
               <div class="mt-4 flex items-center justify-center space-x-3 text-base">
-                <div class="font-semibold text-gray-900">Judith Black</div>
+                <div class="font-semibold text-gray-900">Emma Collins</div>
                 <svg
                   viewBox="0 0 2 2"
                   width="3"
@@ -252,7 +254,7 @@ const index = () => {
                 >
                   <circle r="1" cx="1" cy="1" />
                 </svg>
-                <div class="text-gray-600">CEO of Workcation</div>
+                <div class="text-gray-600">CEO of TravelMind</div>
               </div>
             </figcaption>
           </figure>
@@ -308,7 +310,7 @@ const index = () => {
           <div className="w-full">
             <h2 className="font-nata text-3xl md:text-6xl font-bold mb-12 text-center lg:text-start">
               <span className="font-italiana font-black md:text-5xl">
-                Tourists
+                Users
               </span>
               <br />
               Experience
@@ -325,13 +327,14 @@ const index = () => {
               </div>
               <div class="group relative grow">
                 <h3 class="mt-3 text-xl/6 font-semibold text-gray-900 group-hover:text-gray-600">
-                  <p className="font-marcellus">Boost your conversion rate</p>
+                  <p className="font-marcellus">Travel made effortless</p>
                 </h3>
                 <p class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-                  Your content goes here. Edit or remove this text inline or in
-                  the module Content settings. You can also style every aspect
-                  of this content in the module Design settings and even apply
-                  custom CSS to this text in the module Advanced settings.
+                  Planning my trip through Atlas was smooth from start to
+                  finish. The itinerary was perfectly balanced, the activities
+                  were unique, and customer support was always available when I
+                  needed it. Highly recommended for anyone who loves to travel
+                  with peace of mind.
                 </p>
               </div>
               <div class="relative mt-8 flex items-center gap-x-4 justify-self-end">
@@ -347,7 +350,7 @@ const index = () => {
                       Michael Foster
                     </a>
                   </p>
-                  <p class="text-gray-600">Happy Client</p>
+                  <p class="text-gray-600">Happy Traveler</p>
                 </div>
               </div>
             </article>
@@ -361,15 +364,12 @@ const index = () => {
               </div>
               <div class="group relative grow">
                 <h3 class="mt-3 text-xl/6 font-semibold text-gray-900 group-hover:text-gray-600">
-                  <p className="font-marcellus">
-                    How to use search engine optimization to drive sales
-                  </p>
+                  <p className="font-marcellus">Unforgettable experiences</p>
                 </h3>
                 <p class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-                  Your content goes here. Edit or remove this text inline or in
-                  the module Content settings. You can also style every aspect
-                  of this content in the module Design settings and even apply
-                  custom CSS to this text in the module Advanced settings.
+                  Atlas made our honeymoon truly special. Every detail — from
+                  flights to local activities — was handled flawlessly. We
+                  discovered hidden spots we’d never have found on our own.
                 </p>
               </div>
               <div class="relative mt-8 flex items-center gap-x-4 justify-self-end">
@@ -382,10 +382,10 @@ const index = () => {
                   <p class="font-semibold text-gray-900">
                     <a href="#">
                       <span class="absolute inset-0"></span>
-                      Lindsay Walton
+                      Sophie Martin
                     </a>
                   </p>
-                  <p class="text-gray-600">Happy Client</p>
+                  <p class="text-gray-600">Adventure Seeker</p>
                 </div>
               </div>
             </article>
@@ -400,14 +400,13 @@ const index = () => {
               <div class="group relative grow">
                 <h3 class="mt-3 text-xl/6 font-semibold text-gray-900 group-hover:text-gray-600">
                   <p className="font-marcellus">
-                    Improve your customer experience
+                    Seamless from start to finish
                   </p>
                 </h3>
                 <p class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-                  Your content goes here. Edit or remove this text inline or in
-                  the module Content settings. You can also style every aspect
-                  of this content in the module Design settings and even apply
-                  custom CSS to this text in the module Advanced settings.
+                  Booking with Atlas saved me hours of planning. The platform is
+                  intuitive, and the support team is amazing. Everything worked
+                  perfectly during my business trip abroad.
                 </p>
               </div>
               <div class="relative mt-8 flex items-center gap-x-4 justify-self-end">
@@ -420,10 +419,10 @@ const index = () => {
                   <p class="font-semibold text-gray-900">
                     <a href="#">
                       <span class="absolute inset-0"></span>
-                      Tom Cook
+                      David Nguyen
                     </a>
                   </p>
-                  <p class="text-gray-600">Happy Client</p>
+                  <p class="text-gray-600">Business Traveler</p>
                 </div>
               </div>
             </article>

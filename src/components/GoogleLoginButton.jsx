@@ -1,7 +1,7 @@
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 
-const GoogleLoginButton = ({ onSuccess, onError }) => {
+const GoogleLoginButton = ({ onSuccess, onError, text }) => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -41,7 +41,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
   return (
     <button
       onClick={() => login()}
-      className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800"
+      className="inline-flex cursor-pointer items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800"
     >
       <svg
         width="20"
@@ -67,7 +67,7 @@ const GoogleLoginButton = ({ onSuccess, onError }) => {
           fill="#EB4335"
         />
       </svg>
-      Sign in with Google
+      {text} with Google
     </button>
   );
 };

@@ -38,8 +38,8 @@ const Home = () => {
 
         <div className="flex-grow flex items-center justify-center lg:mt-30">
           <div className="text-center text-black px-4 max-w-3xl flex flex-col items-center gap-16">
-            <h1 className="font-nata text-6xl sm:text-7xl md:text-8xl 2xl:text-9xl font-bold mb-4 text-white select-none">
-              <span className="font-italiana text-black">Mysteries of</span>
+            <h1 className="font-nata text-6xl sm:text-7xl md:text-8xl 2xl:text-9xl font-bold mb-4 text-black select-none">
+              <span className="font-italiana text-white">Mysteries of</span>
               <br />
               The World
             </h1>
@@ -179,38 +179,39 @@ const Home = () => {
               <div className="md:w-1/2 p-12 flex flex-col">
                 <h2 className="font-nata text-6xl font-bold">
                   <span className="font-italiana font-black md:text-5xl">
-                    Seek The
+                    Discover Your
                   </span>
                   <br />
-                  Paradise
+                  Next Adventure
                 </h2>
               </div>
               <div className="lg:w-1/2 h-auto flex flex-col justify-center px-14 py-8 md:py-14 text-black">
                 <h3 className="font-marcellus text-2xl md:text-3xl mb-8 text-white lg:text-black">
-                  Conquer the Frozen Trails
+                  Explore Majestic Landscapes
                 </h3>
                 <p className="text-white lg:text-black lg:font-extralight mb-8">
-                  Our expert guides will lead you through the most breathtaking
-                  frozen landscapes on Earth. All equipment and training
-                  provided.
+                  Join our expert guides on journeys to the world’s most
+                  stunning destinations. All trips include full support, safety
+                  equipment, and personalized planning for an unforgettable
+                  experience.
                 </p>
                 <div className="flex flex-col gap-2 mb-8">
                   <Accordion
                     items={[
                       {
-                        title: "How do I book a trip through your site?",
+                        title: "How do I create a personalized itinerary?",
                         content:
-                          "We offer a user-friendly booking platform where you can search for your desired destination, choose your travel dates, and select from a variety of options. Follow the simple steps to confirm your booking.",
+                          "Simply select your destinations, choose your preferred activities, and our platform will generate a tailored itinerary to match your travel style.",
                       },
                       {
-                        title: "What is your cancellation policy?",
+                        title: "How can I book an activity or experience?",
                         content:
-                          "Our cancellation policy varies depending on the travel product and provider. You can find detailed information about cancellation fees and deadlines in the booking confirmation and on our website.",
+                          "Browse our curated list of activities, select your preferred date and time, and confirm your booking directly through the site.",
                       },
                       {
-                        title: "What payment methods do you accept?",
+                        title: "How do I search for flights?",
                         content:
-                          "We accept major credit cards, debit cards, and PayPal. Some travel products may also allow for bank transfers or other payment methods. Please check the payment options during the booking process.",
+                          "Use our flight search tool to compare options, view real-time availability, and find the best flights for your trip.",
                       },
                     ]}
                   />
