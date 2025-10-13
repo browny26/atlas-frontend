@@ -82,6 +82,7 @@ const BookingForm = ({
       if (onSuccess) {
         onSuccess(data, "flights");
       } else {
+        console.log(data);
         setFlights(data || []);
       }
       setError("");
