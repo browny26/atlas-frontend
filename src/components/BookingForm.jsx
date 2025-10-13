@@ -75,7 +75,7 @@ const BookingForm = ({
     }
 
     try {
-      const res = flightsAPI.searchFlights(flightData);
+      const res = await flightsAPI.searchFlights(flightData);
       console.log(res);
       const data = res.data;
 

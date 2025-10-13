@@ -15,7 +15,7 @@ const GoogleLoginButton = ({ onSuccess, onError, text }) => {
           }
         );
 
-        const res = authAPI.googleLogin({
+        const res = await authAPI.googleLogin({
           sub: userInfo.data.sub,
           email: userInfo.data.email,
           name: userInfo.data.name,
