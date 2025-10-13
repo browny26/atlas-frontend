@@ -66,7 +66,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>© 2023 Atlas. All rights reserved.</p>
+          <p>© 2025 Atlas. All rights reserved.</p>
         </div>
       </div>
     </footer>
