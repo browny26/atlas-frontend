@@ -12,6 +12,24 @@ const FlightComponent = ({ flights, loading, error }) => {
     setSelectedFlight(flight);
     openModal();
   };
+
+  const formatDuration = (duration) => {
+    if (!duration) return "N/A";
+
+    const hoursMatch = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+    const hours = hoursMatch[1] ? parseInt(hoursMatch[1]) : 0;
+    const minutes = hoursMatch[2] ? parseInt(hoursMatch[2]) : 0;
+
+    if (hours > 0 && minutes > 0) {
+      return `${hours}h ${minutes}m`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else if (minutes > 0) {
+      return `${minutes}m`;
+    } else {
+      return "0m";
+    }
+  };
   return (
     <div className="max-w-7xl mx-auto my-10">
       {loading && (
@@ -73,10 +91,7 @@ const FlightComponent = ({ flights, loading, error }) => {
                   <div key={idx} className="mb-4 p-3 border border-gray-100">
                     <p>
                       <strong>Duration:</strong>{" "}
-                      {itinerary.duration.match(/PT(\d+)H(\d+)M/)[1] +
-                        "h" +
-                        itinerary.duration.match(/PT(\d+)H(\d+)M/)[2] +
-                        "m"}
+                      {formatDuration(itinerary.duration)}
                     </p>
                     <p>
                       <strong>Segments:</strong>

@@ -10,12 +10,12 @@ const AirportAutocomplete = ({
   const [suggestions, setSuggestions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedAirport, setSelectedAirport] = useState(null);
-  const [isSelecting, setIsSelecting] = useState(false);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
+  const isSelectingRef = useRef(false);
 
   useEffect(() => {
-    if (isSelecting) return;
+    if (isSelectingRef.current) return;
 
     if (inputValue.length > 2) {
       const timeoutId = setTimeout(() => {
@@ -27,10 +27,10 @@ const AirportAutocomplete = ({
       setSuggestions([]);
       setIsOpen(false);
     }
-  }, [inputValue, isSelecting]);
+  }, [inputValue]);
 
   const searchAirports = async (query) => {
-    if (!query || query.length < 2 || isSelecting) return;
+    if (!query || query.length < 2 || isSelectingRef.current) return;
 
     setLoading(true);
 
@@ -58,7 +58,7 @@ const AirportAutocomplete = ({
     const value = e.target.value;
     setInputValue(value);
     setSelectedAirport(null);
-    setIsSelecting(false);
+    isSelectingRef.current = false;
 
     if (value === "") {
       onChange("");
@@ -66,14 +66,16 @@ const AirportAutocomplete = ({
   };
 
   const handleSelect = (airport) => {
-    setIsSelecting(true);
+    isSelectingRef.current = true;
     setSelectedAirport(airport);
     setInputValue(formatAirportDisplay(airport));
     setSuggestions([]);
     setIsOpen(false);
     onChange(airport.iataCode);
 
-    setTimeout(() => setIsSelecting(false), 100);
+    setTimeout(() => {
+      isSelectingRef.current = false;
+    }, 100);
   };
 
   const handleFocus = () => {
