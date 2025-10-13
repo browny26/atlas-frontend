@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -17,9 +18,18 @@ const Footer = () => {
                 Important Page
               </h3>
               <ul className="space-y-2 text-gray-500 font-extralight">
-                <li>Homepage</li>
-                <li>About</li>
-                <li>Services</li>
+                <li>
+                  <Link to="/">Homepage</Link>
+                </li>
+                <li>
+                  <Link to="/about">About</Link>
+                </li>
+                <li>
+                  <Link to="/services">Services</Link>
+                </li>
+                <li>
+                  <Link to="/adventure">Adventure</Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -27,8 +37,9 @@ const Footer = () => {
                 Other Page
               </h3>
               <ul className="space-y-2 text-gray-500 font-extralight">
-                <li>Contact Us</li>
-                <li>Support</li>
+                <li>
+                  <Link to="/dashboard">Dashboard</Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -55,7 +66,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-400 text-sm">
-          <p>© 2023 Atlas. All rights reserved. | Designed by DIVI PIXEL</p>
+          <p>© 2023 Atlas. All rights reserved.</p>
         </div>
       </div>
     </footer>
