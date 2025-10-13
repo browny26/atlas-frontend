@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import GoogleMapComponent from "../../components/GoogleMapComponent";
 import ActivitiesCard from "../../components/ui/ActivitiesCard";
 import Pagination from "../../components/Pagination";
-import { Modal } from "../../components/ui/Modal";
 import Button from "../../components/ui/Button";
 import { dotPulse } from "ldrs";
 import { useModal } from "../../hooks/useModal";
@@ -10,6 +9,7 @@ import ActivityDescription from "../../components/ui/ActivityDescription";
 import { Link } from "react-router-dom";
 import { useActivity } from "../../context/ActivityContext";
 import { activityAPI } from "../../services/api";
+import { Modal } from "../../components/ui/Modal";
 dotPulse.register();
 
 const Activities = () => {
