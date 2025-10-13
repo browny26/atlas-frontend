@@ -1,6 +1,5 @@
 import UserMetaCard from "../../components/UserMetaCard";
 import UserInfoCard from "../../components/UserInfoCard";
-import UserAddressCard from "../../components/UserAddressCard";
 import { useUser } from "../../context/UserContext";
 import { dotPulse } from "ldrs";
 import DeleteAccountButton from "../../components/DeleteAccountButton";
