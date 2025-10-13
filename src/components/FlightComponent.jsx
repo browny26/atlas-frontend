@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useModal } from "../hooks/useModal";
 import FlightsCard from "./FlightsCard";
-import Pagination from "./Pagination";
 import { Modal } from "./ui/Modal";
+import Button from "./ui/Button";
 
 const FlightComponent = ({ flights, loading, error }) => {
   const { isOpen, openModal, closeModal } = useModal();
@@ -34,14 +34,6 @@ const FlightComponent = ({ flights, loading, error }) => {
           />
         ))}
       </div>
-      {/* {totalPages > 1 && (
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={(newPage) => fetchFlights(newPage)}
-          size="md"
-        />
-      )} */}
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[700px] m-4">
         <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 lg:p-11">
           <div className="px-2 pr-14">
