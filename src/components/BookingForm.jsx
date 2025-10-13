@@ -75,7 +75,7 @@ const BookingForm = ({
     }
 
     try {
-      const res = flightsAPI.searchFlights({ flightData });
+      const res = flightsAPI.searchFlights(flightData);
       if (res.status !== 200) throw new Error("Errore durante la richiesta");
       const data = res.data;
 
