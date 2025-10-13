@@ -76,6 +76,7 @@ const BookingForm = ({
 
     try {
       const res = flightsAPI.searchFlights(flightData);
+      console.log(res);
       const data = res.data;
 
       if (onSuccess) {
