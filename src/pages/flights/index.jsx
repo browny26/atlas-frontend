@@ -63,6 +63,15 @@ const Flights = () => {
       return;
     }
 
+    if (flightData.origin === flightData.destination) {
+      setMessage({
+        type: "error",
+        text: "The origin and destination airport must be different",
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await flightsAPI.searchFlights({
         origin: flightData.origin,

@@ -28,7 +28,7 @@ const Alert = ({ type = "success", message }) => {
   const { containerBg, iconBg, icon } = typeStyles[type] || typeStyles.success;
 
   return (
-    <div className="fixed top-7 right-0 p-10 z-10">
+    <div className="fixed top-9 right-0 p-10 z-10">
       <div
         className={`flex items-center w-full max-w-xs p-4 mb-4 rounded-lg shadow-sm ${containerBg}`}
         role="alert"

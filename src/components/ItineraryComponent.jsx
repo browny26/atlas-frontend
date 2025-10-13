@@ -10,15 +10,10 @@ import {
 import { bouncy } from "ldrs";
 import Button from "./ui/Button";
 import ActivityCard from "./ActivityCard";
+import { Link } from "react-router-dom";
 bouncy.register();
 
 const ItineraryComponent = ({ itinerary, user, loading }) => {
-  const [formData, setFormData] = useState({
-    destination: "",
-    days: 1,
-    budget: "",
-    interests: [],
-  });
   const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
@@ -111,11 +106,9 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
   return (
     <div className="bg-white py-10">
       <div className="max-w-7xl mx-auto">
-        {/* Itinerary Display Section */}
         <div className="lg:col-span-2">
           {itinerary ? (
             <div className="space-y-6">
-              {/* Warning per itinerari parziali */}
               {getNote(itinerary) && (
                 <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
                   <div className="flex items-center">
@@ -134,7 +127,6 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                 </div>
               )}
 
-              {/* Header Card */}
               <div className="bg-white shadow p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
@@ -154,7 +146,6 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                   </div>
                 </div>
 
-                {/* Accommodation */}
                 {getAccommodation(itinerary) && (
                   <div className="bg-blue-50 rounded-xl p-4 mt-4">
                     <div className="flex justify-between items-center">
@@ -177,7 +168,6 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                 )}
               </div>
 
-              {/* Daily Itinerary */}
               <div className="space-y-4">
                 {getItineraryDays(itinerary).map((day) => (
                   <div
@@ -213,7 +203,6 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                         }
                       />
 
-                      {/* Messaggio se non ci sono attività */}
                       {!day.morning && !day.afternoon && !day.evening && (
                         <div className="text-center py-8 text-gray-500">
                           <div className="text-4xl mb-2">🤔</div>
@@ -225,7 +214,6 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                 ))}
               </div>
 
-              {/* Travel Tips */}
               {getTips(itinerary).length > 0 && (
                 <div className="bg-white shadow p-6">
                   <h3 className="text-2xl font-bold text-gray-800 mb-4">
@@ -237,9 +225,6 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                         key={index}
                         className="flex items-start space-x-3 p-3 rounded-lg"
                       >
-                        {/* <div className="flex-shrink-0 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white text-sm">
-                              💡
-                            </div> */}
                         <p className="text-gray-700">- {tip}</p>
                       </div>
                     ))}
@@ -247,14 +232,22 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                 </div>
               )}
 
-              {/* Action Buttons */}
               <div className="flex space-x-4">
-                <Button
-                  onClick={() => handleSaveItinerary()}
-                  className="flex-1 py-3"
-                >
-                  📝 Save Itinerary
-                </Button>
+                {user ? (
+                  <Button
+                    onClick={() => handleSaveItinerary()}
+                    className="flex-1 py-3"
+                  >
+                    Save Itinerary
+                  </Button>
+                ) : (
+                  <Link
+                    className={`flex-1 py-3 text-center font-medium text-sm px-8 whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-black text-white hover:bg-gray-900`}
+                    to="/signin"
+                  >
+                    Login to save the itinary
+                  </Link>
+                )}
               </div>
             </div>
           ) : loading ? (
