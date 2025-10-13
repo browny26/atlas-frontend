@@ -1,19 +1,13 @@
 import React from "react";
 import { useState } from "react";
 import Tab from "./ui/Tab";
-import Dropdown from "./ui/Dropdown";
-import { TicketIcon } from "@heroicons/react/24/outline";
 import Button from "./ui/Button";
-import TextInput from "./ui/TextInput";
-import Select from "./ui/Select";
 import TagSelect from "./ui/TagSelect";
 import AirportAutocomplete from "./ui/AirportAutocomplete";
-import Label from "./ui/Label";
 import DatePicker from "./ui/DatePicker";
 import Input from "./ui/InputField";
-import { validators } from "tailwind-merge";
 import { useNavigate } from "react-router-dom";
-import { flightsAPI } from "../services/api";
+import { flightsAPI, itineraryAPI } from "../services/api";
 
 const BookingForm = ({
   setPage,
