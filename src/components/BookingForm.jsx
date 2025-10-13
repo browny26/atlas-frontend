@@ -193,9 +193,17 @@ const BookingForm = ({
 
             <Button
               type="submit"
-              text="Generate Itinerary"
               className="col-span-1 sm:col-span-2 lg:col-span-1"
-            />
+            >
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Generating Itinerary...
+                </div>
+              ) : (
+                "Generate Itinerary"
+              )}
+            </Button>
           </div>
         </form>
       )}
