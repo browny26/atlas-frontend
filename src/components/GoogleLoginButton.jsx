@@ -1,5 +1,6 @@
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { authAPI } from "../services/api";
 
 const GoogleLoginButton = ({ onSuccess, onError, text }) => {
   const login = useGoogleLogin({
@@ -14,19 +15,16 @@ const GoogleLoginButton = ({ onSuccess, onError, text }) => {
           }
         );
 
-        const response = await axios.post(
-          "http://localhost:8080/v1/api/auth/google",
-          {
-            sub: userInfo.data.sub,
-            email: userInfo.data.email,
-            name: userInfo.data.name,
-            picture: userInfo.data.picture,
-            given_name: userInfo.data.given_name,
-            family_name: userInfo.data.family_name,
-          }
-        );
+        const res = authAPI.googleLogin({
+          sub: userInfo.data.sub,
+          email: userInfo.data.email,
+          name: userInfo.data.name,
+          picture: userInfo.data.picture,
+          given_name: userInfo.data.given_name,
+          family_name: userInfo.data.family_name,
+        });
 
-        onSuccess(response.data);
+        onSuccess(res.data);
       } catch (error) {
         console.error("Google login failed:", error);
         onError(error);

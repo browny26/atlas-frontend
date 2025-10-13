@@ -13,6 +13,7 @@ import DatePicker from "./ui/DatePicker";
 import Input from "./ui/InputField";
 import { validators } from "tailwind-merge";
 import { useNavigate } from "react-router-dom";
+import { flightsAPI } from "../services/api";
 
 const BookingForm = ({
   setPage,
@@ -74,11 +75,9 @@ const BookingForm = ({
     }
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/amadeus/flights?origin=${flightData.origin}&destination=${flightData.destination}&departDate=${flightData.departDate}&returnDate=${flightData.returnDate}&adults=${flightData.adults}`
-      );
-      if (!res.ok) throw new Error("Errore durante la richiesta");
-      const data = await res.json();
+      const res = flightsAPI.searchFlights({ flightData });
+      if (res.status !== 200) throw new Error("Errore durante la richiesta");
+      const data = res.data;
 
       if (onSuccess) {
         onSuccess(data, "flights");
@@ -105,20 +104,11 @@ const BookingForm = ({
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/v1/api/itinerary/generate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await itineraryAPI.generateItinerary(formData);
 
-      if (!response.ok) throw new Error("Failed to generate itinerary");
+      if (res.status !== 200) throw new Error("Failed to generate itinerary");
 
-      const data = await response.json();
+      const data = res.data;
       if (onSuccess) {
         onSuccess(data.itinerary, "itinerary");
       } else {

@@ -89,20 +89,11 @@ const index = () => {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/v1/api/itinerary/generate",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await itineraryAPI.generateItinerary(formData);
 
-      if (!response.ok) throw new Error("Failed to generate itinerary");
+      if (res.status !== 200) throw new Error("Failed to generate itinerary");
 
-      const data = await response.json();
+      const data = res.data;
       if (data.success) {
         setItinerary(data.itinerary);
       } else {

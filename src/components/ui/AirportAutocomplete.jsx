@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { airportsAPI, flightsAPI } from "../../services/api";
 
 const AirportAutocomplete = ({
   value,
@@ -35,15 +36,11 @@ const AirportAutocomplete = ({
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/amadeus/airport-and-city-search?subType=AIRPORT&keyword=${encodeURIComponent(
-          query
-        )}`
-      );
+      const res = await airportsAPI.searchAirports(encodeURIComponent(query));
 
-      if (!response.ok) throw new Error("Failed to fetch airports");
+      if (res.status !== 200) throw new Error("Failed to fetch airports");
 
-      const data = await response.json();
+      const data = res.data;
       setSuggestions(data.data || []);
       setIsOpen(true);
     } catch (error) {

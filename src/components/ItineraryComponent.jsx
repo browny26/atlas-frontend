@@ -11,6 +11,7 @@ import { bouncy } from "ldrs";
 import Button from "./ui/Button";
 import ActivityCard from "./ActivityCard";
 import { Link } from "react-router-dom";
+import { itineraryAPI } from "../services/api";
 bouncy.register();
 
 const ItineraryComponent = ({ itinerary, user, loading }) => {
@@ -21,21 +22,12 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
     setSubmitted(false);
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/v1/api/itinerary/save/${user.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(itinerary),
-        }
-      );
+      const res = await itineraryAPI.saveItinerary(user.id, itinerary);
 
-      if (!res.ok)
+      if (res.status !== 200)
         setMessage({ type: "error", text: "Failed to save itinerary" });
 
-      const data = await res.json();
+      const data = res.data;
       if (data.success) {
         setMessage({ type: "success", text: "Itinerary saved successfully" });
       } else {
