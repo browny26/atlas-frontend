@@ -92,7 +92,7 @@ const index = () => {
         </div>
       </header>
 
-      <section className="my-5">
+      <section className="my-5 px-2">
         <div className="container flex flex-col items-center mx-auto max-w-6xl">
           <BookingForm
             setPage={setCurrentPage}
@@ -107,7 +107,7 @@ const index = () => {
         </div>
       </section>
 
-      <section>
+      <section className="px-2">
         {currentPage === 0 && (
           <ItineraryComponent
             itinerary={itinerary}

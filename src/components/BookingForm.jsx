@@ -193,6 +193,11 @@ const BookingForm = ({
           {error && (
             <p className="mt-2 text-sm text-red-400 text-center">{error}</p>
           )}
+          {loading && (
+            <p className="mt-2 text-sm text-fray-400 text-center">
+              It may take a moment for the ai to respond...
+            </p>
+          )}
         </form>
       )}
       {activeTab === 1 && (
