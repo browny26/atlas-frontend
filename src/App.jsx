@@ -18,6 +18,7 @@ import ForgotPassword from "./pages/forgot-password";
 import Adventure from "./pages/adventure";
 import Terms from "./pages/terms";
 import Privacy from "./pages/privacy";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   const { user } = useUser();
@@ -36,8 +37,6 @@ export default function App() {
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Dashboard layout con pagine interne */}
-
         <Route
           path="/dashboard/*"
           element={
@@ -46,15 +45,14 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-          {/* <Route path="/dashboard" element={<AppLayout />}> */}
-          {/* Qui dentro usiamo Route relative */}
-          <Route index element={<Dashboard />} /> {/* /dashboard */}
+          <Route index element={<Dashboard />} />
           <Route path="profile" element={<UserProfiles />} />{" "}
-          {/* /dashboard/profile */}
           <Route path="itineraries" element={<Itineraries />} />{" "}
           <Route path="flights" element={<Flights />} />{" "}
           <Route path="activities" element={<Activities />} />{" "}
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
