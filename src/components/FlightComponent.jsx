@@ -4,7 +4,7 @@ import FlightsCard from "./FlightsCard";
 import { Modal } from "./ui/Modal";
 import Button from "./ui/Button";
 
-const FlightComponent = ({ flights, loading, error }) => {
+const FlightComponent = ({ flights, loading, error, hasSearched }) => {
   const { isOpen, openModal, closeModal } = useModal();
   const [selectedFlight, setSelectedFlight] = useState(null);
 
@@ -37,8 +37,7 @@ const FlightComponent = ({ flights, loading, error }) => {
           <l-dot-pulse size="43" speed="1.3" color="black"></l-dot-pulse>
         </div>
       )}
-      {error && <p className="text-red-500">{error}</p>}
-      {!loading && !error && flights && flights.length === 0 && (
+      {!loading && !error && hasSearched && flights && flights.length === 0 && (
         <div className="h-[30vh] w-full flex items-center justify-center">
           <p className="text-gray-500">No flights found.</p>
         </div>

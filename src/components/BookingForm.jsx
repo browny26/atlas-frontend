@@ -6,7 +6,6 @@ import TagSelect from "./ui/TagSelect";
 import AirportAutocomplete from "./ui/AirportAutocomplete";
 import DatePicker from "./ui/DatePicker";
 import Input from "./ui/InputField";
-import { useNavigate } from "react-router-dom";
 import { flightsAPI, itineraryAPI } from "../services/api";
 
 const BookingForm = ({
@@ -17,8 +16,9 @@ const BookingForm = ({
   setFlights,
   setItinerary,
   onSuccess,
+  setHasSearched,
+  error,
 }) => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [flightData, setFlightData] = useState({
     origin: "",
@@ -50,6 +50,9 @@ const BookingForm = ({
 
   const handleTabChange = (index) => {
     setActiveTab(index);
+    setError("");
+    setLoading(false);
+    setHasSearched(false);
     if (setPage) setPage(index);
   };
 
@@ -67,6 +70,8 @@ const BookingForm = ({
       setLoading(false);
       return;
     }
+
+    setHasSearched(true);
 
     try {
       const res = await flightsAPI.searchFlights(flightData);
@@ -118,21 +123,6 @@ const BookingForm = ({
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDepartDateChange = (date) => {
-    const formattedDate = format(date, "yyyy-MM-dd");
-    setFlightData({ ...flightData, departDate: formattedDate });
-  };
-
-  const handleReturnDateChange = (date) => {
-    const formattedDate = format(date, "yyyy-MM-dd");
-    setFlightData({ ...flightData, returnDate: formattedDate });
-  };
-
-  const handleSubmit = (e) => {
-    navigate("/adventure");
-    generateItinerary(e);
   };
 
   return (
@@ -200,6 +190,9 @@ const BookingForm = ({
               )}
             </Button>
           </div>
+          {error && (
+            <p className="mt-2 text-sm text-red-400 text-center">{error}</p>
+          )}
         </form>
       )}
       {activeTab === 1 && (
@@ -273,6 +266,7 @@ const BookingForm = ({
               )}
             </Button>
           </div>
+          {error && <p className="text-sm text-red-400 text-center">{error}</p>}
         </form>
       )}
     </div>

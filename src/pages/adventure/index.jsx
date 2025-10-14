@@ -21,6 +21,7 @@ const index = () => {
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState();
   const [flightData, setFlightData] = useState({
@@ -68,44 +69,6 @@ const index = () => {
     }
   }, [location.state]);
 
-  const handleInterestToggle = (interest) => {
-    setFormData((prev) => ({
-      ...prev,
-      interests: prev.interests.includes(interest)
-        ? prev.interests.filter((i) => i !== interest)
-        : [...prev.interests, interest],
-    }));
-  };
-
-  const generateItinerary = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    if (!formData.destination || !formData.days || !formData.budget) {
-      setError("Please fill in destination, days and budget");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const res = await itineraryAPI.generateItinerary(formData);
-
-      if (res.status !== 200) throw new Error("Failed to generate itinerary");
-
-      const data = res.data;
-      if (data.success) {
-        setItinerary(data.itinerary);
-      } else {
-        throw new Error("Failed to generate itinerary");
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <section className="relative bg-gray-50">
       <div
@@ -134,9 +97,12 @@ const index = () => {
           <BookingForm
             setPage={setCurrentPage}
             setError={setError}
+            error={error}
+            loading={loading}
             setLoading={setLoading}
             setFlights={setFlights}
             setItinerary={setItinerary}
+            setHasSearched={setHasSearched}
           />
         </div>
       </section>
@@ -150,7 +116,12 @@ const index = () => {
           />
         )}
         {currentPage === 1 && (
-          <FlightComponent flights={flights} loading={loading} error={error} />
+          <FlightComponent
+            flights={flights}
+            loading={loading}
+            error={error}
+            setHasSearched={hasSearched}
+          />
         )}
       </section>
 

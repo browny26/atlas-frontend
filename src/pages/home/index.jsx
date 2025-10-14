@@ -47,6 +47,8 @@ const Home = () => {
             <BookingForm
               onSuccess={handleSubmitSuccess}
               setError={setError}
+              error={error}
+              loading={loading}
               setLoading={setLoading}
             />
 
