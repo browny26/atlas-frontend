@@ -5,8 +5,17 @@
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-blue?logo=tailwindcss)
 ![Supabase](https://img.shields.io/badge/Supabase-2-green?logo=supabase)
 ![GoogleMaps](https://img.shields.io/badge/Google%20Maps-API-orange?logo=googlemaps)
+![Vercel](https://img.shields.io/badge/Vercel-Deployment-black?logo=vercel)
 
 > **Atlas** is an intelligent travel companion that helps users discover destinations, plan itineraries, and book experiences — all in one seamless platform powered by AI and Google Maps.
+
+---
+
+## 👩‍💻 Developer
+
+**Luisa Cerin Ogbeiwi**
+
+---
 
 ## 💡 Highlights
 
@@ -19,22 +28,13 @@
 
 ## 🌐 Live Demo
 
-👉 [atlas.vercel.app](https://atlas-works.vercel.app)
+[atlas.vercel.app](https://atlas-works.vercel.app)
 
 ## 🧩 Related Projects
 
-- [Atlas Backend (Java Spring Boot)](https://github.com/browny26/atlas-backend)
+**[Atlas Backend (Java Spring Boot)](https://github.com/browny26/atlas-backend)**
 
-## 📋 Table of Contents
-
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Available Scripts](#available-scripts)
-- [Environment Variables](#environment-variables)
-- [Developer](#developer)
-- [License](#license)
+---
 
 ## ✨ Features
 
@@ -46,6 +46,8 @@
 - **User Dashboard**: Comprehensive user profile and booking management
 - **Responsive Design**: Mobile-first, fully responsive UI with Tailwind CSS
 - **Protected Routes**: Secure authentication and authorization
+
+---
 
 ## 🛠 Tech Stack
 
@@ -60,6 +62,8 @@
 - **HTTP Client**: Axios 1.12.2
 - **Date Handling**: date-fns 4.1.0
 - **State Management**: React Context API
+
+---
 
 ## 🚀 Getting Started
 
@@ -144,11 +148,7 @@ atlas-frontend/
 └── README.md            # Project documentation
 ```
 
-## 🏗️ Architecture Overview
-
-Atlas frontend communicates with the backend via REST APIs for authentication, data management, and AI requests.  
-Supabase handles image storage, while Google APIs manage login and map services.
-
+---
 
 ## 📜 Available Scripts
 
@@ -156,6 +156,8 @@ Supabase handles image storage, while Google APIs manage login and map services.
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
+
+---
 
 ## 🔐 Environment Variables
 
@@ -169,9 +171,24 @@ The following environment variables are required:
 | `VITE_SUPABASE_ANON_KEY`   | Supabase anonymous key                    |
 | `VITE_BE_URL`              | Backend API base URL                      |
 
-## 👨‍💻 Developer
+---
 
-**Luisa Cerin Ogbeiwi**
+## 🏗️ Architecture Overview
+
+Atlas frontend communicates with the backend via REST APIs for authentication, data management, and AI requests.  
+Supabase handles image storage, while Google APIs manage login and map services.
+
+```mermaid
+graph TD;
+  User --> Frontend[React + Vite];
+  Frontend --> Backend[Spring Boot API];
+  Backend --> Supabase[Image Storage];
+  Backend --> Google[OAuth & Email Service];
+  Frontend --> GoogleMaps[Interactive Map];
+  Backend --> Groq[AI Integration];
+```
+
+---
 
 ## 🤝 Contributing
 
