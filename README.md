@@ -71,6 +71,7 @@ VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 VITE_API_BASE_URL=your_api_base_url
+VITE_BE_URL=http://your_backend_url
 ```
 
 4. Start the development server:
