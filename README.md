@@ -1,6 +1,29 @@
 # 🌍 Atlas Frontend
 
-A modern travel planning application built with React and Vite, featuring flight search, itinerary management, activity booking, and interactive maps.
+![React](https://img.shields.io/badge/React-18-blue?logo=react)
+![Vite](https://img.shields.io/badge/Vite-7-purple?logo=vite)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-blue?logo=tailwindcss)
+![Supabase](https://img.shields.io/badge/Supabase-2-green?logo=supabase)
+![GoogleMaps](https://img.shields.io/badge/Google%20Maps-API-orange?logo=googlemaps)
+
+**Atlas** is an intelligent travel companion that helps users discover destinations, plan itineraries, and book experiences — all in one seamless platform powered by AI and Google Maps.
+
+## 💡 Highlights
+
+- Seamless Google OAuth authentication  
+- Real-time interactive Google Maps integration  
+- Integrated Supabase backend for image storage  
+- Secure password recovery via email  
+- Optimized build with Vite and Tailwind  
+- Modern and responsive UI built from scratch
+
+## 🌐 Live Demo
+
+👉 [atlas.vercel.app](https://atlas-works.vercel.app)
+
+## 🧩 Related Projects
+
+- [Atlas Backend (Java Spring Boot)](https://github.com/browny26/atlas-backend)
 
 ## 📋 Table of Contents
 
@@ -70,8 +93,7 @@ VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-VITE_API_BASE_URL=your_api_base_url
-VITE_BE_URL=http://your_backend_url
+VITE_BE_URL=your_api_base_url
 ```
 
 4. Start the development server:
@@ -122,6 +144,12 @@ atlas-frontend/
 └── README.md            # Project documentation
 ```
 
+## 🏗️ Architecture Overview
+
+Atlas frontend communicates with the backend via REST APIs for authentication, data management, and AI requests.  
+Supabase handles image storage, while Google APIs manage login and map services.
+
+
 ## 📜 Available Scripts
 
 - `npm run dev` - Start development server
@@ -139,11 +167,16 @@ The following environment variables are required:
 | `VITE_GOOGLE_CLIENT_ID`    | Google OAuth client ID for authentication |
 | `VITE_SUPABASE_URL`        | Supabase project URL                      |
 | `VITE_SUPABASE_ANON_KEY`   | Supabase anonymous key                    |
-| `VITE_API_BASE_URL`        | Backend API base URL                      |
+| `VITE_BE_URL`              | Backend API base URL                      |
 
 ## 👨‍💻 Developer
 
 **Luisa Cerin Ogbeiwi**
+
+## 🤝 Contributing
+
+Contributions and feedback are welcome!  
+Feel free to open issues or suggest new features.
 
 ## 📄 License
 
