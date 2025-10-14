@@ -23,7 +23,7 @@ const FlightsCard = ({ flight, onClick }) => {
   const minutes = duration ? duration[2] : "0";
 
   return (
-    <div className="border border-gray-100 p-4 shadow hover:shadow-lg transition-shadow duration-300">
+    <div className="border border-gray-100 bg-white p-4 shadow hover:shadow-lg transition-shadow duration-300">
       <div className="mb-4">
         <h4 className="font-semibold text-lg mb-2">
           Flight: {flight.validatingAirlineCodes[0]}

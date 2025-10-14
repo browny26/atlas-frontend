@@ -31,7 +31,7 @@ const FlightComponent = ({ flights, loading, error, hasSearched }) => {
     }
   };
   return (
-    <div className="max-w-7xl mx-auto my-10">
+    <div className="max-w-7xl mx-auto py-10 px-2">
       {loading && (
         <div className="h-[30vh] w-full flex items-center justify-center">
           <l-dot-pulse size="43" speed="1.3" color="black"></l-dot-pulse>

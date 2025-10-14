@@ -107,7 +107,7 @@ const index = () => {
         </div>
       </section>
 
-      <section className="px-2">
+      <section>
         {currentPage === 0 && (
           <ItineraryComponent
             itinerary={itinerary}

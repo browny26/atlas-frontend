@@ -96,7 +96,7 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
   };
 
   return (
-    <div className="bg-white py-10">
+    <div className="bg-white py-10 px-2">
       <div className="max-w-7xl mx-auto">
         <div className="lg:col-span-2">
           {itinerary ? (
