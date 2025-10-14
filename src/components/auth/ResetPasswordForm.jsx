@@ -44,15 +44,6 @@ const ResetPasswordForm = () => {
     try {
       const res = await authAPI.resetPassword({ token, newPassword: password });
 
-      if (res.status !== 200) {
-        const data = res.data;
-        setMessage({
-          type: "error",
-          text: data.message || "Failed to reset password",
-        });
-        return;
-      }
-
       setTimeout(() => {
         setMessage({
           type: "success",
@@ -63,6 +54,10 @@ const ResetPasswordForm = () => {
       navigate("/signin");
     } catch (error) {
       console.error("Error:", error);
+      setMessage({
+        type: "error",
+        text: "The reset link is not valid or expired.",
+      });
     } finally {
       setLoading(false);
     }

@@ -8,6 +8,10 @@ import Alert from "../ui/Alert";
 
 const ResetRequestForm = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
+  const [sended, setSended] = useState({
+    status: false,
+    message: "The email was sent but it may take a moment to arrive.",
+  });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -42,9 +46,20 @@ const ResetRequestForm = () => {
         type: "success",
         text: "Reset link sent! Check your email.",
       });
+      setSended({ ...sended, status: true });
     } catch (error) {
+      if (error.response && error.response.status === 400) {
+        setMessage({
+          type: "error",
+          text: "A password reset token has already been generated for this user. Please check your email or wait for it to expire.",
+        });
+      } else {
+        setMessage({
+          type: "error",
+          text: "An error occurred. Please try again.",
+        });
+      }
       console.error("Error:", error);
-      setMessage({ type: "error", text: "Failed to send reset link" });
     } finally {
       setLoading(false);
     }
@@ -80,7 +95,7 @@ const ResetRequestForm = () => {
             <h1 className="mb-2 font-semibold text-gray-800 text-lg sm:text-xl">
               Forgot Your Password?
             </h1>
-            <p className="text-sm text-gray-500 ">
+            <p className="text-sm text-gray-500">
               Enter the email address linked to your account, and we’ll send you
               a link to reset your password.
             </p>
@@ -110,6 +125,9 @@ const ResetRequestForm = () => {
                     )}
                   </Button>
                 </div>
+                <p className="mt-2 text-sm text-gray-500 text-center">
+                  {sended.status == true && sended.message}
+                </p>
               </div>
             </form>
             <div className="mt-5">
