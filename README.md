@@ -6,7 +6,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-2-green?logo=supabase)
 ![GoogleMaps](https://img.shields.io/badge/Google%20Maps-API-orange?logo=googlemaps)
 
-**Atlas** is an intelligent travel companion that helps users discover destinations, plan itineraries, and book experiences — all in one seamless platform powered by AI and Google Maps.
+> **Atlas** is an intelligent travel companion that helps users discover destinations, plan itineraries, and book experiences — all in one seamless platform powered by AI and Google Maps.
 
 ## 💡 Highlights
 
