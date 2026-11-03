@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   SunIcon,
@@ -6,124 +6,189 @@ import {
   ExclamationTriangleIcon,
   PaperAirplaneIcon,
   CloudIcon,
+  ArrowPathIcon,
+  SparklesIcon,
 } from "@heroicons/react/24/solid";
 import { bouncy } from "ldrs";
 import Button from "./ui/Button";
 import ActivityCard from "./ActivityCard";
+import Alert from "./ui/Alert";
 import { Link } from "react-router-dom";
 import { itineraryAPI } from "../services/api";
 bouncy.register();
 
-const ItineraryComponent = ({ itinerary, user, loading }) => {
-  const [submitted, setSubmitted] = useState(false);
+const getItineraryDays = (itinerary) => {
+  if (!itinerary.itinerary) return [];
+
+  return itinerary.itinerary.map((day) => {
+    if (day.morning || day.afternoon || day.evening) {
+      return {
+        day: day.day,
+        morning: day.morning,
+        afternoon: day.afternoon,
+        evening: day.evening,
+      };
+    } else if (day.activities && Array.isArray(day.activities)) {
+      const activities = day.activities.slice(0, 3);
+      return {
+        day: day.day,
+        morning: activities[0] || null,
+        afternoon: activities[1] || null,
+        evening: activities[2] || null,
+      };
+    }
+    return { day: day.day, morning: null, afternoon: null, evening: null };
+  });
+};
+
+const getTotalDays = (itinerary) =>
+  itinerary.total_days || itinerary.itinerary?.length || 0;
+
+/** Shown when the AI was unavailable and the backend returned a generic template. */
+const FallbackNotice = () => (
+  <div className="bg-yellow-50 border border-yellow-200 p-4 flex items-start gap-3">
+    <ExclamationTriangleIcon className="h-6 w-6 text-yellow-600 shrink-0" />
+    <div>
+      <h4 className="font-semibold text-yellow-800">Generic itinerary</h4>
+      <p className="text-yellow-700 text-sm mt-1">
+        Our AI planner is temporarily unavailable, so this is a generic plan
+        based on your budget. Try again in a few minutes for a personalized
+        itinerary.
+      </p>
+    </div>
+  </div>
+);
+
+const StreamingNotice = ({ itinerary, statusMessage }) => (
+  <div className="bg-blue-50 border border-blue-200 p-4 flex items-center gap-3">
+    <SparklesIcon className="h-6 w-6 text-blue-600 animate-pulse shrink-0" />
+    <p className="text-blue-800 text-sm">
+      {statusMessage ||
+        `Planning your trip... ${itinerary.itinerary?.length || 0} of ${getTotalDays(itinerary)} days ready`}
+    </p>
+  </div>
+);
+
+/** "Regenerate" control for one day, with optional feedback for the AI. */
+const RegenerateDay = ({ itinerary, day, onItineraryChange, onError }) => {
+  const [open, setOpen] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const regenerate = async (e) => {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      const res = await itineraryAPI.regenerateDay(itinerary, day, feedback);
+      onItineraryChange(res.data.itinerary);
+      setOpen(false);
+      setFeedback("");
+    } catch (error) {
+      onError(
+        error.response?.data?.message || "Could not regenerate this day"
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-1 text-sm text-white/80 hover:text-white cursor-pointer"
+      >
+        <ArrowPathIcon className="h-4 w-4" /> Regenerate
+      </button>
+    );
+  }
+
+  return (
+    <form onSubmit={regenerate} className="flex items-center gap-2">
+      <input
+        type="text"
+        value={feedback}
+        maxLength={300}
+        onChange={(e) => setFeedback(e.target.value)}
+        placeholder="e.g. more museums, less walking (optional)"
+        className="w-64 px-3 py-1 text-sm text-black bg-white"
+        disabled={busy}
+        autoFocus
+      />
+      <button
+        type="submit"
+        disabled={busy}
+        className="text-sm bg-white text-black px-3 py-1 cursor-pointer disabled:opacity-50"
+      >
+        {busy ? "Regenerating..." : "Go"}
+      </button>
+      <button
+        type="button"
+        onClick={() => setOpen(false)}
+        disabled={busy}
+        className="text-sm text-white/80 hover:text-white cursor-pointer"
+      >
+        Cancel
+      </button>
+    </form>
+  );
+};
+
+const ItineraryComponent = ({
+  itinerary,
+  user,
+  loading,
+  streaming = false,
+  statusMessage = "",
+  onItineraryChange,
+}) => {
   const [message, setMessage] = useState({ type: "", text: "" });
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (!message.text) return;
+    const timer = setTimeout(() => setMessage({ type: "", text: "" }), 3000);
+    return () => clearTimeout(timer);
+  }, [message.text]);
 
   const handleSaveItinerary = async () => {
-    setSubmitted(false);
-
+    setSaving(true);
     try {
-      const res = await itineraryAPI.saveItinerary(user.id, itinerary);
-
-      if (res.status !== 200)
-        setMessage({ type: "error", text: "Failed to save itinerary" });
-
-      const data = res.data;
-      if (data.success) {
-        setMessage({ type: "success", text: "Itinerary saved successfully" });
-      } else {
-        setMessage({ type: "error", text: "Failed to save itinerary" });
-      }
+      await itineraryAPI.saveItinerary(user.id, itinerary);
+      setMessage({ type: "success", text: "Itinerary saved successfully" });
     } catch (error) {
       console.error("Error saving itinerary:", error);
       setMessage({ type: "error", text: "Failed to save itinerary" });
     } finally {
-      setSubmitted(true);
+      setSaving(false);
     }
   };
 
-  const getAccommodation = (itinerary) => {
-    return itinerary.accommodation || null;
-  };
-
-  const getItineraryDays = (itinerary) => {
-    if (!itinerary.itinerary) return [];
-
-    return itinerary.itinerary.map((day) => {
-      if (day.morning || day.afternoon || day.evening) {
-        return {
-          day: day.day,
-          morning: day.morning,
-          afternoon: day.afternoon,
-          evening: day.evening,
-        };
-      } else if (day.activities && Array.isArray(day.activities)) {
-        const activities = day.activities.slice(0, 3);
-        return {
-          day: day.day,
-          morning: activities[0] || null,
-          afternoon: activities[1] || null,
-          evening: activities[2] || null,
-        };
-      }
-
-      return {
-        day: day.day,
-        morning: null,
-        afternoon: null,
-        evening: null,
-      };
-    });
-  };
-
-  const getTips = (itinerary) => {
-    return itinerary.tips || [];
-  };
-
-  const getNote = (itinerary) => {
-    return itinerary.note || null;
-  };
-
-  const getTotalBudget = (itinerary) => {
-    return itinerary.total_budget || "Not specified";
-  };
-
-  const getTotalDays = (itinerary) => {
-    return itinerary.total_days || itinerary.itinerary?.length || 0;
-  };
-
-  const getDestination = (itinerary) => {
-    return itinerary.destination || "Unknown destination";
-  };
+  const showError = (text) => setMessage({ type: "error", text });
+  const canRegenerate =
+    !streaming && onItineraryChange && itinerary?.source !== "fallback";
 
   return (
     <div className="bg-white py-10 px-2">
+      {message.text && <Alert type={message.type} message={message.text} />}
       <div className="max-w-7xl mx-auto">
         <div className="lg:col-span-2">
           {itinerary ? (
             <div className="space-y-6">
-              {getNote(itinerary) && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
-                  <div className="flex items-center">
-                    <div className="text-yellow-600 text-lg mr-3">
-                      <ExclamationTriangleIcon className="h-6 w-6 text-gray-500" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-yellow-800">
-                        Partial Itinerary
-                      </h4>
-                      <p className="text-yellow-700 text-sm mt-1">
-                        {getNote(itinerary)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+              {streaming && (
+                <StreamingNotice
+                  itinerary={itinerary}
+                  statusMessage={statusMessage}
+                />
               )}
+              {itinerary.source === "fallback" && <FallbackNotice />}
 
               <div className="bg-white shadow p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h2 className="text-3xl font-bold text-gray-800 capitalize">
-                      {getDestination(itinerary)}
+                      {itinerary.destination || "Unknown destination"}
                     </h2>
                     <p className="text-gray-600 mt-2">
                       {getTotalDays(itinerary)} day
@@ -132,13 +197,26 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-green-600">
-                      {getTotalBudget(itinerary)}
+                      {itinerary.total_budget || "Not specified"}
                     </div>
                     <div className="text-sm text-gray-500">Total Budget</div>
+                    {itinerary.total_estimated_cost && (
+                      <div
+                        className={`text-sm mt-1 ${
+                          itinerary.budget_status === "over_budget"
+                            ? "text-red-600"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        Estimated cost: {itinerary.total_estimated_cost}
+                        {itinerary.budget_status === "over_budget" &&
+                          " (over budget)"}
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {getAccommodation(itinerary) && (
+                {itinerary.accommodation && (
                   <div className="bg-blue-50 rounded-xl p-4 mt-4">
                     <div className="flex justify-between items-center">
                       <div>
@@ -146,12 +224,12 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                           Accommodation
                         </h3>
                         <p className="text-gray-600">
-                          {getAccommodation(itinerary).name}
+                          {itinerary.accommodation.name}
                         </p>
                       </div>
                       <div className="text-right">
                         <div className="text-lg font-bold text-gray-800">
-                          {getAccommodation(itinerary).cost}
+                          {itinerary.accommodation.cost}
                         </div>
                         <div className="text-sm text-gray-500">per night</div>
                       </div>
@@ -162,14 +240,19 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
 
               <div className="space-y-4">
                 {getItineraryDays(itinerary).map((day) => (
-                  <div
-                    key={day.day}
-                    className="bg-white shadow overflow-hidden"
-                  >
-                    <div className="bg-black p-4">
+                  <div key={day.day} className="bg-white shadow overflow-hidden">
+                    <div className="bg-black p-4 flex flex-wrap justify-between items-center gap-2">
                       <h3 className="text-xl font-bold text-white">
                         Day {day.day}
                       </h3>
+                      {canRegenerate && (
+                        <RegenerateDay
+                          itinerary={itinerary}
+                          day={day.day}
+                          onItineraryChange={onItineraryChange}
+                          onError={showError}
+                        />
+                      )}
                     </div>
 
                     <div className="p-6 space-y-4">
@@ -206,13 +289,19 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                 ))}
               </div>
 
-              {getTips(itinerary).length > 0 && (
+              {streaming && (
+                <div className="flex justify-center py-6">
+                  <l-bouncy size="35" speed="1.75" color="black"></l-bouncy>
+                </div>
+              )}
+
+              {itinerary.tips?.length > 0 && (
                 <div className="bg-white shadow p-6">
                   <h3 className="text-2xl font-bold text-gray-800 mb-4">
                     Travel Tips
                   </h3>
                   <div className="grid gap-3">
-                    {getTips(itinerary).map((tip, index) => (
+                    {itinerary.tips.map((tip, index) => (
                       <div
                         key={index}
                         className="flex items-start space-x-3 p-3 rounded-lg"
@@ -224,23 +313,26 @@ const ItineraryComponent = ({ itinerary, user, loading }) => {
                 </div>
               )}
 
-              <div className="flex space-x-4">
-                {user ? (
-                  <Button
-                    onClick={() => handleSaveItinerary()}
-                    className="flex-1 py-3"
-                  >
-                    Save Itinerary
-                  </Button>
-                ) : (
-                  <Link
-                    className={`flex-1 py-3 text-center font-medium text-sm px-8 whitespace-nowrap cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed bg-black text-white hover:bg-gray-900`}
-                    to="/signin"
-                  >
-                    Login to save the itinary
-                  </Link>
-                )}
-              </div>
+              {!streaming && (
+                <div className="flex space-x-4">
+                  {user ? (
+                    <Button
+                      onClick={handleSaveItinerary}
+                      disabled={saving}
+                      className="flex-1 py-3"
+                    >
+                      {saving ? "Saving Itinerary..." : "Save Itinerary"}
+                    </Button>
+                  ) : (
+                    <Link
+                      className="flex-1 py-3 text-center font-medium text-sm px-8 whitespace-nowrap cursor-pointer bg-black text-white hover:bg-gray-900"
+                      to="/signin"
+                    >
+                      Login to save the itinerary
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
           ) : loading ? (
             <div className="h-[50vh] flex items-center justify-center">

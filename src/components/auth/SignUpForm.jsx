@@ -67,6 +67,15 @@ export default function SignUpForm() {
       return;
     }
 
+    if (password.length < 8) {
+      setMessage({
+        type: "error",
+        text: "The password must be at least 8 characters long",
+      });
+      setLoading(false);
+      return;
+    }
+
     if (!isChecked) {
       setMessage({
         type: "error",
@@ -93,10 +102,12 @@ export default function SignUpForm() {
       setMessage({ type: "success", text: "Registration successful!" });
       navigate("/signin");
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Registration failed:", error);
       setMessage({
         type: "error",
-        text: "Registration failed. Please try again.",
+        // e.g. "Email already registered" (409) from the backend
+        text:
+          error.response?.data?.message || "Registration failed. Please try again.",
       });
     } finally {
       setLoading(false);

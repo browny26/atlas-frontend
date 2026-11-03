@@ -66,6 +66,14 @@ export const itineraryAPI = {
   generateItinerary: (data) =>
     publicApi.post("/v1/api/itinerary/generate", data),
 
+  // Rewrite one day of the displayed itinerary, optionally following user feedback.
+  regenerateDay: (itinerary, day, feedback) =>
+    publicApi.post("/v1/api/itinerary/regenerate-day", {
+      itinerary,
+      day,
+      feedback: feedback || null,
+    }),
+
   saveItinerary: (id, data) => api.post(`/v1/api/itinerary/save/${id}`, data),
 
   getUserItineraries: () => api.get("/v1/api/itinerary/user"),
