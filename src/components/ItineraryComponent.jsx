@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import {
   SunIcon,
@@ -70,25 +70,15 @@ const StreamingNotice = ({ itinerary, statusMessage }) => (
 );
 
 /** "Regenerate" control for one day, with optional feedback for the AI. */
-const RegenerateDay = ({ itinerary, day, onItineraryChange, onError }) => {
+const RegenerateDay = ({ day, disabled, busy, onRegenerate }) => {
   const [open, setOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
-  const [busy, setBusy] = useState(false);
 
   const regenerate = async (e) => {
     e.preventDefault();
-    setBusy(true);
-    try {
-      const res = await itineraryAPI.regenerateDay(itinerary, day, feedback);
-      onItineraryChange(res.data.itinerary);
+    if (await onRegenerate(day, feedback)) {
       setOpen(false);
       setFeedback("");
-    } catch (error) {
-      onError(
-        error.response?.data?.message || "Could not regenerate this day"
-      );
-    } finally {
-      setBusy(false);
     }
   };
 
@@ -97,7 +87,8 @@ const RegenerateDay = ({ itinerary, day, onItineraryChange, onError }) => {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-1 text-sm text-white/80 hover:text-white cursor-pointer"
+        disabled={disabled}
+        className="flex items-center gap-1 text-sm text-white/80 hover:text-white cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
       >
         <ArrowPathIcon className="h-4 w-4" /> Regenerate
       </button>
@@ -113,12 +104,12 @@ const RegenerateDay = ({ itinerary, day, onItineraryChange, onError }) => {
         onChange={(e) => setFeedback(e.target.value)}
         placeholder="e.g. more museums, less walking (optional)"
         className="w-64 px-3 py-1 text-sm text-black bg-white"
-        disabled={busy}
+        disabled={disabled}
         autoFocus
       />
       <button
         type="submit"
-        disabled={busy}
+        disabled={disabled}
         className="text-sm bg-white text-black px-3 py-1 cursor-pointer disabled:opacity-50"
       >
         {busy ? "Regenerating..." : "Go"}
@@ -126,7 +117,7 @@ const RegenerateDay = ({ itinerary, day, onItineraryChange, onError }) => {
       <button
         type="button"
         onClick={() => setOpen(false)}
-        disabled={busy}
+        disabled={disabled}
         className="text-sm text-white/80 hover:text-white cursor-pointer"
       >
         Cancel
@@ -166,6 +157,31 @@ const ItineraryComponent = ({
   };
 
   const showError = (text) => setMessage({ type: "error", text });
+
+  // One regeneration at a time: each response replaces the whole itinerary, so two
+  // concurrent ones would undo each other. A response that arrives after the itinerary
+  // was replaced (e.g. a new trip was generated) is discarded.
+  const [regeneratingDay, setRegeneratingDay] = useState(null);
+  const currentItinerary = useRef(itinerary);
+  useEffect(() => {
+    currentItinerary.current = itinerary;
+  }, [itinerary]);
+
+  const regenerateDay = async (day, feedback) => {
+    const snapshot = itinerary;
+    setRegeneratingDay(day);
+    try {
+      const res = await itineraryAPI.regenerateDay(snapshot, day, feedback);
+      if (currentItinerary.current !== snapshot) return false;
+      onItineraryChange(res.data.itinerary);
+      return true;
+    } catch (error) {
+      showError(error.response?.data?.message || "Could not regenerate this day");
+      return false;
+    } finally {
+      setRegeneratingDay(null);
+    }
+  };
   const canRegenerate =
     !streaming && onItineraryChange && itinerary?.source !== "fallback";
 
@@ -247,10 +263,10 @@ const ItineraryComponent = ({
                       </h3>
                       {canRegenerate && (
                         <RegenerateDay
-                          itinerary={itinerary}
                           day={day.day}
-                          onItineraryChange={onItineraryChange}
-                          onError={showError}
+                          busy={regeneratingDay === day.day}
+                          disabled={regeneratingDay !== null}
+                          onRegenerate={regenerateDay}
                         />
                       )}
                     </div>

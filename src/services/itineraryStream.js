@@ -8,11 +8,27 @@ import { itineraryAPI } from "./api";
  * EventSource only supports GET, so the stream is read from fetch() manually.
  * If streaming is not available, it falls back to the classic POST /generate.
  */
-export async function generateItineraryStream(data, { onDay, onStatus } = {}) {
+export async function generateItineraryStream(data, handlers = {}) {
   const token = localStorage.getItem("token");
-  let response;
+  let response = await openStream(data, token);
+
+  // Generation is public: an expired session must not block it, so retry anonymously.
+  if (response?.status === 401 && token) {
+    response = await openStream(data, null);
+  }
+  if (!response || response.status === 404 || response.status === 405) {
+    return generateWithoutStreaming(data);
+  }
+  if (!response.ok || !response.body) {
+    throw new Error(await errorMessage(response));
+  }
+  return readEvents(response, handlers);
+}
+
+/** The token is optional: when present, rate limits apply per user instead of per IP. */
+async function openStream(data, token) {
   try {
-    response = await fetch(
+    return await fetch(
       `${import.meta.env.VITE_BE_URL}/v1/api/itinerary/generate/stream`,
       {
         method: "POST",
@@ -25,16 +41,11 @@ export async function generateItineraryStream(data, { onDay, onStatus } = {}) {
       }
     );
   } catch {
-    return generateWithoutStreaming(data);
+    return null; // network error: try the classic endpoint
   }
+}
 
-  if (response.status === 404 || response.status === 405) {
-    return generateWithoutStreaming(data);
-  }
-  if (!response.ok || !response.body) {
-    throw new Error(await errorMessage(response));
-  }
-
+async function readEvents(response, { onDay, onStatus }) {
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
@@ -42,7 +53,12 @@ export async function generateItineraryStream(data, { onDay, onStatus } = {}) {
   for (;;) {
     const { value, done } = await reader.read();
     if (done) break;
-    buffer += decoder.decode(value, { stream: true });
+    // SSE allows CRLF line endings. A trailing "\r" may be the first half of a "\r\n"
+    // split across two chunks, so only complete pairs are normalized.
+    buffer = (buffer + decoder.decode(value, { stream: true })).replace(
+      /\r\n/g,
+      "\n"
+    );
 
     // Events are separated by a blank line.
     let separator;
