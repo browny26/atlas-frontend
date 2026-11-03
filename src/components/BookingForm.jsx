@@ -6,7 +6,8 @@ import TagSelect from "./ui/TagSelect";
 import AirportAutocomplete from "./ui/AirportAutocomplete";
 import DatePicker from "./ui/DatePicker";
 import Input from "./ui/InputField";
-import { flightsAPI, itineraryAPI } from "../services/api";
+import { flightsAPI } from "../services/api";
+import { generateItineraryStream } from "../services/itineraryStream";
 
 const BookingForm = ({
   setPage,
@@ -15,6 +16,8 @@ const BookingForm = ({
   loading,
   setFlights,
   setItinerary,
+  setStreaming,
+  setStatusMessage,
   onSuccess,
   setHasSearched,
   error,
@@ -104,24 +107,33 @@ const BookingForm = ({
     }
 
     try {
-      const res = await itineraryAPI.generateItinerary(formData);
+      // Days appear one by one while the AI writes them (Server-Sent Events).
+      setItinerary?.(null);
+      setStreaming?.(true);
+      const itinerary = await generateItineraryStream(formData, {
+        onDay: (day) =>
+          setItinerary?.((prev) => ({
+            destination: formData.destination,
+            total_days: Number(formData.days),
+            total_budget: `€${formData.budget}`,
+            ...prev,
+            itinerary: [...(prev?.itinerary || []), day],
+          })),
+        onStatus: (status) => setStatusMessage?.(status),
+      });
 
-      if (res.status !== 200) throw new Error("Failed to generate itinerary");
-
-      const data = res.data;
       if (onSuccess) {
-        onSuccess(data.itinerary, "itinerary");
+        onSuccess(itinerary, "itinerary");
       } else {
-        if (data.success) {
-          setItinerary(data.itinerary);
-        } else {
-          throw new Error("Failed to generate itinerary");
-        }
+        setItinerary(itinerary);
       }
     } catch (err) {
+      setItinerary?.(null); // partial days are not authoritative
       setError(err.message);
     } finally {
       setLoading(false);
+      setStreaming?.(false);
+      setStatusMessage?.("");
     }
   };
 
@@ -150,6 +162,7 @@ const BookingForm = ({
             <Input
               type="number"
               min={1}
+              max={14}
               placeholder="Days"
               onChange={(e) =>
                 setFormData({

@@ -13,7 +13,7 @@ import FlightComponent from "../../components/FlightComponent";
 import { useLocation } from "react-router-dom";
 dotPulse.register();
 
-const index = () => {
+const Adventure = () => {
   const { user } = useUser();
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(0);
@@ -43,6 +43,8 @@ const index = () => {
   const [message, setMessage] = useState({ type: "", text: "" });
   const [submitted, setSubmitted] = useState(false);
   const [itinerary, setItinerary] = useState(null);
+  const [streaming, setStreaming] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
 
   const interestOptions = [
     "food",
@@ -102,6 +104,8 @@ const index = () => {
             setLoading={setLoading}
             setFlights={setFlights}
             setItinerary={setItinerary}
+            setStreaming={setStreaming}
+            setStatusMessage={setStatusMessage}
             setHasSearched={setHasSearched}
           />
         </div>
@@ -113,6 +117,9 @@ const index = () => {
             itinerary={itinerary}
             user={user}
             loading={loading}
+            streaming={streaming}
+            statusMessage={statusMessage}
+            onItineraryChange={setItinerary}
           />
         )}
         {currentPage === 1 && (
@@ -130,4 +137,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Adventure;

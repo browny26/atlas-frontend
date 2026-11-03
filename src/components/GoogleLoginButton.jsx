@@ -1,27 +1,14 @@
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 import { authAPI } from "../services/api";
 
 const GoogleLoginButton = ({ onSuccess, onError, text }) => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
-        const userInfo = await axios.get(
-          "https://www.googleapis.com/oauth2/v3/userinfo",
-          {
-            headers: {
-              Authorization: `Bearer ${tokenResponse.access_token}`,
-            },
-          }
-        );
-
+        // Only the access token is sent: the backend verifies it with Google and reads
+        // the user's identity from there (never trust identity data sent by the client).
         const res = await authAPI.googleLogin({
-          sub: userInfo.data.sub,
-          email: userInfo.data.email,
-          name: userInfo.data.name,
-          picture: userInfo.data.picture,
-          given_name: userInfo.data.given_name,
-          family_name: userInfo.data.family_name,
+          access_token: tokenResponse.access_token,
         });
 
         onSuccess(res.data);
