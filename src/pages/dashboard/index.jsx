@@ -15,7 +15,11 @@ import {
 } from "@heroicons/react/24/solid";
 import ActivityCard from "../../components/ActivityCard";
 import { itineraryAPI } from "../../services/api";
-import { PENDING_SAVED_KEY } from "../../services/pendingItinerary";
+import {
+  savePendingItinerary,
+  takeSaveOutcome,
+} from "../../services/pendingItinerary";
+import { useUser } from "../../context/UserContext";
 import { bouncy } from "ldrs";
 
 bouncy.register();
@@ -29,6 +33,10 @@ const Dashboard = () => {
   const [selectedItinerary, setSelectedItinerary] = useState(null);
   const [cancelItinary, setCancelItinary] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
+  const { user } = useUser();
+  // Set when the itinerary generated as a guest could not be saved during sign-in.
+  const [failedSave, setFailedSave] = useState(null);
+  const [retryingSave, setRetryingSave] = useState(false);
 
   useEffect(() => {
     if (message.text) {
@@ -95,22 +103,55 @@ const Dashboard = () => {
     }
   };
 
-  useEffect(() => {
-    getUserItineraries();
-    // An itinerary generated as a guest was saved during sign-in.
-    const savedDestination = sessionStorage.getItem(PENDING_SAVED_KEY);
-    if (savedDestination) {
-      sessionStorage.removeItem(PENDING_SAVED_KEY);
+  const showSaveOutcome = (outcome) => {
+    if (outcome?.status === "saved") {
+      setFailedSave(null);
       setMessage({
         type: "success",
-        text: `Your itinerary for ${savedDestination} was saved to your account`,
+        text: `Your itinerary for ${outcome.destination} was saved to your account`,
       });
+    } else if (outcome?.status === "failed") {
+      setFailedSave(outcome.destination);
     }
+  };
+
+  const retryPendingSave = async () => {
+    if (!user) return;
+    setRetryingSave(true);
+    await savePendingItinerary(user);
+    setRetryingSave(false);
+    const outcome = takeSaveOutcome();
+    showSaveOutcome(outcome);
+    if (outcome?.status === "saved") getUserItineraries();
+  };
+
+  useEffect(() => {
+    getUserItineraries();
+    // Result of saving the itinerary generated as a guest, during sign-in.
+    showSaveOutcome(takeSaveOutcome());
   }, []);
 
   return (
     <div className="relative">
       {message.text && <Alert type={message.type} message={message.text} />}
+      {failedSave && (
+        <div
+          role="alert"
+          className="flex flex-wrap items-center justify-between gap-3 border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+        >
+          <span>
+            You are signed in, but your itinerary for {failedSave} could not be
+            saved.
+          </span>
+          <Button
+            variant="red"
+            onClick={retryPendingSave}
+            disabled={retryingSave || !user}
+          >
+            {retryingSave ? "Saving..." : "Retry"}
+          </Button>
+        </div>
+      )}
       <div className=" bg-white p-5 lg:p-6">
         <h3 className="mb-5 text-3xl font-marcellus font-semibold text-gray-800 lg:mb-7">
           Dashboard
