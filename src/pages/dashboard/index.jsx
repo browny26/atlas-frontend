@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/24/solid";
 import ActivityCard from "../../components/ActivityCard";
 import { itineraryAPI } from "../../services/api";
+import { PENDING_SAVED_KEY } from "../../services/pendingItinerary";
 import { bouncy } from "ldrs";
 
 bouncy.register();
@@ -96,6 +97,15 @@ const Dashboard = () => {
 
   useEffect(() => {
     getUserItineraries();
+    // An itinerary generated as a guest was saved during sign-in.
+    const savedDestination = sessionStorage.getItem(PENDING_SAVED_KEY);
+    if (savedDestination) {
+      sessionStorage.removeItem(PENDING_SAVED_KEY);
+      setMessage({
+        type: "success",
+        text: `Your itinerary for ${savedDestination} was saved to your account`,
+      });
+    }
   }, []);
 
   return (
@@ -245,12 +255,12 @@ const Dashboard = () => {
                               <strong>Accommodation</strong>
                             </h4>
                             <p className="text-gray-600">
-                              {selectedItinerary.accommodation.accomodationName}
+                              {selectedItinerary.accommodation.name}
                             </p>
                           </div>
                           <div className="text-right">
                             <div className="text-lg font-bold text-gray-800">
-                              {selectedItinerary.accommodation.accomodationCost}
+                              {selectedItinerary.accommodation.cost}
                             </div>
                             <div className="text-sm text-gray-500">
                               per night

@@ -14,6 +14,7 @@ import Button from "./ui/Button";
 import ActivityCard from "./ActivityCard";
 import Alert from "./ui/Alert";
 import { Link } from "react-router-dom";
+import { keepItineraryForLogin } from "../services/pendingItinerary";
 import { itineraryAPI } from "../services/api";
 bouncy.register();
 
@@ -147,7 +148,10 @@ const ItineraryComponent = ({
     setSaving(true);
     try {
       await itineraryAPI.saveItinerary(user.id, itinerary);
-      setMessage({ type: "success", text: "Itinerary saved successfully" });
+      setMessage({
+        type: "success",
+        text: "Itinerary saved: you will find it in your dashboard",
+      });
     } catch (error) {
       console.error("Error saving itinerary:", error);
       setMessage({ type: "error", text: "Failed to save itinerary" });
@@ -343,8 +347,10 @@ const ItineraryComponent = ({
                     <Link
                       className="flex-1 py-3 text-center font-medium text-sm px-8 whitespace-nowrap cursor-pointer bg-black text-white hover:bg-gray-900"
                       to="/signin"
+                      // Saved automatically to the account right after signing in.
+                      onClick={() => keepItineraryForLogin(itinerary)}
                     >
-                      Login to save the itinerary
+                      Sign in to save the itinerary
                     </Link>
                   )}
                 </div>

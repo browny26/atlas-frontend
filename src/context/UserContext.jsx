@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { authAPI, userAPI } from "../services/api";
+import { savePendingItinerary } from "../services/pendingItinerary";
 
 const UserContext = createContext();
 
@@ -9,9 +10,17 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  /**
+   * Stores the token and waits until the user is loaded, so callers can navigate to
+   * protected pages right after it. Throws if the user cannot be loaded.
+   */
   const login = async (token) => {
     localStorage.setItem("token", token);
-    await fetchUser();
+    setLoading(true);
+    const loaded = await fetchUser();
+    if (!loaded) throw new Error("Could not load the user");
+    await savePendingItinerary(loaded);
+    return loaded;
   };
 
   // Funzione per logout
@@ -25,7 +34,7 @@ export const UserProvider = ({ children }) => {
     if (!token) {
       setUser(null);
       setLoading(false);
-      return;
+      return null;
     }
 
     try {
@@ -42,9 +51,11 @@ export const UserProvider = ({ children }) => {
 
       const dataUser = userData.data;
       setUser(dataUser);
+      return dataUser;
     } catch (err) {
       console.error(err);
       setUser(null);
+      return null;
     } finally {
       setLoading(false);
     }

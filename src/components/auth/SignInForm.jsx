@@ -27,18 +27,12 @@ export default function SignInForm() {
 
   const handleGoogleSuccess = async (data) => {
     try {
-      const { token } = data;
-
-      localStorage.setItem("token", token);
-
-      login(token);
-
-      setMessage({ type: "success", text: "Login successful!" });
-
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
+      // Wait until the user is loaded: navigating earlier sends the user back to
+      // sign-in, because the protected route does not see them yet.
+      await login(data.token);
+      navigate("/dashboard");
     } catch (error) {
+      console.error("Google login failed:", error);
       setMessage({ type: "error", text: "Login failed. Please try again." });
     }
   };
