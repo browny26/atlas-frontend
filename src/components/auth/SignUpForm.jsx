@@ -7,6 +7,7 @@ import Button from "../ui/Button";
 import { authAPI } from "../../services/api";
 import GoogleLoginButton from "../GoogleLoginButton";
 import Alert from "../ui/Alert";
+import { useUser } from "../../context/UserContext";
 
 export default function SignUpForm() {
   const [message, setMessage] = useState({ type: "", text: "" });
@@ -14,6 +15,7 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const navigate = useNavigate();
+  const { login } = useUser();
 
   useEffect(() => {
     if (message.text) {
@@ -27,18 +29,12 @@ export default function SignUpForm() {
 
   const handleGoogleSuccess = async (data) => {
     try {
-      const { token } = data;
-
-      localStorage.setItem("token", token);
-
-      login(token);
-
-      setMessage({ type: "success", text: "Login successful!" });
-
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 1000);
+      // Wait until the user is loaded: navigating earlier sends the user back to
+      // sign-in, because the protected route does not see them yet.
+      await login(data.token);
+      navigate("/dashboard");
     } catch (error) {
+      console.error("Google login failed:", error);
       setMessage({ type: "error", text: "Login failed. Please try again." });
     }
   };
@@ -281,7 +277,7 @@ export default function SignUpForm() {
                   </p>
                 </div>
                 <div>
-                  <Button type="submit" className="w-full">
+                  <Button type="submit" className="w-full" disabled={loading}>
                     {loading ? (
                       <div className="flex items-center justify-center">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
