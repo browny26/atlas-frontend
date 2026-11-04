@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import GoogleMapComponent from "../../components/GoogleMapComponent";
+import MapComponent from "../../components/MapComponent";
 import ActivitiesCard from "../../components/ui/ActivitiesCard";
 import Pagination from "../../components/Pagination";
 import Button from "../../components/ui/Button";
@@ -65,7 +65,7 @@ const Activities = () => {
     }
   }
 
-  // GoogleMapComponent passes { lat, lng }.
+  // MapComponent passes { lat, lng }.
   const handleLocationSelect = (point) => {
     setLocation(point);
     fetchActivities(point, radius, 1);
@@ -96,8 +96,8 @@ const Activities = () => {
         </h3>
         <div className="flex flex-wrap items-center justify-between gap-4 mb-10">
           <p className="text-gray-600">
-            Click on the map to find museums, monuments and places to visit
-            nearby.
+            Click on the map, or use your location, to find museums, monuments
+            and places to visit nearby.
           </p>
           <label className="flex items-center gap-2 text-sm text-gray-700">
             Within
@@ -115,9 +115,10 @@ const Activities = () => {
           </label>
         </div>
         <div className="space-y-6 flex flex-col items-center">
-          <GoogleMapComponent
+          <MapComponent
             onLocationSelect={handleLocationSelect}
             initialMarker={pointer || null}
+            radiusKm={radius}
           />
 
           {loading && (
