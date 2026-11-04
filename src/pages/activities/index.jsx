@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import GoogleMapComponent from "../../components/GoogleMapComponent";
 import ActivitiesCard from "../../components/ui/ActivitiesCard";
 import Pagination from "../../components/Pagination";
@@ -31,8 +31,13 @@ const Activities = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [searched, setSearched] = useState(false);
+  // The map and the radius stay usable during a search: only the latest one may update
+  // the page, so a slow, older answer cannot replace newer results.
+  const latestRequest = useRef(0);
 
   async function fetchActivities({ lat, lng }, radiusKm, pageNumber) {
+    const requestId = ++latestRequest.current;
+    const isLatest = () => requestId === latestRequest.current;
     setLoading(true);
     setError("");
     try {
@@ -43,18 +48,20 @@ const Activities = () => {
         page: pageNumber,
         size: ITEMS_PER_PAGE,
       });
+      if (!isLatest()) return;
       setActivities(res.data.data || []);
       setTotalPages(res.data.totalPages);
       setPage(res.data.page);
       setSearched(true);
     } catch (err) {
+      if (!isLatest()) return;
       setActivities([]);
       setError(
         err.response?.data?.message ||
           "Could not load the activities. Please try again."
       );
     } finally {
-      setLoading(false);
+      if (isLatest()) setLoading(false);
     }
   }
 

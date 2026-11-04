@@ -7,6 +7,7 @@ import AirportAutocomplete from "./ui/AirportAutocomplete";
 import DatePicker from "./ui/DatePicker";
 import Input from "./ui/InputField";
 import { generateItineraryStream } from "../services/itineraryStream";
+import { validateFlightSearch } from "../services/flightLinks";
 
 const BookingForm = ({
   setPage,
@@ -61,20 +62,9 @@ const BookingForm = ({
   // Flight prices are compared on partner sites: the search is passed on as it is.
   function fetchFlights(e) {
     e.preventDefault();
-    setError("");
-
-    if (
-      !flightData.origin ||
-      !flightData.destination ||
-      !flightData.departDate
-    ) {
-      setError("Please fill in origin, destination and departure date");
-      return;
-    }
-    if (flightData.origin === flightData.destination) {
-      setError("The origin and destination airport must be different");
-      return;
-    }
+    const error = validateFlightSearch(flightData);
+    setError(error || "");
+    if (error) return;
 
     setHasSearched?.(true);
     if (onSuccess) {

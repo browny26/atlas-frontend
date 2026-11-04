@@ -1,6 +1,23 @@
 // Free flight-price APIs are gone (Amadeus closed its self-service APIs in July 2026), so
 // the search is handed to comparison sites with the route, dates and passengers prefilled.
 
+/**
+ * Checks a flight search before it is shown. Returns an error message, or null when valid.
+ * yyyy-MM-dd strings compare correctly as text.
+ */
+export function validateFlightSearch({ origin, destination, departDate, returnDate }) {
+  if (!origin || !destination || !departDate) {
+    return "Please fill in origin, destination and departure date";
+  }
+  if (origin === destination) {
+    return "The origin and destination airport must be different";
+  }
+  if (returnDate && returnDate < departDate) {
+    return "The return date must be on or after the departure date";
+  }
+  return null;
+}
+
 const compact = (isoDate) => isoDate.slice(2).replaceAll("-", ""); // 2026-12-01 -> 261201
 
 /**

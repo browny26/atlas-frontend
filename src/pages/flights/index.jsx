@@ -5,6 +5,7 @@ import Button from "../../components/ui/Button";
 import DatePicker from "../../components/ui/DatePicker";
 import AirportAutocomplete from "../../components/ui/AirportAutocomplete";
 import FlightSearchLinks from "../../components/FlightSearchLinks";
+import { validateFlightSearch } from "../../services/flightLinks";
 import Alert from "../../components/ui/Alert";
 
 const Flights = () => {
@@ -31,18 +32,9 @@ const Flights = () => {
   // Live prices come from comparison sites: the search is validated here and opened there.
   const searchFlights = (e) => {
     e.preventDefault();
-    if (!flightData.origin || !flightData.destination || !flightData.departDate) {
-      setMessage({
-        type: "error",
-        text: "Please fill in origin, destination and departure date",
-      });
-      return;
-    }
-    if (flightData.origin === flightData.destination) {
-      setMessage({
-        type: "error",
-        text: "The origin and destination airport must be different",
-      });
+    const error = validateFlightSearch(flightData);
+    if (error) {
+      setMessage({ type: "error", text: error });
       return;
     }
     setSearch({ ...flightData });
