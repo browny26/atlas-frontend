@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import GoogleMapComponent from "../../components/GoogleMapComponent";
+import MapComponent from "../../components/MapComponent";
 import { useNavigate } from "react-router-dom";
 import { useActivity } from "../../context/ActivityContext";
 import Button from "../../components/ui/Button";
@@ -162,7 +162,7 @@ const Dashboard = () => {
               <p className="mb-2 text-gray-600">
                 Click on the map to find the best activity near you!
               </p>
-              <GoogleMapComponent onLocationSelect={handleLocationSelect} />
+              <MapComponent onLocationSelect={handleLocationSelect} />
             </div>
             <div>
               <div className="bg-white shadow p-6 h-full flex flex-col justify-between">

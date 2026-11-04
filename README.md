@@ -4,10 +4,10 @@
 ![Vite](https://img.shields.io/badge/Vite-7-purple?logo=vite)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-blue?logo=tailwindcss)
 ![Supabase](https://img.shields.io/badge/Supabase-2-green?logo=supabase)
-![GoogleMaps](https://img.shields.io/badge/Google%20Maps-API-orange?logo=googlemaps)
+![Leaflet](https://img.shields.io/badge/Leaflet-OpenStreetMap-199900?logo=leaflet)
 ![Vercel](https://img.shields.io/badge/Vercel-Deployment-black?logo=vercel)
 
-> **Atlas** is an intelligent travel companion that helps users discover destinations, plan itineraries, and book experiences — all in one seamless platform powered by AI and Google Maps.
+> **Atlas** is an intelligent travel companion that helps users discover destinations, plan itineraries, and book experiences — all in one seamless platform powered by AI and OpenStreetMap.
 
 ---
 
@@ -20,7 +20,7 @@
 ## 💡 Highlights
 
 - Seamless Google OAuth authentication  
-- Real-time interactive Google Maps integration  
+- Interactive map with Leaflet and OpenStreetMap (no API key)  
 - Integrated Supabase backend for image storage  
 - Secure password recovery via email  
 - Optimized build with Vite and Tailwind  
@@ -46,7 +46,7 @@
 - **Transparent fallback**: A clear notice when the AI is unavailable and a generic plan is shown
 - **Itinerary Management**: Save and manage travel itineraries
 - **Activity Booking**: Browse and book travel activities
-- **Interactive Maps**: Google Maps integration for location visualization
+- **Interactive Maps**: Leaflet + OpenStreetMap tiles for location selection
 - **User Dashboard**: Comprehensive user profile and booking management
 - **Responsive Design**: Mobile-first, fully responsive UI with Tailwind CSS
 - **Protected Routes**: Secure authentication and authorization
@@ -60,7 +60,7 @@
 - **Styling**: Tailwind CSS 4.1.13
 - **UI Components**: Flowbite, Headless UI, Heroicons
 - **Routing**: React Router DOM 7.9.1
-- **Maps**: Google Maps API (@react-google-maps/api, @vis.gl/react-google-maps)
+- **Maps**: Leaflet + react-leaflet with OpenStreetMap tiles
 - **Authentication**: Google OAuth (@react-oauth/google)
 - **Backend Integration**: Supabase 2.75.0
 - **HTTP Client**: Axios 1.12.2
@@ -75,7 +75,6 @@
 
 - Node.js (v16 or higher)
 - npm or yarn
-- Google Maps API Key
 - Google OAuth Client ID
 - Supabase Project
 
@@ -97,7 +96,6 @@ npm install
 3. Create a `.env` file in the root directory and add your environment variables:
 
 ```env
-VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
@@ -171,8 +169,6 @@ The following environment variables are required:
 | ----------------------------- | ------------------------------------- |
 | `VITE_BE_URL`                 | Backend API base URL                  |
 | `VITE_GOOGLE_OAUTH_CLIENT_ID` | Google OAuth client ID (sign in)      |
-| `VITE_GOOGLE_MAPS_KEY`        | Google Maps API key                   |
-| `VITE_GOOGLE_MAPS_MAP_ID`     | Google Maps map ID                    |
 
 ### Docker
 
@@ -185,7 +181,6 @@ Vite inlines `VITE_*` variables at build time, so they are passed as build argum
 The image serves the static build with nginx (SPA fallback to `index.html`).
 
 -------------------------- | ----------------------------------------- |
-| `VITE_GOOGLE_MAPS_API_KEY` | Google Maps API key for map functionality |
 | `VITE_GOOGLE_CLIENT_ID`    | Google OAuth client ID for authentication |
 | `VITE_SUPABASE_URL`        | Supabase project URL                      |
 | `VITE_SUPABASE_ANON_KEY`   | Supabase anonymous key                    |
@@ -204,7 +199,7 @@ graph TD;
   Frontend --> Backend[Spring Boot API];
   Backend --> Supabase[Image Storage];
   Backend --> Google[OAuth & Email Service];
-  Frontend --> GoogleMaps[Interactive Map];
+  Frontend --> Leaflet[Interactive Map<br/>Leaflet + OSM];
   Backend -->|REST / SSE| AI[Atlas AI Service<br/>Python FastAPI];
   AI --> LLM[Groq LLM];
 ```
