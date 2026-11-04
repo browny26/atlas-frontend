@@ -1,12 +1,12 @@
 import React from "react";
-import { BanknotesIcon } from "@heroicons/react/24/outline";
+import { BanknotesIcon, MapPinIcon } from "@heroicons/react/24/outline";
 
 import { ExclamationCircleIcon } from "@heroicons/react/24/solid";
 
 const ActivitiesCard = ({
   price = null,
   title = "",
-  location = "SPAIN, EUROPE",
+  location = "",
   img = null,
   size = "",
   onClick,
@@ -61,11 +61,18 @@ const ActivitiesCard = ({
             {title} <br />
           </h3>
 
-          {/* Location */}
-          <p className="text-sm uppercase tracking-wide font-medium flex items-center gap-2 opacity-90">
-            <BanknotesIcon className="h-4 w-4" />
-            {price}
-          </p>
+          {location && (
+            <p className="text-sm tracking-wide font-medium flex items-center gap-2 opacity-90 mb-1">
+              <MapPinIcon className="h-4 w-4" />
+              {location}
+            </p>
+          )}
+          {price && (
+            <p className="text-sm uppercase tracking-wide font-medium flex items-center gap-2 opacity-90">
+              <BanknotesIcon className="h-4 w-4" />
+              {price}
+            </p>
+          )}
         </div>
       </div>
     </div>

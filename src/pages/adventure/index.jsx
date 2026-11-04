@@ -3,11 +3,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import BookingForm from "../../components/BookingForm";
 import { dotPulse } from "ldrs";
-import FlightsCard from "../../components/FlightsCard";
-import Pagination from "../../components/Pagination";
-import { Modal } from "../../components/ui/Modal";
 import ItineraryComponent from "../../components/ItineraryComponent";
-import { useModal } from "../../hooks/useModal";
 import { useUser } from "../../context/UserContext";
 import FlightComponent from "../../components/FlightComponent";
 import { useLocation } from "react-router-dom";
@@ -17,45 +13,12 @@ const Adventure = () => {
   const { user } = useUser();
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(0);
-  const { isOpen, openModal, closeModal } = useModal();
-  const [flights, setFlights] = useState([]);
+  const [flights, setFlights] = useState(null); // the flight search, shown as links
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [hasSearched, setHasSearched] = useState(false);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
-  const [flightData, setFlightData] = useState({
-    origin: "",
-    destination: "",
-    departDate: "",
-    returnDate: "",
-    adults: 1,
-  });
-  const [selectedFlight, setSelectedFlight] = useState(null);
-  const itemsPerPage = 10;
-
-  const [formData, setFormData] = useState({
-    destination: "",
-    days: 1,
-    budget: "",
-    interests: [],
-  });
-  const [message, setMessage] = useState({ type: "", text: "" });
-  const [submitted, setSubmitted] = useState(false);
   const [itinerary, setItinerary] = useState(null);
   const [streaming, setStreaming] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
-
-  const interestOptions = [
-    "food",
-    "culture",
-    "adventure",
-    "nature",
-    "shopping",
-    "history",
-    "relaxation",
-    "nightlife",
-  ];
 
   useEffect(() => {
     if (location.state?.results) {
@@ -106,7 +69,6 @@ const Adventure = () => {
             setItinerary={setItinerary}
             setStreaming={setStreaming}
             setStatusMessage={setStatusMessage}
-            setHasSearched={setHasSearched}
           />
         </div>
       </section>
@@ -123,12 +85,7 @@ const Adventure = () => {
           />
         )}
         {currentPage === 1 && (
-          <FlightComponent
-            flights={flights}
-            loading={loading}
-            error={error}
-            setHasSearched={hasSearched}
-          />
+          <FlightComponent search={flights} />
         )}
       </section>
 

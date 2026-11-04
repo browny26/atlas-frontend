@@ -1,26 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../components/ui/InputField";
 import Label from "../../components/ui/Label";
-import { useState } from "react";
-import Pagination from "../../components/Pagination";
-import { dotPulse } from "ldrs";
 import Button from "../../components/ui/Button";
-import FlightsCard from "../../components/FlightsCard";
-import { useModal } from "../../hooks/useModal";
 import DatePicker from "../../components/ui/DatePicker";
 import AirportAutocomplete from "../../components/ui/AirportAutocomplete";
-import { Modal } from "../../components/ui/Modal";
-import { flightsAPI } from "../../services/api";
+import FlightSearchLinks from "../../components/FlightSearchLinks";
+import { validateFlightSearch } from "../../services/flightLinks";
 import Alert from "../../components/ui/Alert";
-dotPulse.register();
 
 const Flights = () => {
-  const { isOpen, openModal, closeModal } = useModal();
-  const [flights, setFlights] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState();
   const [flightData, setFlightData] = useState({
     origin: "",
     destination: "",
@@ -28,10 +16,8 @@ const Flights = () => {
     returnDate: "",
     adults: 1,
   });
+  const [search, setSearch] = useState(null);
   const [message, setMessage] = useState({ type: "", text: "" });
-  const [hasSearched, setHasSearched] = useState(false);
-  const [selectedFlight, setSelectedFlight] = useState(null);
-  const itemsPerPage = 10;
 
   useEffect(() => {
     if (message.text) {
@@ -43,81 +29,15 @@ const Flights = () => {
     }
   }, [message.text]);
 
-  async function fetchFlights(e, page = 1) {
+  // Live prices come from comparison sites: the search is validated here and opened there.
+  const searchFlights = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-    setSelectedFlight(null);
-    setHasSearched(true);
-
-    if (
-      !flightData.origin ||
-      !flightData.destination ||
-      !flightData.departDate
-    ) {
-      setMessage({
-        type: "error",
-        text: "Please fill in origin, destination and departure date",
-      });
-      setLoading(false);
+    const error = validateFlightSearch(flightData);
+    if (error) {
+      setMessage({ type: "error", text: error });
       return;
     }
-
-    if (flightData.origin === flightData.destination) {
-      setMessage({
-        type: "error",
-        text: "The origin and destination airport must be different",
-      });
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const res = await flightsAPI.searchFlights({
-        origin: flightData.origin,
-        destination: flightData.destination,
-        departDate: flightData.departDate,
-        returnDate: flightData.returnDate,
-        adults: flightData.adults,
-      });
-
-      if (res.status !== 200) {
-        setMessage({
-          type: "error",
-          text: "Errore durante la ricerca di voli",
-        });
-      }
-      const data = res.data;
-      setFlights(data || []);
-      setError("");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const formatDuration = (duration) => {
-    if (!duration) return "N/A";
-
-    const hoursMatch = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
-    const hours = hoursMatch[1] ? parseInt(hoursMatch[1]) : 0;
-    const minutes = hoursMatch[2] ? parseInt(hoursMatch[2]) : 0;
-
-    if (hours > 0 && minutes > 0) {
-      return `${hours}h ${minutes}m`;
-    } else if (hours > 0) {
-      return `${hours}h`;
-    } else if (minutes > 0) {
-      return `${minutes}m`;
-    } else {
-      return "0m";
-    }
-  };
-
-  const handleOpenModal = (flight) => {
-    setSelectedFlight(flight);
-    openModal();
+    setSearch({ ...flightData });
   };
 
   return (
@@ -133,7 +53,7 @@ const Flights = () => {
         <div className="space-y-6">
           <form
             className="border border-gray-100 shadow flex flex-col gap-10 justify-between p-10"
-            onSubmit={(e) => fetchFlights(e)}
+            onSubmit={searchFlights}
           >
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-10 justify-between">
               <div>
@@ -189,6 +109,7 @@ const Flights = () => {
                   type="number"
                   min="1"
                   max="9"
+                  value={flightData.adults}
                   placeholder="es: 3"
                   onChange={(e) =>
                     setFlightData({ ...flightData, adults: e.target.value })
@@ -196,118 +117,10 @@ const Flights = () => {
                 />
               </div>
             </div>
-            <Button type="submit" disabled={loading}>
-              {loading ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Searching...
-                </div>
-              ) : (
-                "Search"
-              )}
-            </Button>
+            <Button type="submit">Search</Button>
           </form>
-
-          <div className="flex flex-col items-center mt-20">
-            {loading && (
-              <div className="h-[30vh] w-full flex items-center justify-center">
-                <l-dot-pulse size="43" speed="1.3" color="black"></l-dot-pulse>
-              </div>
-            )}
-            {error && <p className="text-red-500">{error}</p>}
-            {!loading && !error && hasSearched && flights.length === 0 && (
-              <p className="text-gray-500">No flights found.</p>
-            )}
-            <div className="flex flex-col w-full gap-6">
-              {flights.map((flight) => (
-                <FlightsCard
-                  key={flight.id}
-                  flight={flight}
-                  onClick={() => handleOpenModal(flight)}
-                />
-              ))}
-            </div>
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={(newPage) => fetchFlights(newPage)}
-                size="md"
-              />
-            )}
-            <Modal
-              isOpen={isOpen}
-              onClose={closeModal}
-              className="max-w-[700px] m-4"
-            >
-              <div className="no-scrollbar relative w-full max-w-[700px] overflow-y-auto rounded-3xl bg-white p-4 lg:p-11">
-                <div className="px-2 pr-14">
-                  <h4 className="mb-4 text-2xl font-semibold text-gray-800">
-                    Flight Information
-                  </h4>
-
-                  {selectedFlight ? (
-                    <>
-                      <p className="mb-2">
-                        <strong>Airline(s):</strong>{" "}
-                        {selectedFlight.validatingAirlineCodes?.join(", ") ||
-                          "N/A"}
-                      </p>
-
-                      <p className="mb-2">
-                        <strong>Price:</strong> {selectedFlight.price?.total}{" "}
-                        {selectedFlight.price?.currency}
-                      </p>
-
-                      <p className="mb-2">
-                        <strong>Seats available:</strong>{" "}
-                        {selectedFlight.numberOfBookableSeats}
-                      </p>
-
-                      <p className="mb-2">
-                        <strong>Refundable:</strong>{" "}
-                        {selectedFlight.pricingOptions?.refundableFare
-                          ? "Yes"
-                          : "No"}
-                      </p>
-
-                      <p className="mb-4">
-                        <strong>Instant Ticketing Required:</strong>{" "}
-                        {selectedFlight.instantTicketingRequired ? "Yes" : "No"}
-                      </p>
-
-                      <p className="mb-2 font-semibold">Itineraries:</p>
-                      {selectedFlight.itineraries?.map((itinerary, idx) => (
-                        <div
-                          key={idx}
-                          className="mb-4 p-3 border border-gray-100"
-                        >
-                          <p>
-                            <strong>Duration:</strong>{" "}
-                            {formatDuration(itinerary.duration)}
-                          </p>
-                          <p>
-                            <strong>Segments:</strong>
-                          </p>
-                          <ul className="list-disc list-inside text-sm mt-2">
-                            {itinerary.segments?.map((segment, segIdx) => (
-                              <li key={segIdx}>
-                                {segment.departure?.iataCode} →{" "}
-                                {segment.arrival?.iataCode}({segment.duration})
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
-
-                      <Button onClick={closeModal}>Close</Button>
-                    </>
-                  ) : (
-                    <p>No flight data available</p>
-                  )}
-                </div>
-              </div>
-            </Modal>
+          <div className="flex flex-col items-center mt-10">
+            <FlightSearchLinks search={search} />
           </div>
         </div>
       </div>
