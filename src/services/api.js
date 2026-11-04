@@ -41,25 +41,16 @@ export const publicApi = axios.create({
   },
 });
 
-export const flightsAPI = {
-  searchFlights: (params) => publicApi.get("/amadeus/flights", { params }),
-
-  getFlightDetails: (flightId) => publicApi.get(`/amadeus/flights/${flightId}`),
-};
-
+// Airport search for the flight form (public). Flight prices are compared on partner
+// sites through prefilled links, see services/flightLinks.js.
 export const airportsAPI = {
-  searchAirports: (query) =>
-    publicApi.get("/amadeus/airport-and-city-search", {
-      params: {
-        subType: "AIRPORT",
-        keyword: query,
-      },
-    }),
+  searchAirports: (keyword) =>
+    publicApi.get("/v1/api/airports", { params: { keyword } }),
 };
 
+// Places to visit near a point, from OpenStreetMap (logged-in users).
 export const activityAPI = {
-  searchActivity: (params) =>
-    publicApi.get("amadeus/tours-and-activities", { params }),
+  searchActivity: (params) => api.get("/v1/api/activities", { params }),
 };
 
 export const itineraryAPI = {

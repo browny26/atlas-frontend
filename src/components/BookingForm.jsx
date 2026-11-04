@@ -6,7 +6,6 @@ import TagSelect from "./ui/TagSelect";
 import AirportAutocomplete from "./ui/AirportAutocomplete";
 import DatePicker from "./ui/DatePicker";
 import Input from "./ui/InputField";
-import { flightsAPI } from "../services/api";
 import { generateItineraryStream } from "../services/itineraryStream";
 
 const BookingForm = ({
@@ -55,13 +54,13 @@ const BookingForm = ({
     setActiveTab(index);
     setError("");
     setLoading(false);
-    setHasSearched(false);
+    setHasSearched?.(false); // optional: the home page does not track it
     if (setPage) setPage(index);
   };
 
-  async function fetchFlights(e) {
+  // Flight prices are compared on partner sites: the search is passed on as it is.
+  function fetchFlights(e) {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
     if (
@@ -70,28 +69,18 @@ const BookingForm = ({
       !flightData.departDate
     ) {
       setError("Please fill in origin, destination and departure date");
-      setLoading(false);
+      return;
+    }
+    if (flightData.origin === flightData.destination) {
+      setError("The origin and destination airport must be different");
       return;
     }
 
-    setHasSearched(true);
-
-    try {
-      const res = await flightsAPI.searchFlights(flightData);
-      console.log(res);
-      const data = res.data;
-
-      if (onSuccess) {
-        onSuccess(data, "flights");
-      } else {
-        console.log(data);
-        setFlights(data || []);
-      }
-      setError("");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    setHasSearched?.(true);
+    if (onSuccess) {
+      onSuccess({ ...flightData }, "flights");
+    } else {
+      setFlights({ ...flightData });
     }
   }
 

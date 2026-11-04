@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { airportsAPI, flightsAPI } from "../../services/api";
+import { airportsAPI } from "../../services/api";
 
 const AirportAutocomplete = ({
   value,
@@ -36,12 +36,12 @@ const AirportAutocomplete = ({
     setLoading(true);
 
     try {
-      const res = await airportsAPI.searchAirports(encodeURIComponent(query));
+      const res = await airportsAPI.searchAirports(query);
 
       if (res.status !== 200) throw new Error("Failed to fetch airports");
 
       const data = res.data;
-      setSuggestions(data.data || []);
+      setSuggestions(Array.isArray(data) ? data : []);
       setIsOpen(true);
     } catch (error) {
       console.error("Error searching airports:", error);
@@ -95,11 +95,7 @@ const AirportAutocomplete = ({
 
   const formatAirportDisplay = (airport) => {
     if (!airport) return "";
-    return `${airport.address.cityName} (${airport.iataCode}) - ${airport.name}`;
-  };
-
-  const formatDetailedName = (detailedName) => {
-    return detailedName.replace(/.*?:/, "").trim();
+    return `${airport.cityName} (${airport.iataCode}) - ${airport.name}`;
   };
 
   return (
@@ -141,7 +137,7 @@ const AirportAutocomplete = ({
           ) : (
             suggestions.map((airport) => (
               <button
-                key={airport.id}
+                key={airport.iataCode}
                 type="button"
                 onClick={() => handleSelect(airport)}
                 className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0 transition-colors"
@@ -149,21 +145,16 @@ const AirportAutocomplete = ({
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <div className="font-semibold text-gray-900 flex items-center">
-                      {airport.address.cityName}
+                      {airport.cityName}
                       <span className="text-blue-600 ml-2 font-mono text-sm bg-blue-50 px-1 rounded">
                         {airport.iataCode}
                       </span>
                     </div>
                     <div className="text-sm text-gray-600 mt-1">
-                      {formatDetailedName(airport.detailedName)}
+                      {airport.name}
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
-                      {airport.address.countryName}
-                      {airport.analytics?.travelers?.score && (
-                        <span className="ml-2 text-orange-500">
-                          • Popularity: {airport.analytics.travelers.score}
-                        </span>
-                      )}
+                      {airport.countryName}
                     </div>
                   </div>
                 </div>
