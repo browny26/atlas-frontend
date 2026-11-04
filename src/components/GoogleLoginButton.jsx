@@ -1,9 +1,31 @@
-import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { useEffect, useState } from "react";
+import { useGoogleLogin } from "@react-oauth/google";
 import { authAPI } from "../services/api";
 
+// After this long, explain the wait: the free backend can take up to a minute to wake up.
+const SLOW_SIGN_IN_MS = 4000;
+
+/**
+ * "Continue with Google". From Google's answer until `onSuccess` has finished (user loaded,
+ * page changed), the button shows a spinner and stays disabled, so the user knows the
+ * sign-in is in progress and cannot start a second one.
+ */
 const GoogleLoginButton = ({ onSuccess, onError, text }) => {
+  const [busy, setBusy] = useState(false);
+  const [slow, setSlow] = useState(false);
+
+  useEffect(() => {
+    if (!busy) {
+      setSlow(false);
+      return;
+    }
+    const timer = setTimeout(() => setSlow(true), SLOW_SIGN_IN_MS);
+    return () => clearTimeout(timer);
+  }, [busy]);
+
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      setBusy(true);
       try {
         // Only the access token is sent: the backend verifies it with Google and reads
         // the user's identity from there (never trust identity data sent by the client).
@@ -11,10 +33,12 @@ const GoogleLoginButton = ({ onSuccess, onError, text }) => {
           access_token: tokenResponse.access_token,
         });
 
-        onSuccess(res.data);
+        await onSuccess(res.data);
       } catch (error) {
         console.error("Google login failed:", error);
         onError(error);
+      } finally {
+        setBusy(false);
       }
     },
     onError: (error) => {
@@ -23,8 +47,29 @@ const GoogleLoginButton = ({ onSuccess, onError, text }) => {
     },
   });
 
+  if (busy) {
+    return (
+      <div role="status" aria-live="polite" className="text-center">
+        <button
+          type="button"
+          disabled
+          className="inline-flex w-full items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 bg-gray-100 rounded-lg px-7 cursor-wait"
+        >
+          <span className="animate-spin rounded-full h-5 w-5 border-2 border-gray-300 border-t-gray-700" />
+          Signing you in...
+        </button>
+        <p className="mt-2 text-xs text-gray-500">
+          {slow
+            ? "Waking up the server, the first sign-in can take up to a minute."
+            : "Loading your account..."}
+        </p>
+      </div>
+    );
+  }
+
   return (
     <button
+      type="button"
       onClick={() => login()}
       className="inline-flex cursor-pointer items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800"
     >
